@@ -75,6 +75,7 @@ Graphics图形可以是二维或者三维的; image图像可以完成生成、�
 
 应用领域涵盖娱乐、工业、民用等领域
 
+<a id="markdown-_13-graphics-apis图形学接口" name="_13-graphics-apis图形学接口"></a>
 ### _1.3 Graphics APIs图形学接口
 
 API的经典定义:
@@ -86,17 +87,22 @@ API的经典定义:
 1. 方法的集成, 由语言包实现, 例如java等
 2. Direct3D、OpenGL, 由C++等实现的软件
   
+<a id="markdown-_14-graphics-pipeline图形管道" name="_14-graphics-pipeline图形管道"></a>
 ### _1.4 Graphics Pipeline图形管道
 
 什么是图形管道? 每台计算机都有强大的3D图形管道. 这是一个特殊的子系统, 可以高校的绘制3D图像. 
 
 基本的操作是绘制共享定点的三角形并加上阴影, 使之呈现3D效果.
 
+<a id="markdown-_15-numerical-issues数值问题" name="_15-numerical-issues数值问题"></a>
 ### _1.5 Numerical Issues数值问题
 
+<a id="markdown-_16-efficiency效率" name="_16-efficiency效率"></a>
 ### _1.6 Efficiency效率
 
+<a id="markdown-_17-designing-and-coding-graphics-programs" name="_17-designing-and-coding-graphics-programs"></a>
 ### _1.7 Designing and Coding Graphics Programs
 
+<a id="markdown-notes" name="notes"></a>
 ### Notes
 
