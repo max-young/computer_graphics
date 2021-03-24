@@ -61,15 +61,15 @@ Graphics图形可以是二维或者三维的; image图像可以完成生成、�
 ### _1.2 Major Applications主要用途
 - Video game视频游戏
 - Cartoons卡通
-- Visual effects视觉效果
+- Visual effects视觉效果  
   视觉效果几乎用到了计算机图形学所有类型的结束. 在现在电影里, 几乎都会将拍摄的前景与数字合成的背景相结合. 很多电影还会用3D建模和3D动画来合成幻觉、 对象、甚至任务, 观众难辨真假
-- Animated films动画电影
+- Animated films动画电影  
   用到了很对visual effects的技术, 但是不以真实图像为创作目标
-- CAD/CAM计算机辅助设计/计算机辅助制造
+- CAD/CAM计算机辅助设计/计算机辅助制造  
   computer aided design and computer aided manufacturing. 例如, 很多机械零件是用计算机3D建模工具设计, 然后在计算机控制的机床设备上自动生产
-- Simulation模拟
+- Simulation模拟  
   模拟可以理解为精确的视频游戏. 比如可以模拟飞行来训练初级飞行员. 这项技术可以应用到其他花费较高或者具有一定危险性的行业训练中.
-- Medical imaging医学成像
+- Medical imaging医学成像  
   例如可以将CT数据合成为shaded images(阴影图像), 帮助医生获取更多医学数据
 - Information virsualization信息可视化
 
@@ -96,6 +96,56 @@ API的经典定义:
 
 <a id="markdown-_15-numerical-issues数值问题" name="_15-numerical-issues数值问题"></a>
 ### _1.5 Numerical Issues数值问题
+
+很多图形程序只是3D数值代码.数值至关重要.
+
+几乎所有现代计算机都符合IEEE浮点标准(IEEE Standards Association, 1985), 下面是对于图形学来说, IEEE的一些重要特征:
+- Infinity $\infty$
+  this is a valid number that is larger than all other valid number
+- Minus Infinity $-\infty$
+  this is a valid number that is smaller than all other valid number
+- Not a number(NaN)  
+  invalid number that arise from an operation, such as zero divided by zero
+
+IEEE标准对上面三个值的操作有下面的定义:  
+a是实数  
+$$
+\begin{align}
++a/(+\infty) = +0\newline
+-a/(+\infty) = -0\newline
++a/(-\infty) = -0\newline
+-a/(-\infty) = +0\newline
+\infty + \infty = \infty\newline
+\infty - \infty = NaN\newline
+\infty \times \infty = \infty\newline
+\infty / \infty = NaN\newline
+\infty / a = \infty\newline
+\infty / 0 = \infty\newline
+0 / 0 = NaN
+\end{align}
+$$
+请注意, 在上面$\infty$除以0不是NaN, 0除以0才是NaN, a除以0也不是NaN  
+另外+0、-0在这里是有意义的
+$$
+\begin{align}
++a / +0 = +\infty\newline
+-a / +0 = -\infty
+\end{align}
+$$
+这个特性给我们带来了很多方便, 例如:
+$$a = \frac{1}{\frac{1}{b} + \frac{1}{c}}$$
+如果不遵循IEEE不标准, 就需要检查b和c是否为0, 否则就会出现异常.  
+
+另外一种情况:
+```pseudocode
+a = f(x)
+if (a>0) then
+  do something
+```
+如果`f(x)`返回NaN或者$\infty$, 那么也会抛出异常.  
+但是如果遵循IEEE标准, 如果a = NaN或者$-\infty$, 则是false  
+如果$a = +\infty$, 则是true
+遵循这个标准让程序变得更小、更健壮、更有效率
 
 <a id="markdown-_16-efficiency效率" name="_16-efficiency效率"></a>
 ### _1.6 Efficiency效率
