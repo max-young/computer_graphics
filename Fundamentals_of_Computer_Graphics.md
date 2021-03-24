@@ -13,6 +13,7 @@
     - [_1.7.2 Float vs. Double](#_172-float-vs-double)
     - [_1.7.3 Debugging Graphics Programs](#_173-debugging-graphics-programs)
   - [Notes](#notes)
+- [_2 Miscellaneous Math多样的数学](#_2-miscellaneous-math多样的数学)
 
 <!-- /TOC -->
 
@@ -204,5 +205,33 @@ locations位置和displacements位移是否需要用不同的类来表达, 看�
 
 #### _1.7.3 Debugging Graphics Programs 
 
+在图形学中有用的debug策略
+- The scientific Method  
+  一种取代传统debug的方法通常非常有用. 但是看起来好像有些“傻瓜”, 而且通常在我们的编程生涯初期, 都被教育不要这样做, 那这是一种什么样的debug方法呢?  
+  我们创建一个图像, 观察它有什么问题  
+  我们假设导致问题的原因, 并测试  
+  例如, 在光线追踪程序里很典型的shadow acne阴影痤疮问题, 我们可以假设这些点是被错误的标记了称了阴影. 为了证明这个假设, 我们可以关闭阴影检查并重新编译.  
+  通过这种方法避免了浪费大量的时间在逐步检查变量值上面
+- Images as coded Debugging Output  
+  调试过程中输出图像, 来验证假设
+- Using a Debugger  
+  The scientific Method看似以来直觉和经验, 无法解决所有的问题.
+  我们可以用条件断点, 在特定输入下运行程序, 并在假设的引起错误的值的运行位置, set a trap, 例如:
+  ```
+  if x == 126 and y == 247 then
+    print "blarg!"
+  ```
+  一些debugger有条件断点的功能, 就不需要想上面这样手动操作了.  
+- Data Visualization for Debugging  
+  我们经常无法理解程序在做什么, 因为在程序出问题之前会计算出大量中间数据.  
+  这样我们就需要图和图解来帮助我们理解.  
+  比如在光线追踪程序里, 我们可以编写代码来可视化光线, 这样就能理解像素是由哪些光线生成的. 
+
 <a id="markdown-notes" name="notes"></a>
 ### Notes
+
+本章对于软件工程的讨论, 收到了Effective C++ se- ries (Meyers, 1995, 1997)、Extreme Programming movement (Beck & Andres, 2004)、The Practice of Programming (Kernighan & Pike, 1999)的影响.    
+有许多计算机图形学大会, 包括 ACM SIGGRAPH 和 SIGGRAPH Asia, Graphics Interface, the Game Developers Conference (GDC), Eurographics, Pacific Graphics, High Performance Graphics, the Eurographics Symposium on Rendering, and IEEE VisWeek. 去网上搜索吧.
+
+## _2 Miscellaneous Math多样的数学
+
