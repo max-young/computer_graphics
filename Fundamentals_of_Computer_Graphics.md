@@ -9,6 +9,9 @@
   - [_1.5 Numerical Issues数值问题](#_15-numerical-issues数值问题)
   - [_1.6 Efficiency效率](#_16-efficiency效率)
   - [_1.7 Designing and Coding Graphics Programs](#_17-designing-and-coding-graphics-programs)
+    - [_1.7.1 Class Design](#_171-class-design)
+    - [_1.7.2 Float vs. Double](#_172-float-vs-double)
+    - [_1.7.3 Debugging Graphics Programs](#_173-debugging-graphics-programs)
   - [Notes](#notes)
 
 <!-- /TOC -->
@@ -109,29 +112,33 @@ API的经典定义:
 
 IEEE标准对上面三个值的操作有下面的定义:  
 a是实数  
+
 $$
-\begin{align}
-+a/(+\infty) = +0\newline
--a/(+\infty) = -0\newline
-+a/(-\infty) = -0\newline
--a/(-\infty) = +0\newline
-\infty + \infty = \infty\newline
-\infty - \infty = NaN\newline
-\infty \times \infty = \infty\newline
-\infty / \infty = NaN\newline
-\infty / a = \infty\newline
-\infty / 0 = \infty\newline
-0 / 0 = NaN
-\end{align}
+\begin{aligned}
++a/(+\infty) &= +0\\
+-a/(+\infty) &= -0\\
++a/(-\infty) &= -0\\
+-a/(-\infty) &= +0\\
+\infty + \infty &= \infty\\
+\infty - \infty &= NaN\\
+\infty \times \infty &= \infty\\
+\infty / \infty &= NaN\\
+\infty / a &= \infty\\
+\infty / 0 &= \infty\\
+0 / 0 &= NaN
+\end{aligned}
 $$
+
 请注意, 在上面$\infty$除以0不是NaN, 0除以0才是NaN, a除以0也不是NaN  
 另外+0、-0在这里是有意义的
+
 $$
-\begin{align}
-+a / +0 = +\infty\newline
--a / +0 = -\infty
-\end{align}
+\begin{aligned}
++a / +0 &= +\infty\newline
+-a / +0 &= -\infty
+\end{aligned}
 $$
+
 这个特性给我们带来了很多方便, 例如:
 $$a = \frac{1}{\frac{1}{b} + \frac{1}{c}}$$
 如果不遵循IEEE不标准, 就需要检查b和c是否为0, 否则就会出现异常.  
@@ -150,8 +157,52 @@ if (a>0) then
 <a id="markdown-_16-efficiency效率" name="_16-efficiency效率"></a>
 ### _1.6 Efficiency效率
 
+在可见的未来, 对于效率, 我们应更加关注内存占用, 多于操作次数. 因为内存的发展速度跟不上处理器的运算速度.
+
+使代码快速运行的方法:
+1. 以最直接的方式编写代码. 根据需要即时计算中间结果, 而不是存储它们.
+2. 以优化模式编译
+3. 用分析工具定位瓶颈
+4. 检查数据结构, 找到优化方法. 使数据单元大小与缓存匹配(?)
+5. 如果瓶颈使数值计算问题, 你可能需要重写代码.
+
+最重要的是上面的第一点. 很多"优化""使代码阅读性变差, 但效率并没有提升. 在前期, 更应该把时间花在解决bug和功能开发上
+
 <a id="markdown-_17-designing-and-coding-graphics-programs" name="_17-designing-and-coding-graphics-programs"></a>
 ### _1.7 Designing and Coding Graphics Programs
+
+一些通用策略在图形编程中很有用
+
+#### _1.7.1 Class Design
+
+在图形编程中, 涉及到集合实体(vectors向量、matrics矩阵)和图形实体(RGB颜色、images图像), 它们可以为class设计提供便利.  
+locations位置和displacements位移是否需要用不同的类来表达, 看法不一. 为了举例方便, 我们使两者使用同样的类.  
+
+我们可以设计下面这些基本的类:
+- vector2  
+  2D向量, 包括x、y分量(component), 存储在array里, 还应实现加法减法等运算
+- vector3  
+  3D向量
+- hvector  
+  包括4个分量的同构向量(homogeneous), 姑且认为是4D向量
+- rgb  
+  包括3个分享的RGB颜色, 也需要实现加法减法等操作
+- transform
+  4*4的矩阵, 在第六章介绍
+- image  
+  能够输出的元素是RGB像素的2D array
+  
+#### _1.7.2 Float vs. Double
+
+为了效率, 现代架构建议降低内存使用以及保持一致的内存访问. 这意味着用单精度数据更好.  
+但是为了避免数值问题, 使用双精度更好.  
+根据实际情况权衡  
+
+> 建议使用double进行几何计算、float进行颜色计算. 对于三角网等占用大量内存的数据, 建议用float, 但是当通过成员函数访问数据时, 建议转换为double
+
+> 我主张使用浮点数进行所有计算，直到找到证据证明在代码的特定部分中需要双精度。
+
+#### _1.7.3 Debugging Graphics Programs 
 
 <a id="markdown-notes" name="notes"></a>
 ### Notes
