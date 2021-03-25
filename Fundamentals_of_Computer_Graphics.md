@@ -14,6 +14,19 @@
     - [_1.7.3 Debugging Graphics Programs](#_173-debugging-graphics-programs)
   - [Notes](#notes)
 - [_2 Miscellaneous Math多样的数学](#_2-miscellaneous-math多样的数学)
+  - [_2.1 Sets and Mappings](#_21-sets-and-mappings)
+    - [_2.1.1 Inverse Mappings逆向映射](#_211-inverse-mappings逆向映射)
+    - [_2.1.2 Intervals区间](#_212-intervals区间)
+    - [_2.1.3 Logarithms对数](#_213-logarithms对数)
+  - [_2.2 Solving Quadratic Equations求解二次方程](#_22-solving-quadratic-equations求解二次方程)
+  - [_2.3 Trigonometry三角几何](#_23-trigonometry三角几何)
+  - [_2.4 Vectors向量](#_24-vectors向量)
+  - [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
+  - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
+  - [_2.7 Triangles三角形](#_27-triangles三角形)
+  - [Frequently Asked Questions](#frequently-asked-questions)
+  - [notes](#notes-1)
+  - [Exercises](#exercises)
 
 <!-- /TOC -->
 
@@ -235,3 +248,108 @@ locations位置和displacements位移是否需要用不同的类来表达, 看�
 
 ## _2 Miscellaneous Math多样的数学
 
+一些图形工作只是将数学直接转换为代码. 数学越清晰, 代码越简洁. 本章只提及图形学相关的数学知识作为参考.
+
+### _2.1 Sets and Mappings
+
+Mappings映射, 也被成为functions函数, 是数学和编程的基础.  
+一个mapping映射是一个type映射到另外一个类型的type, 在这里我们需要定义set集合来包含这些type.  
+
+一个对象属于一个集合, 可以表示为:
+$$a\in S$$  
+意思是"a is a member of set S"  
+有两个集合$A$和$B$, 它们的Cartesian product笛卡尔积, 可以表示为$A\times B$, 它表示一个集合, 元素是所有可能的配对$(a, b)$, $a \in A$, $b \in B$  
+$A \times A$可以简化为$A^2$, 这是2维的, 我们可以扩展为3维、多维  
+
+一些特定的集合:
+- $\R$: the real numbers
+- $\R^+$: the nonnegative real numbers(includes zero)
+- $\R^2$: 2D实数的配对
+- $\R^n$: n维笛卡尔积
+- $\Z$: the integers
+- $S^2$: 球面上的3D笛卡尔积点的集合
+
+mapping映射可以这么表示
+$$f: \R \mapsto \Z$$
+意思是"There is a function called f that takes a real number as input and maps it to an integer"  
+箭头左侧的集合称之为domain, 右侧称之为target  
+在计算机程序里可以表达为: "There  is a function called f which has one real argument and returns an integer"
+$$integer\ f(real) \gets equivalent \to f:\R \mapsto \Z$$
+
+$f(a)$成为$a$的image, "the image of the whole domain is called the range of the function"
+
+#### _2.1.1 Inverse Mappings逆向映射
+
+如果一个function: $f: A \mapsto B$, 那么可能存在inverse function: $f^-1: B \mapsto A$  
+另一种表示方法是: $b = f(a)$, $f^-1(b) = a$  
+这个定义需要满足这样的条件: target B里的所有元素b都是domain中的某个元素a的image(换句话说, range和target相等), 并且a是唯一的.  
+那么我们称这样的mappings或者functions为*bijections(双射)*  
+形象一点的描述: 一群骑手, 一群马, 每个骑手都骑一匹马, 每匹马都有骑手骑.  
+
+举两个例子:
+- bijection: $f:\R \mapsto \R, f(x) = x^3$
+- not bijection: $sqr: \R \mapsto \R, sqr(x) = x^2$, 因为target中的元素对应两个domain中的元素
+
+#### _2.1.2 Intervals区间
+
+我们通常想指定函数只处理值在限定范围的实数, 我们称之为我们制定了interval区间  
+比如interval区间是0和1之间的实数, 不包括0和1, 我们表示为$(0, 1)$  
+因为不包括端点, 我们称之为open interval开区间, 与之对应的是closed interval闭区间, 依照上面的例子, 可以表示为$[0, 1]$  
+也有半开区间, 只包含其中一个端点
+我们可以应用到区间笛卡尔积, 比如表示单位立方体的点集, 可以用$X \in [0, 1]^3$, X是$(a, b, c)$, abc都属于$[0, 1]$这个区间
+
+intervals和set操作结合非常有用, 举例说明:  
+$[3,5) \cap [4, 6] = [4, 5)$  
+$[3, 5) \cup [4, 6] = [3, 6]$  
+$[3, 5) - [4, 6] = [3, 4)$  
+$[4, 6] - [3, 5) = [5, 6]$
+
+#### _2.1.3 Logarithms对数
+
+每个对数都有一个base a, x的log base a可以写作$log_a x$, 指的是a要提高到x的指数(exponent), 例如:
+$$ y = log_ax \iff a^y = x$$
+
+根据这个定义, 我们可以得到:
+$$
+\begin{aligned}
+a^{log_a(x)} &= x\\
+log_a(a^x) &= x\\
+log_a(xy) &= log_ax + log_ay\\
+log_a(x/y) &= log_ax - log_ay\\
+log_ax &= log_ab\ log_bx
+\end{aligned}
+$$
+
+之后还讲到了微积分的特殊数字$e = 2.718...$
+$$ln\ x \equiv log_ex$$
+知识盲区, 以后再补
+
+### _2.2 Solving Quadratic Equations求解二次方程
+
+Quadratic Equation可以表示为:
+$$Ax^2 + Bx + C = 0$$
+这一节的图Figure2.5很有意思, 我们根据$y = Ax^2 + Bx + C$可以画出一个倒抛物线  
+$Ax^2 + Bx + C = 0$的root(解/根)就是y=0的线(也就是x轴)和抛物线相交的点  
+抛物线可以misses(错过), grazes(掠过), hits(撞击)x轴, 分别得到0、1、2个解
+
+我们可以推导出:
+$$x = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A}$$
+有几个root取决于$B^2 - 4AC$, 我们表示为:
+$$D \equiv B^2 - 4AC$$
+D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个实数解, 如果$D = 0$, 则有1个实数解, 如果$D < 0$, 则没有实数解答
+
+### _2.3 Trigonometry三角几何
+
+### _2.4 Vectors向量
+
+### _2.5 Curves and Surfaces曲线和曲面
+
+### _2.6 Linear Interpolation线性插值
+
+### _2.7 Triangles三角形
+
+### Frequently Asked Questions
+
+### notes
+
+### Exercises
