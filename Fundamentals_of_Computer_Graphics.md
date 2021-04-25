@@ -340,7 +340,100 @@ D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个
 
 ### _2.3 Trigonometry三角几何
 
+**Angles**
+
+两条half_lines(direction)组成的角度angle如何表示呢?  
+交点为圆心画一个单位圆(半径为1), 两条线切的圆弧长度可以用来表示角度, 一般用较短的圆弧来表示角度.  
+这种表示方法的angle的单位是**radians**  
+两条线切的圆弧有长的一段和短的一段, 两个角度加起来就是单位圆的周长$2\pi$
+
+还有另外一种表示方法叫**degrees**, 半圆的角度用radians表示是$\pi$radians, 用degrees表示是180degrees, 符号是$180^{\circ}$
+
+两种表示方法的换算关系是:
+$$degrees = \frac{180}{\pi}radians$$
+$$radians = \frac{\pi}{180}degrees$$
+
+**Trigonometrics Functions三角函数**
+
+勾股定理的证明  
+以及sin, cos, tan, cot等的定义
+
+**Userful Identities**
+
+sin, cos, tan, cot的一些等式
+
 ### _2.4 Vectors向量
+
+vector描述了长度和方向. 如果两个vector的长度和方向相同, 即时我们想象它们在不同的位置, 它们依然是相等的.  
+vector一般用粗体字母表示, 比如$\bm{a}$, vector的长度可以这么表示: $\parallel\bm{a}\parallel$  
+unit vector的长度是1, zero vector的长度是0, 方向没有定义  
+
+vector可用来表示offset(偏移)
+
+**Vector Operations**
+
+vector的加法和减法, 画图就清晰明了了
+
+**Cartesian Coordinates of a Vector**
+
+根据上面的加法, 一个vector可以是两个vector相加:
+$$\bm{c} = a_c\bm{a} + b_c\bm{b}$$
+$a_c$和$b_c$分别代表$\bm{a}$和$\bm{b}$的weight(或者是长度), 为什么这么表示呢? 因为长度是和$\bm{c}$相关的, 看下面就理解了.
+
+那么假如$\bm{a}$和$\bm{b}$是垂直相交的呢? 它们组成Cartesian coordinate system直角坐标系, vector就能表示为:
+$$\bm{a} = x_a\bm{x} + y_a\bm{y}$$
+$\bm{a}$的长度就是:
+$$\parallel\bm{a}\parallel = \sqrt{x^{2}_{a}+y^{2}_{a}}$$
+有了$x_a$和$y_a$, 方向也能确定, 所以向量可以这么表示:
+$$
+\begin{bmatrix}
+x_a \\
+y_a
+\end{bmatrix}
+$$
+也可以横过来表示:
+$$\bm{a}^T = \left[ x_a\ y_a \right]$$
+这是2D vector的表示方法, 同样的, 我们也可以用这种方法表示3D, 4D等vector
+
+**Dot Product点乘**
+
+两个vector的dot product是一个scalar常量
+$$\bm{a}\cdot\bm{b} = \parallel\bm{a}\parallel\parallel\bm{b}\parallel \cos\phi$$
+可以理解为a在b上的垂直投影长度乘以另一个b的长度  
+a在b上的垂直投影长度可以表示为:
+$$\bm{a}\to\bm{b} = \parallel\bm{a}\parallel\cos\phi = \frac{\bm{a}\cdot\bm{b}}{\parallel\bm{b}\parallel}$$
+
+dot product满足以下特性:  
+$$
+\bm{a}\cdot\bm{b} = \bm{b}\cdot\bm{a} \\
+\bm{a}\cdot(\bm{b} + \bm{c}) = \bm{a}\cdot\bm{b} + \bm{a}\cdot\bm{c} \\
+(k\bm{a})\cdot\bm{b} = \bm{a}\cdot(k\bm{b}) = k\bm{a}\cdot\bm{b}
+$$
+
+向量a
+$
+\begin{bmatrix}
+x_a \\
+y_a
+\end{bmatrix}
+$
+和向量b
+$
+\begin{bmatrix}
+x_b \\
+y_b
+\end{bmatrix}
+$的dot product如何计算呢?  
+$$
+\begin{aligned}
+\bm{a}\cdot\bm{b}&=(x_a\bm{x}+y_a\bm{y})\cdot(x_b\bm{x}+y_b\bm{y}) \\
+&=x_ax_b(\bm{x}\cdot\bm{x}) + x_ay_b(\bm{x}\cdot\bm{y}) + y_ax_b(\bm{y}\cdot\bm{x}) + y_ay_b(\bm{y}\cdot\bm{y}) \\
+&=x_ax_b + y_ay_b
+\end{aligned}
+$$
+这里假定$\bm{x}\cdot\bm{x} = \bm{y}\cdot\bm{y} = 1$, $\bm{x}\cdot\bm{y} = 0$  
+同样的, 对于3D vector:  
+$$\bm{a}\cdot\bm{b} = x_ax_b + y_ay_b + z_az_b$$
 
 ### _2.5 Curves and Surfaces曲线和曲面
 
