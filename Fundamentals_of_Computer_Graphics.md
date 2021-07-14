@@ -21,6 +21,10 @@
   - [_2.2 Solving Quadratic Equations求解二次方程](#_22-solving-quadratic-equations求解二次方程)
   - [_2.3 Trigonometry三角几何](#_23-trigonometry三角几何)
   - [_2.4 Vectors向量](#_24-vectors向量)
+    - [_2.4.1 Vector Operations](#_241-vector-operations)
+    - [_2.4.2 Cartesian Coordinates of a Vector](#_242-cartesian-coordinates-of-a-vector)
+    - [_2.4.3 Dot Product点积](#_243-dot-product点积)
+    - [_2.4.4 Cross Product叉积](#_244-cross-product叉积)
   - [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
   - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
   - [_2.7 Triangles三角形](#_27-triangles三角形)
@@ -370,36 +374,37 @@ unit vector的长度是1, zero vector的长度是0, 方向没有定义
 
 vector可用来表示offset(偏移)
 
-**Vector Operations**
+#### _2.4.1 Vector Operations
 
 vector的加法和减法, 画图就清晰明了了
 
-**Cartesian Coordinates of a Vector**
+#### _2.4.2 Cartesian Coordinates of a Vector
 
-根据上面的加法, 一个vector可以是两个vector相加:
+根据上面的加法, 一个2D的vector可以是两个不平行的2D vector相加:
 $$\bm{c} = a_c\bm{a} + b_c\bm{b}$$
-$a_c$和$b_c$分别代表$\bm{a}$和$\bm{b}$的weight(或者是长度), 为什么这么表示呢? 因为长度是和$\bm{c}$相关的, 看下面就理解了.
+$a_c$和$b_c$分别代表$\bm{a}$和$\bm{b}$的weight(或者是长度), $\bm{a}$和$\bm{b}$指basic vector, 意思是只有方向没有长度的vector. 为什么这么表示呢? 因为长度是和$\bm{c}$相关的, 看下面就理解了.
 
 那么假如$\bm{a}$和$\bm{b}$是垂直相交的呢? 它们组成Cartesian coordinate system直角坐标系, vector就能表示为:
 $$\bm{a} = x_a\bm{x} + y_a\bm{y}$$
 $\bm{a}$的长度就是:
 $$\parallel\bm{a}\parallel = \sqrt{x^{2}_{a}+y^{2}_{a}}$$
-有了$x_a$和$y_a$, 方向也能确定, 所以向量可以这么表示:
+有了$x_a$和$y_a$, 方向也能确定, 所以向量可以用一个列矩阵column matrix表示:
 $$
 \begin{bmatrix}
 x_a \\
 y_a
 \end{bmatrix}
 $$
-也可以横过来表示:
+也可以行矩阵row matrix表示:
 $$\bm{a}^T = \left[ x_a\ y_a \right]$$
 这是2D vector的表示方法, 同样的, 我们也可以用这种方法表示3D, 4D等vector
 
-**Dot Product点乘**
+#### _2.4.3 Dot Product点积
 
-两个vector的dot product是一个scalar常量
+上面说的是两个vector的加减法, 那么可以相乘吗?  
+两个vector相乘可以用点乘(dot product), 结果是一个scalar product(标量)
 $$\bm{a}\cdot\bm{b} = \parallel\bm{a}\parallel\parallel\bm{b}\parallel \cos\phi$$
-可以理解为a在b上的垂直投影长度乘以另一个b的长度  
+可以理解为a在b上的垂直(right angle)投影(projection)长度乘以另一个b的长度, **这是计算机图形学里最重要的公式之一**  
 a在b上的垂直投影长度可以表示为:
 $$\bm{a}\to\bm{b} = \parallel\bm{a}\parallel\cos\phi = \frac{\bm{a}\cdot\bm{b}}{\parallel\bm{b}\parallel}$$
 
@@ -410,14 +415,14 @@ $$
 (k\bm{a})\cdot\bm{b} = \bm{a}\cdot(k\bm{b}) = k\bm{a}\cdot\bm{b}
 $$
 
-向量a
+向量$\bm{a}$
 $
 \begin{bmatrix}
 x_a \\
 y_a
 \end{bmatrix}
 $
-和向量b
+和向量$\bm{b}$
 $
 \begin{bmatrix}
 x_b \\
@@ -434,6 +439,52 @@ $$
 这里假定$\bm{x}\cdot\bm{x} = \bm{y}\cdot\bm{y} = 1$, $\bm{x}\cdot\bm{y} = 0$  
 同样的, 对于3D vector:  
 $$\bm{a}\cdot\bm{b} = x_ax_b + y_ay_b + z_az_b$$
+
+#### _2.4.4 Cross Product叉积
+
+Cross product只应用在三维向量领域, 因为两个向量的cross product的结果还是一个向量, 不像dot product的结果是一个scalar标量, 没有方向, 只有长度.  
+而且cross product的结果向量的方向还不和原始的两个向量在一个平面上, 是垂直于这两个向量的平面的, 方向遵守右手螺旋定则  
+也就是说$\bm{a} \times \bm{b}$得出的向量的方向, 我们可以用右手从$\bm{a}$旋转到$\bm{b}$, 大拇指的方向就是cross product结果向量的方向  
+那么长度呢? 长度是$\bm{a}$和$\bm{b}$组成的平行四边形的面积(the area of parallelogram), 也就是:
+$$\parallel \bm{a} \times \bm{b} \parallel = \parallel \bm{a} \parallel \parallel \bm{b} \parallel \sin\phi$$
+我们假设一个三维坐标系, $\bm{x}$$\bm{y}$$\bm{z}$是三个坐标轴的三维向量, 也就是:
+$$
+\begin{aligned}
+\bm{x} = (1, 0, 0), \\
+\bm{y} = (0, 1, 0), \\
+\bm{z} = (0, 0, 1),
+\end{aligned}
+$$
+这样就好理解了, 他们的cross product分别是:
+$$
+\begin{aligned}
+\bm{x} \times \bm{y} = + \bm{z} \\
+\bm{y} \times \bm{x} = - \bm{z} \\
+\bm{y} \times \bm{z} = + \bm{x} \\
+\bm{z} \times \bm{y} = - \bm{x} \\
+\bm{z} \times \bm{x} = + \bm{y} \\
+\bm{x} \times \bm{z} = - \bm{y} \\
+\end{aligned}
+$$
+另外, 因为$\sin\phi$的特性, $\bm{x} \times \bm{x} = 0$, 此外, cross product还有下面的特性:
+$$
+\begin{aligned}
+\bm{a} \times (\bm{b} + \bm{c}) &= \bm{a} \times \bm{b} + \bm{a} \times \bm{c} \\
+\bm{a} \times (k\bm{b}) &= k(\bm{a} \times \bm{b}) \\
+\bm{a} \times \bm{b} &= - (\bm{b} \times \bm{a})
+\end{aligned}
+$$
+在笛卡尔坐标系里, 我们可以得出:
+$$
+\begin{aligned}
+\bm{a} \times \bm{b} &= (x_a\bm{x} + y_a\bm{y} + z_a\bm{z})\times(x_b\bm{x} + y_b\bm{y} + z_b\bm{z}) \\
+&= x_ax_b\bm{x}\times\bm{x} + x_ay_b\bm{x}\times\bm{y} + x_az_b\bm{x}\times\bm{z} + y_ax_b\bm{y}\times\bm{x} + y_ay_b\bm{y}\times\bm{y} + y_az_b\bm{y}\times\bm{z} + z_ax_b\bm{z}\times\bm{x} + z_ay_b\bm{z}\times\bm{y} + z_az_b\bm{z}\times \bm{z} \\
+&= x_ay_b\bm{z} - x_az_b\bm{y} - y_ax_b\bm{z} + y_az_b\bm{x} + z_ax_b\bm{y} - z_ay_b\bm{x} \\
+&= (y_az_b - z_ay_b)\bm{x} + (z_ax_b - x_az_b)\bm{y} + (x_ay_b - y_ax_b)\bm{z}
+\end{aligned}
+$$
+用坐标格式表示就是:
+$$\bm{a} \times \bm{b} = (y_az_b - z_ay_b, z_ax_b - x_az_b, x_ay_b - y_ax_b)$$
 
 ### _2.5 Curves and Surfaces曲线和曲面
 
