@@ -448,6 +448,7 @@ Cross product只应用在三维向量领域, 因为两个向量的cross product�
 那么长度呢? 长度是$\bm{a}$和$\bm{b}$组成的平行四边形的面积(the area of parallelogram), 也就是:
 $$\parallel \bm{a} \times \bm{b} \parallel = \parallel \bm{a} \parallel \parallel \bm{b} \parallel \sin\phi$$
 我们假设一个三维坐标系, $\bm{x}$$\bm{y}$$\bm{z}$是三个坐标轴的三维向量, 也就是:
+
 $$
 \begin{aligned}
 \bm{x} = (1, 0, 0), \\
@@ -455,7 +456,9 @@ $$
 \bm{z} = (0, 0, 1),
 \end{aligned}
 $$
+
 这样就好理解了, 他们的cross product分别是:
+
 $$
 \begin{aligned}
 \bm{x} \times \bm{y} = + \bm{z} \\
@@ -466,7 +469,9 @@ $$
 \bm{x} \times \bm{z} = - \bm{y} \\
 \end{aligned}
 $$
+
 另外, 因为$\sin\phi$的特性, $\bm{x} \times \bm{x} = 0$, 此外, cross product还有下面的特性:
+
 $$
 \begin{aligned}
 \bm{a} \times (\bm{b} + \bm{c}) &= \bm{a} \times \bm{b} + \bm{a} \times \bm{c} \\
@@ -474,7 +479,9 @@ $$
 \bm{a} \times \bm{b} &= - (\bm{b} \times \bm{a})
 \end{aligned}
 $$
+
 在笛卡尔坐标系里, 我们可以得出:
+
 $$
 \begin{aligned}
 \bm{a} \times \bm{b} &= (x_a\bm{x} + y_a\bm{y} + z_a\bm{z})\times(x_b\bm{x} + y_b\bm{y} + z_b\bm{z}) \\
@@ -483,6 +490,7 @@ $$
 &= (y_az_b - z_ay_b)\bm{x} + (z_ax_b - x_az_b)\bm{y} + (x_ay_b - y_ax_b)\bm{z}
 \end{aligned}
 $$
+
 用坐标格式表示就是:
 $$\bm{a} \times \bm{b} = (y_az_b - z_ay_b, z_ax_b - x_az_b, x_ay_b - y_ax_b)$$
 
