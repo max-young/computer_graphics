@@ -446,8 +446,10 @@ Cross product只应用在三维向量领域, 因为两个向量的cross product�
 而且cross product的结果向量的方向还不和原始的两个向量在一个平面上, 是垂直于这两个向量的平面的, 方向遵守右手螺旋定则  
 也就是说$\bm{a} \times \bm{b}$得出的向量的方向, 我们可以用右手从$\bm{a}$旋转到$\bm{b}$, 大拇指的方向就是cross product结果向量的方向  
 那么长度呢? 长度是$\bm{a}$和$\bm{b}$组成的平行四边形的面积(the area of parallelogram), 也就是:
+
 $$\parallel \bm{a} \times \bm{b} \parallel = \parallel \bm{a} \parallel \parallel \bm{b} \parallel \sin\phi$$
-我们假设一个三维坐标系, $\bm{x}$$\bm{y}$$\bm{z}$是三个坐标轴的三维向量, 也就是:
+
+我们假设一个三维坐标系, $\bm{x}$, $\bm{y}$, $\bm{z}$是三个坐标轴的三维向量, 也就是:
 
 $$
 \begin{aligned}
