@@ -25,6 +25,7 @@
     - [_2.4.2 Cartesian Coordinates of a Vector](#_242-cartesian-coordinates-of-a-vector)
     - [_2.4.3 Dot Product点积](#_243-dot-product点积)
     - [_2.4.4 Cross Product叉积](#_244-cross-product叉积)
+    - [_2.4.5 Orthonormal Bases and Coordinate Frames正交基和坐标系](#_245-orthonormal-bases-and-coordinate-frames正交基和坐标系)
   - [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
   - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
   - [_2.7 Triangles三角形](#_27-triangles三角形)
@@ -495,6 +496,9 @@ $$
 
 用坐标格式表示就是:
 $$\bm{a} \times \bm{b} = (y_az_b - z_ay_b, z_ax_b - x_az_b, x_ay_b - y_ax_b)$$
+
+#### _2.4.5 Orthonormal Bases and Coordinate Frames正交基和坐标系
+
 
 ### _2.5 Curves and Surfaces曲线和曲面
 
