@@ -26,6 +26,9 @@
     - [_2.4.3 Dot Product点积](#_243-dot-product点积)
     - [_2.4.4 Cross Product叉积](#_244-cross-product叉积)
     - [_2.4.5 Orthonormal Bases and Coordinate Frames正交基和坐标系](#_245-orthonormal-bases-and-coordinate-frames正交基和坐标系)
+    - [_2.4.6 Constructing a Basis from a Single Vector根据一个向量来构建正交基](#_246-constructing-a-basis-from-a-single-vector根据一个向量来构建正交基)
+    - [_2.4.7 Constructing a Basis from Two Vectors](#_247-constructing-a-basis-from-two-vectors)
+    - [Squaring Up a Basis修复](#squaring-up-a-basis修复)
   - [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
   - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
   - [_2.7 Triangles三角形](#_27-triangles三角形)
@@ -499,7 +502,42 @@ $$\bm{a} \times \bm{b} = (y_az_b - z_ay_b, z_ax_b - x_az_b, x_ay_b - y_ax_b)$$
 
 #### _2.4.5 Orthonormal Bases and Coordinate Frames正交基和坐标系
 
+orthonormal basis就是一个三维坐标系, 三个轴向量的长度都是1, 方向遵守右手螺旋定则
 
+carnonical orthonormal basis可以理解为主坐标系, 它的原点$o$称之为origin location, 这个坐标系也可称之为global coordinate system  
+与之对应的是, 在global coordinate system里还可以设定一个子坐标系, 例如大地坐标是是主坐标系, 我们可以确定飞机在主坐标系的位置  
+但是对于飞行员来说, 可能还需要一个原点是飞机, 航向是x轴的坐标系  
+大地坐标系和飞机坐标系构成了a frame of reference, 或者说coordinate frame  
+子坐标系称为local coordinate system
+
+第6章会有详细讲述, 我对本章的理解没有很透测, 暂且搁置
+
+#### _2.4.6 Constructing a Basis from a Single Vector根据一个向量来构建正交基
+
+如上一章节所述, 飞行员需要根据自己的航向这个单个向量, 来构建一个坐标系.  
+假设这个向量是$\bm{a}$, 要构建一个u-v-w的basis  
+首先以$\bm{a}$的单位向量作为$\bm{w}$:
+$$\bm{w} = \frac{\bm{a}}{\parallel \bm{a} \parallel}$$
+然后我们取任意一个和$\bm{a}$不同的向量$\bm{t}$, 以$\bm{w}$和$\bm{t}$的cross product作为$\bm{u}$, 也就是:
+$$\bm{u} = \frac{\bm{t} \times \bm{w}}{\parallel \bm{t} \times \bm{w} \parallel}$$
+但是问题是, 如何选择$\bm{t}$呢? 如果太接近$\bm{a}$, 得到的结果精度很低(原画如此, 我的理解是, 两条边的夹角很小, 构成的面也很小, 做垂线的精度就会比较低, 如果夹角比较大就不一样了)  
+那么我们怎么取$\bm{t}$呢? 方法是将$\bm{w}$最小的一个坐标值变成1, 比如$\bm{w} = (1/\sqrt{2}, -1/\sqrt{2}, 0)$, 那么$\bm{t} = (1/\sqrt{2}, -1/\sqrt{2}, 1)$  
+这样$\bm{w}$和$\bm{u}$都确定了, $\bm{v}$也就确定了:
+$$\bm{v} = \bm{w} \times \bm{u}$$
+
+#### _2.4.7 Constructing a Basis from Two Vectors
+
+已知两个vectors $\bm{a}$和$\bm{b}$, 构建u-v-w basis  
+我们以$\bm{a}$为w:  
+$$\bm{w} = \frac{\bm{a}}{\parallel \bm{a} \parallel}$$
+然后以$\bm{w}$和$\bm{b}$的cross product, 也就是他们的垂线作为$\bm{u}$:
+$$\bm{u} = \frac{\bm{b} \times \bm{w}}{\parallel \bm{b} \times \bm{w} \parallel}$$
+然后:
+$$\bm{v} = \bm{w} \times \bm{u}$$
+
+#### Squaring Up a Basis修复
+
+假如我们计算向量时发生错误, 我们可以用上面的方法重建basis, 但是这不是最好的方法, 在5.4.1章节里有更精确的方法SVD
 ### _2.5 Curves and Surfaces曲线和曲面
 
 ### _2.6 Linear Interpolation线性插值
