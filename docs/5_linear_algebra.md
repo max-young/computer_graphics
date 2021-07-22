@@ -5,7 +5,7 @@
   - [_5.2 Matrics矩阵](#_52-matrics矩阵)
     - [_5.2.1 Matrix Arithmetic矩阵计算](#_521-matrix-arithmetic矩阵计算)
     - [_5.2.2 Operations on Matrics对矩阵的操作](#_522-operations-on-matrics对矩阵的操作)
-    - [_5.2.3 Vector Operations in Matrix Form](#_523-vector-operations-in-matrix-form)
+    - [_5.2.3 Vector Operations in Matrix Form通过matrix对vector进行操作](#_523-vector-operations-in-matrix-form通过matrix对vector进行操作)
 
 <!-- /TOC -->
 
@@ -28,7 +28,10 @@ determinants有下面的特性:
 $$|(k\bm{a})\bm{b}| = |\bm{a}(k\bm{b})| = k|\bm{a}\bm{b}|$$
 就是把一个平行四边形放大k倍, 放大哪条边都是一样的
 $$|(\bm{a}+k\bm{b})\bm{b}| = |\bm{a}(\bm{b}+k\bm{a})| = |\bm{a}\bm{b}|$$
-这个不是很好理解, 但是画图后就清晰了, 就是把一个四边形剪去(shearing)一个角, 然后拼到另外一边  
+这个不是很好理解, 但是画图后就清晰了, 就是把一个四边形剪去(shearing)一个角, 然后拼到另外一边.  
+或者可以这么理解, 一个矩形, 保持底边和高度不变, 将上边的那条边左右移动, 这样这个矩形就变成了平行四边形, 但是面积是不变的  
+在shear matrix里有很形象的解释
+
 另外一个特性是, 两个平行四边形想加, 不是直接把他们的面积相加, 而是指首尾两边构成一个新的四边形:
 $$|\bm{a}(\bm{b}+\bm{c})| = |\bm{a}\bm{b}| + |\bm{a}\bm{c}|$$  
 二维的determinants用笛卡尔表示的话就是:
@@ -129,8 +132,8 @@ $$AB \neq BA$$
 $$
 \begin{aligned}
 (AB)C &= A(BC) \\
-A(B + C) = AB + AC \\
-(A + B)C = AC + BC
+A(B + C) &= AB + AC \\
+(A + B)C &= AC + BC
 \end{aligned}
 $$
 
@@ -204,4 +207,72 @@ $$(\mathbf A \mathbf B)^{\rm T} = \mathbf B^{\rm T}\mathbf A^{\rm T}$$
 
 接下来讲到了matrix的determinant, 不太明白, 第一节说的是向量的determinant, 怎么一下跳到了matrix的determinant, 可能是之前有向量的matrix表示我还没看到, 暂且搁置
 
-#### _5.2.3 Vector Operations in Matrix Form
+#### _5.2.3 Vector Operations in Matrix Form通过matrix对vector进行操作
+
+一个二维向量$a = (x_a, y_a)$, 旋转90度, 得到$a^{'} = (-y_a, x_a)$, 我们可以对向量乘以一个matrix得到这样的效果:
+$$
+\left[
+\begin{matrix}
+0 & -1 \\
+1 & 0
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+x_a \\
+y_a
+\end{matrix}
+\right] = 
+\left[
+\begin{matrix}
+-y_a \\
+x_a
+\end{matrix}
+\right]
+$$
+
+如果是横向量, 那就是:
+$$
+\left[
+\begin{matrix}
+x_a & y_a
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+0 & 1 \\
+-1 & 0
+\end{matrix}
+\right] = 
+\left[
+\begin{matrix}
+-y_a & x_a
+\end{matrix}
+\right]
+$$
+
+两个向量的dot product, 也可以用matrix表示:
+$$a\cdot b = a^{\rm T}b$$
+对a转置变成横向量然后变成一个横向量乘以一个竖向量:
+$$
+\left[
+\begin{matrix}
+x_a & y_a & z_a
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+x_b \\
+y_b \\
+z_b
+\end{matrix}
+\right] = 
+\left[
+\begin{matrix}
+x_ax_b + y_ay_b + z_az_b
+\end{matrix}
+\right]
+$$
+
+那么$ab^{\rm T}$得到什么呢? 如果是一个三维向量的话, 就会得到一个3X3的matrix  
+代表什么含义呢? 没看懂, 先搁置
