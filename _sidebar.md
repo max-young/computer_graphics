@@ -1,2 +1,5 @@
 * [Home](/)
-* [Fundamentals_of_Computer_Graphics](./Fundamentals_of_Computer_Graphics.md)
+* [preface](./docs/preface.md)
+* [1 introduction](./docs/1_introduction.md)
+* [2 miscellaneous math](./docs/2_miscellaneous_math.md)
+* [5 linear algebra](./docs/5_linear_algebra.md)
