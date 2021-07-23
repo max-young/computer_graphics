@@ -7,6 +7,9 @@
     - [_2.1.3 Logarithms对数](#_213-logarithms对数)
   - [_2.2 Solving Quadratic Equations求解二次方程](#_22-solving-quadratic-equations求解二次方程)
   - [_2.3 Trigonometry三角几何](#_23-trigonometry三角几何)
+    - [_2.3.1 Angles角度](#_231-angles角度)
+    - [_2.3.2 Trigonometrics Functions三角函数](#_232-trigonometrics-functions三角函数)
+    - [_2.3.3 Userful Identities](#_233-userful-identities)
   - [_2.4 Vectors向量](#_24-vectors向量)
     - [_2.4.1 Vector Operations](#_241-vector-operations)
     - [_2.4.2 Cartesian Coordinates of a Vector](#_242-cartesian-coordinates-of-a-vector)
@@ -126,7 +129,7 @@ D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个
 <a id="markdown-_23-trigonometry三角几何" name="_23-trigonometry三角几何"></a>
 ### _2.3 Trigonometry三角几何
 
-**Angles**
+#### _2.3.1 Angles角度
 
 两条half_lines(direction)组成的角度angle如何表示呢?  
 交点为圆心画一个单位圆(半径为1), 两条线切的圆弧长度可以用来表示角度, 一般用较短的圆弧来表示角度.  
@@ -139,12 +142,12 @@ D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个
 $$degrees = \frac{180}{\pi}radians$$
 $$radians = \frac{\pi}{180}degrees$$
 
-**Trigonometrics Functions三角函数**
+#### _2.3.2 Trigonometrics Functions三角函数
 
 勾股定理的证明  
 以及sin, cos, tan, cot等的定义
 
-**Userful Identities**
+#### _2.3.3 Userful Identities
 
 sin, cos, tan, cot的一些等式
 
