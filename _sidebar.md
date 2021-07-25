@@ -2,6 +2,7 @@
 * [preface](./docs/preface.md)
 * [1 introduction](./docs/1_introduction.md)
 * [2 miscellaneous math](./docs/2_miscellaneous_math.md)
+* [4 ray tracing](./docs/4_ray_tracing.md)
 * [5 linear algebra](./docs/5_linear_algebra.md)
 * [6 transformation matrices](./docs/6_transformation_matrices.md)
 * [7 viewing](./docs/7_viewing.md)
