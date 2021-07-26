@@ -6,6 +6,7 @@
     - [_5.2.1 Matrix Arithmetic矩阵计算](#_521-matrix-arithmetic矩阵计算)
     - [_5.2.2 Operations on Matrics对矩阵的操作](#_522-operations-on-matrics对矩阵的操作)
     - [_5.2.3 Vector Operations in Matrix Form通过matrix对vector进行操作](#_523-vector-operations-in-matrix-form通过matrix对vector进行操作)
+    - [_5.2.4 Special Types of Matrics矩阵的特殊类型](#_524-special-types-of-matrics矩阵的特殊类型)
 
 <!-- /TOC -->
 
@@ -275,4 +276,8 @@ x_ax_b + y_ay_b + z_az_b
 $$
 
 那么$ab^{\rm T}$得到什么呢? 如果是一个三维向量的话, 就会得到一个3X3的matrix  
-代表什么含义呢? 没看懂, 先搁置
+我们可以把$3\times 3$的matrix理解为3行横向量, 或者3列列向量  
+那么这个这个$3\times 3$的matrix乘以一个列向量, 得到一个列向量, 这个列向量的entries是$3\times 3$的matrix的3个横向量和列向量的dot product  
+如果是两个$3 times 3$的matrix相乘, 可以理解为3个横向量的组合和3个列向量的组合两两点乘, 得到3个横向量(列向量)
+
+#### _5.2.4 Special Types of Matrics矩阵的特殊类型

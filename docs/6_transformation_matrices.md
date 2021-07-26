@@ -9,6 +9,7 @@
     - [_6.1.5 Composition and Decomposition of Transformations变换的合成和分解](#_615-composition-and-decomposition-of-transformations变换的合成和分解)
   - [_6.2 3D Linear Transformations3D线性变换](#_62-3d-linear-transformations3d线性变换)
   - [_6.3 Translation and Affine Transformations平移和仿射变换](#_63-translation-and-affine-transformations平移和仿射变换)
+    - [_6.4 Inverse of Transformation Matrices矩阵变换的逆](#_64-inverse-of-transformation-matrices矩阵变换的逆)
 
 <!-- /TOC -->
 
@@ -271,5 +272,5 @@ c & d & 0 \\
 \right]
 $$
 
-
+#### _6.4 Inverse of Transformation Matrices矩阵变换的逆
 
