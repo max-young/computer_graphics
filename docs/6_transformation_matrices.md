@@ -9,7 +9,8 @@
     - [_6.1.5 Composition and Decomposition of Transformations变换的合成和分解](#_615-composition-and-decomposition-of-transformations变换的合成和分解)
   - [_6.2 3D Linear Transformations3D线性变换](#_62-3d-linear-transformations3d线性变换)
   - [_6.3 Translation and Affine Transformations平移和仿射变换](#_63-translation-and-affine-transformations平移和仿射变换)
-    - [_6.4 Inverse of Transformation Matrices矩阵变换的逆](#_64-inverse-of-transformation-matrices矩阵变换的逆)
+  - [_6.4 Inverse of Transformation Matrices矩阵变换的逆](#_64-inverse-of-transformation-matrices矩阵变换的逆)
+  - [_6.5 Coordinate Transformations坐标系变换](#_65-coordinate-transformations坐标系变换)
 
 <!-- /TOC -->
 
@@ -71,7 +72,7 @@ y
 \end{matrix}
 \right]
 $$
-所以我们要缩放的话, 就把二维向量乘以这样的一个矩阵:
+所以我们要缩放的话, 就把二维向量乘以一个diagonal matrix:
 $$
 \left[
 \begin{matrix}
@@ -140,6 +141,8 @@ rotate(\phi) =
 \right]
 $$
 证明过程这里就不说了, 也不复杂, 看书去吧
+
+值得注意的是, 这个矩阵是一个orthogonal matrix  
 
 #### _6.1.4 Reflection反射
 
@@ -272,5 +275,106 @@ c & d & 0 \\
 \right]
 $$
 
-#### _6.4 Inverse of Transformation Matrices矩阵变换的逆
+### _6.4 Inverse of Transformation Matrices矩阵变换的逆
 
+矩阵变换的逆, 在几何上有什么意义呢? 
+
+首先, 如果我们对一个向量做scale缩放操作, 我们要乘以一个diagonal matrix, 假设斜线是$(s_x, s_y, s_z)$  
+如果我们要反向缩放回原来的大小, 我们也需要乘以一个diagonal matrix, 斜线是${1/s_x, 1/s_y, 1/s_z}$
+
+如果是旋转的话, 要对一个向量乘以一个orthogonal matrx, 如果要旋转回来, 就要乘以这个matrix的inverse  
+根据orthogonal matrix的特性, 它的inverse也是它的transpose  
+inverse计算很复杂, transpose就很简单了, 所以要旋转回来, 我们乘以其transpose就可以了  
+
+实例: 假如我们对一个向量旋转$\rm R_1$, 再缩放${s_x, s_y, s_z}$, 再旋转$\rm R_2$, ($\rm R$代表orthogonal matrix), 那么我们要对向量乘以的矩阵是:
+$$\rm M = \rm R_2(s_x, s_y, s_z)\rm R_1$$  
+做逆向操作的话, 矩阵就是
+$$\rm M^{-1} = \rm R_1^T(1/s_x, 1/s_y, 1/s_z)\rm R_2^T$$  
+
+### _6.5 Coordinate Transformations坐标系变换
+
+举一例子:
+汽车在路上行走在马路上, 路边的大楼再往后退  
+那么我们是要将大楼往后移动呢? 还是要将以汽车为原点的坐标系在城市坐标系里移动呢?  
+这就涉及到坐标系变换的问题.
+
+术语:  
+coordinate system, 或者coordinate frame, 包括原点origin, 和basis(几个向量)  
+比如orthonormal bases就是一个包含一个原点, 和三个互相垂直的向量的coordinate system  
+假如一个三维坐标系origin是$p$, basis是${u, v, w}$, 那么这个坐标系下的点可以表示为:
+$$p + u\bm u + v\bm v + w\bm w$$
+二维坐标系, origin是$o$, basis是${x, y}$, 其中的点可以表示为:
+$$\bm p = (x_p, y_p) \equiv \bm o + x_p\bm x + y_p \bm y$$
+
+假设$o, x, y$是carnonical coordinate system主坐标系, 怎么把子坐标系$e, u ,v$上的点p转换到主坐标系下呢? 
+$$\bm p = (u_p, v_p) \equiv \bm e + u_p\bm u + v_p \bm v$$
+
+我们可以用仿射变换, 将p先旋转再平移:
+$$
+\left[
+\begin{matrix}
+x_p \\
+y_p \\
+1
+\end{matrix}
+\right] = 
+\left[
+\begin{matrix}
+1 & 0 & x_e \\
+0 & 1 & y_e \\
+0 & 0 & 1
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+x_u & x_v & 0 \\
+y_u & y_v & 0 \\
+0 & 0 & 1
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+u_p \\
+v_p \\
+1
+\end{matrix}
+\right] = 
+\left[
+\begin{matrix}
+x_u & x_v & x_e \\
+y_u & y_v & y_e \\
+0 & 0 & 1
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+u_p \\
+v_p \\
+1
+\end{matrix}
+\right]
+$$
+其中$x_u, y_u$和$x_v, y_v$指的是子坐标系的basis vector在carnicol system下的向量表示
+可以简化表示为:
+$$
+\rm P_{xy} =
+\left[
+\begin{matrix}
+\bm u & \bm v & \bm e \\
+0 & 0 & 1
+\end{matrix}
+\right]
+\rm P_{uv}
+$$
+如果要反向转换, 那就是先平移再旋转:
+$$
+\rm P_{uv} =
+\left[
+\begin{matrix}
+\bm u & \bm v & \bm e \\
+0 & 0 & 1
+\end{matrix}
+\right]^{-1}
+\rm P_{xy}
+$$
+三维坐标系是同样的道理

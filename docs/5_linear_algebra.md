@@ -286,7 +286,7 @@ $$
 
 *diagonal matrix*: 除了左上角和右下角的对角线上的entries, 其他都是0  
 *symmetric*: 对称, 如果一个矩阵的transpose还是它自己, 那么我们称这个matrix symmetric  
-*orthogonal matrix*: 我们把一个矩阵的每一行(或者每一列)都看作是一个向量, 如果每个向量的长度都是1, 且于其他向量都垂直, 那么这个matrix就是orthogonal matrix正交矩阵. 表象就是每一行(每一列)有且只有一个entries等于1  
+*orthogonal matrix*: 我们把一个矩阵的每一行(或者每一列)都看作是一个向量, 如果每个向量的长度都是1, 且于其他向量都垂直, 那么这个matrix就是orthogonal matrix正交矩阵. terminant是1或者-1.
 
 identity matrix满足上面三个特性  
 
