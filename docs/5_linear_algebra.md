@@ -7,6 +7,8 @@
     - [_5.2.2 Operations on Matrics对矩阵的操作](#_522-operations-on-matrics对矩阵的操作)
     - [_5.2.3 Vector Operations in Matrix Form通过matrix对vector进行操作](#_523-vector-operations-in-matrix-form通过matrix对vector进行操作)
     - [_5.2.4 Special Types of Matrics矩阵的特殊类型](#_524-special-types-of-matrics矩阵的特殊类型)
+  - [_5.3 Computing with Matrices and Determinants](#_53-computing-with-matrices-and-determinants)
+    - [_5.3.1 Computing Inverse](#_531-computing-inverse)
 
 <!-- /TOC -->
 
@@ -281,3 +283,100 @@ $$
 如果是两个$3 times 3$的matrix相乘, 可以理解为3个横向量的组合和3个列向量的组合两两点乘, 得到3个横向量(列向量)
 
 #### _5.2.4 Special Types of Matrics矩阵的特殊类型
+
+*diagonal matrix*: 除了左上角和右下角的对角线上的entries, 其他都是0  
+*symmetric*: 对称, 如果一个矩阵的transpose还是它自己, 那么我们称这个matrix symmetric  
+*orthogonal matrix*: 我们把一个矩阵的每一行(或者每一列)都看作是一个向量, 如果每个向量的长度都是1, 且于其他向量都垂直, 那么这个matrix就是orthogonal matrix正交矩阵. 表象就是每一行(每一列)有且只有一个entries等于1  
+
+identity matrix满足上面三个特性  
+
+orthogonal matrix还满足这样的特性:
+$$\rm R^{\rm T}\rm R = I = \rm R\rm R^{\rm T}$$
+
+$$
+\left[
+\begin{matrix}
+8 & 0 & 0 \\
+0 & 2 & 0 \\
+0 & 0 & 9
+\end{matrix}
+\right]
+$$
+这个矩阵是diagonal, symmetric但是不是orthogonal  
+
+$$
+\left[
+\begin{matrix}
+1 & 1 & 2 \\
+1 & 9 & 7 \\
+2 & 7 & 1
+\end{matrix}
+\right]
+$$
+这个矩阵symmetric, 但是不diagonal, 也不orthogonal
+
+$$
+\left[
+\begin{matrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{matrix}
+\right]
+$$
+这个矩阵orthogonal, 但是不diagonal, 也不symmetric
+
+### _5.3 Computing with Matrices and Determinants
+
+我们可以把一个2X2的矩阵看作是两个横向量, 或者两个列向量, 那么我们就可计算一个2X2的矩阵的determinant  
+回忆一下, determinant就是向量围起来的面积(体积)
+
+这样:
+$$
+\left|
+\begin{matrix}
+\left[
+\begin{matrix}
+a \\
+b
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+A \\
+B
+\end{matrix}
+\right]
+\end{matrix}
+\right| \equiv
+\left|
+\begin{matrix}
+a & A \\
+b & B
+\end{matrix}
+\right| =
+aB - Ab
+$$
+看做两个横向量也是一样的  
+(至于为什么这个平行四边形的面积是$aB - Ab$, 应该是中学知识)
+
+我们在看一个$3 \times 3$的矩阵:
+$$
+\left|
+\begin{matrix}
+x - x_0 & x - x_1 & x - x_2 \\
+y - y_0 & y - y_1 & y - y_2 \\
+z- z_0 & z - z_1 & z - z_2
+\end{matrix}
+\right|
+$$
+这个矩阵可以看作是4个点, 3个列向量, 分别是$(x, y ,x)$和其他三个点的连线, 如果这个matrix的determinant是0, 那么代表$(x, y, z)$和其他三个点在一个平面上
+
+那么我们怎么计算一个matrix的determinant呢? 需要用到*Laplace's expansion*  
+这里不再重复了, 稍微有点复杂. 这个原理为什么成立, 我也不知道. 反正拿来用就好
+
+#### _5.3.1 Computing Inverse
+
+计算你矩阵, 和上面计算determinant相关, 也是直接拿过来用, 这里不重复说了
+
+需要说明的是, 这种计算方法比较耗时, 比较适合小的矩阵. 但是在图形学里, 小矩阵居多, 所以很有用.
