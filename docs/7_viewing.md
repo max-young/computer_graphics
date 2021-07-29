@@ -5,6 +5,8 @@
     - [_7.1.1 The Viewport Transformation](#_711-the-viewport-transformation)
     - [_7.1.2 The Orthographic Projection Transformation正交投影变换](#_712-the-orthographic-projection-transformation正交投影变换)
     - [_7.1.3 The Camera Transformation](#_713-the-camera-transformation)
+  - [_7.2 Projective Transformations投影变换](#_72-projective-transformations投影变换)
+  - [_7.3 Perspective projection透视投影](#_73-perspective-projection透视投影)
 
 <!-- /TOC -->
 
@@ -131,6 +133,195 @@ $$
 
 这一步由相机的位置、观测角度、相机自身的角度相关, 这个坐标系也和canonical view volume一样
 这一步的关键是如何将现实世界中的坐标转换到这个坐标系下  
-其实就是将现实的坐标平移然后旋转, 和相机坐标相匹配  
+其实就是将现实的坐标旋转平移做放射变换, 和相机坐标相匹配   
+这就是6.5章节的坐标系变换
 
-先看6.5章节
+假设这一步的三个决定因素这样表示:
+- 观测位置e
+- 视线方向g
+- 相机的向上方向的向量
+这三个因素构成了一个$(u, v, w)$的orthonormal坐标系:
+$$
+\begin{aligned}
+w &= - \frac{g}{\parallel g \parallel} \\
+u &= \frac{t \times w}{\parallel t \times w \parallel} \\
+v &= w \times u
+\end{aligned}
+$$
+
+现在的问题就变成了, 将现实坐标系$(x, y, z)$的点, 转换到相机坐标系$(u, v, w)$下, 根据6.5章节:
+$$
+\rm M_{cam} =
+\left[
+\begin{matrix}
+u & v & w & e \\
+0 & 0 & 0 & 1
+\end{matrix}
+\right]^{-1} =
+\left[
+\begin{matrix}
+x_u & y_u & z_u & 0 \\
+x_v & y_v & z_v & 0 \\
+x_w & y_w & z_w & 0 \\
+0 & 0 & 0 & 1
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+1 & 0 & 0 & -x_e \\
+0 & 1 & 0 & -y_e \\
+0 & 0 & 1 & -z_e \\
+0 & 0 & 0 & 1
+\end{matrix}
+\right]
+$$
+
+这样, 拍照的完整的转换过程就是对现实坐标系下的一个向量乘以这样的一个矩阵:
+$$
+\rm M = M_{vp}M_{orth}M_{cam}
+$$
+这里我们假设投影变换只需要进行orthographic projection  
+通俗的理解就是一个正方体直接压缩到一个平面上  
+但实际的情况不是这样的, 我们接下来就会说到透视变换
+
+### _7.2 Projective Transformations投影变换
+
+上一章节里说到了其中一种简单的投影变换
+投影变换有多种方式, 比如perspective projection透视投影, 相对比较复杂, 所以我们单独拿出来讲.
+
+本一章节主要讲homogeneous coordinate齐次坐标的特殊表示.  
+一个3D point$(x, y, z)$用齐次坐标坐标表示的话, 就是加一个维度, 数字是1: ${x, y, z, 1}$  
+我们对它进行变换时, 是乘以一个$4 \times 4$的矩阵, 矩阵的最后一行是$(0, 0, 0, 1)$  
+
+我们在这里定义${x, y, z, w}$, $w \neq 1$并且$w \neq 0$, 也表示一个3D的point, 它和$(x/w, y/w, z/w, 1)$是等价的  
+这样我们对其进行变换的时候, 最后一行就不必是$(0, 0, 0, 1)$了:
+$$
+\left[
+\begin{matrix}
+\widetilde{x} \\
+\widetilde{y} \\
+\widetilde{z} \\
+\widetilde{w}
+\end{matrix}
+\right] =
+\left[
+\begin{matrix}
+a_1 & b_1 & c_1 & d_1 \\
+a_2 & b_2 & c_2 & d_2 \\
+a_3 & b_3 & c_3 & d_3 \\
+e & f & g & h
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+x \\
+y \\
+z \\
+1
+\end{matrix}
+\right]
+$$
+$(x, y, z)$经过转换后得到$(x^{\prime}, y^{\prime}, z^{\prime}) = (\widetilde{x}/\widetilde{w}, \widetilde{y}/\widetilde{w}, \widetilde{z}/\widetilde{w})$
+
+举一个实际的例子:
+$$
+\left[
+\begin{matrix}
+2 & 0 & -1 \\
+0 & 3 & 0 \\
+0 & \frac{2}[3] & \frac{1}{3}
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+1 \\
+0 \\
+1
+\end{matrix}
+\right] =
+\left[
+\begin{matrix}
+1 \\
+0 \\
+\frac{1}{3}
+\end{matrix}
+\right]
+$$
+一个二维的点$(1, 0)$经过转换后得到$(1, 0, 1/3)$, 也就是$(3, 0, 1)$, $(3, 0)$
+
+而且还有一个特性, 如果我们对上面的矩阵乘以一个数字, 再进行变换, 得到的点是一样的.  
+另外如果我们对一个正方形执行上面的变换, 会发现得到了一个变形的四边形, 好像有点像近大远小的效果  
+对, 接下来我们就要讲到perspective projection透视变换
+
+### _7.3 Perspective projection透视投影
+
+看这张图:  
+<img src="./_images/perspective_projection.png">  
+
+实际的情况是这样, 从相机的中心位置, 或者从人眼位置去观测, 将实景投射到视窗上, 是按比例缩放的:  
+假设观测位置是e, 离视窗(显示的坐标系)的距离是d, 离实景的距离是z, 那么y坐标投射到视窗上就变成了:  
+$$y_s = \frac{d}{z}y$$
+x也是一样  
+$$x_s = \frac{d}{z}x$$
+那么对于z轴呢? 咋一看z轴好像不变, 也需要做一下变换:  
+$$
+\rm P =
+\left[
+\begin{matrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & n+f & -fb \\
+0 & 0 & 1 & 0
+\end{matrix}
+\right]
+$$
+投影计算后得到:
+$$
+\rm P
+\left[
+\begin{matrix}
+x \\
+y \\
+z \\
+1
+\end{matrix}
+\right] = 
+\left[
+\begin{matrix}
+nx \\
+ny \\
+(n+f)z - fn \\
+z
+\end{matrix}
+\right] ~
+\left[
+\begin{matrix}
+\frac{nx}{z} \\
+\frac{ny}{z} \\
+n + f - \frac{fn}{z} \\
+1
+\end{matrix}
+\right]
+$$
+这里的n和f指的是near和far  
+near是指视窗的z坐标, far指的是实景的z坐标, 都是负数
+
+这样, 实际的拍照过程, 就要加上这一个投影过程:  
+1. camera transformation将实景坐标系转换到相机坐标系下
+2. perspective projection透视投影, 将相机坐标系下的点转做与人眼相适应的转换
+3. 将camera coordinate转换成carnonical coordinate(1X1X1)的标准坐标系
+4. 将carnonical coordinate成像, 扩展成任意大小
+所以:
+$$\rm M = M_{vp}M_{orth}PM_{cam}$$  
+我们将$\rm M_{orth}P$合并成:
+$$
+\rm M_{per} = M_{orth}P =
+\left[
+\begin{matrix}
+\frac{2n}{r-l} & 0 & \frac{l+r}{l-r} & 0 \\
+0 & \frac{2n}{t-b} & \frac{b+t}{b-t} & 0 \\
+0 & 0 & \frac{f+n}{n-f} & \frac{2fn}{f-n} \\
+0 & 0 & 1 & 0
+\end{matrix}
+\right]
+$$
