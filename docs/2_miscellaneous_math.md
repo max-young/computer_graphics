@@ -20,6 +20,8 @@
     - [_2.4.7 Constructing a Basis from Two Vectors](#_247-constructing-a-basis-from-two-vectors)
     - [Squaring Up a Basis修复](#squaring-up-a-basis修复)
   - [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
+    - [_2.5.1 2D Implicit Curves 2D隐式曲线](#_251-2d-implicit-curves-2d隐式曲线)
+    - [_2.5.2 The 2D Gradient 2D梯度](#_252-the-2d-gradient-2d梯度)
   - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
   - [_2.7 Triangles三角形](#_27-triangles三角形)
   - [Frequently Asked Questions](#frequently-asked-questions)
@@ -337,6 +339,24 @@ $$\bm{v} = \bm{w} \times \bm{u}$$
 可以理解为曲线在某个点的切线的倾斜度. 实际场景下, 运动的瞬时速度就是运动过程在某个时间点的导数.  
 
 梯度可以理解为三维导数, 两个参数的曲线, 比如等高线, 参数是x, y坐标, 值是高度, 梯度和x方向的导数以及y方向的导数相关, 详细概念待学习
+
+#### _2.5.1 2D Implicit Curves 2D隐式曲线
+
+我们用这样的一个implicit equation隐式方程来表示2D曲线:
+$$f(x, y) = 0$$
+举一个例子:
+$$f(x, y) = (x - x_c)^2 + (y - y_c)^2 - r^2$$
+这就表示了一个以$(x_c, y_c)$为圆心, 半径为r的圆  
+为什么说是implicit, 因为我们从这个方程得不到具体的$(x, y)$坐标  
+
+我们还可以用向量来解释上面的方程, 假设向量$p = (x, y)$, $c = (x_c, y_c)$, 满足:
+$$(p-c)\cdot(p-c) - r^2 = 0$$
+c到p的向量dot product自身, 等于$r^2$  
+其实这和上面的式子是等价的, 因为dot product自己就是自身的长度的平方  
+根据dot product的特性, 我们可以这样简化表示:
+$$\parallel p - c \parallel - r = 0$$
+
+#### _2.5.2 The 2D Gradient 2D梯度
 
 <a id="markdown-_26-linear-interpolation线性插值" name="_26-linear-interpolation线性插值"></a>
 ### _2.6 Linear Interpolation线性插值
