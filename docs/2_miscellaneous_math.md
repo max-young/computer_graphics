@@ -22,6 +22,8 @@
   - [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
     - [_2.5.1 2D Implicit Curves 2D隐式曲线](#_251-2d-implicit-curves-2d隐式曲线)
     - [_2.5.2 The 2D Gradient 2D梯度](#_252-the-2d-gradient-2d梯度)
+      - [Implicit 2D lines隐式2D直线](#implicit-2d-lines隐式2d直线)
+      - [Implicit Quadric Curves隐式二次曲线](#implicit-quadric-curves隐式二次曲线)
   - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
   - [_2.7 Triangles三角形](#_27-triangles三角形)
   - [Frequently Asked Questions](#frequently-asked-questions)
@@ -333,12 +335,12 @@ $$\bm{v} = \bm{w} \times \bm{u}$$
 <a id="markdown-_25-curves-and-surfaces曲线和曲面" name="_25-curves-and-surfaces曲线和曲面"></a>
 ### _2.5 Curves and Surfaces曲线和曲面
 
-这里需要了解导数和梯度的概念  
+这里需要了解导数derivative和梯度gradient的概念  
 
 导数是指只有一个参数的曲线(也就是平面), 在某个点上曲线的值和参数之比, 无限趋近得到的一个数.  
 可以理解为曲线在某个点的切线的倾斜度. 实际场景下, 运动的瞬时速度就是运动过程在某个时间点的导数.  
 
-梯度可以理解为三维导数, 两个参数的曲线, 比如等高线, 参数是x, y坐标, 值是高度, 梯度和x方向的导数以及y方向的导数相关, 详细概念待学习
+梯度可以理解为2D导数, 两个参数的曲线, 比如等高线, 参数是x, y坐标, 值是高度, 梯度和x方向的导数以及y方向的导数相关, 详细概念待学习
 
 #### _2.5.1 2D Implicit Curves 2D隐式曲线
 
@@ -357,6 +359,60 @@ c到p的向量dot product自身, 等于$r^2$
 $$\parallel p - c \parallel - r = 0$$
 
 #### _2.5.2 The 2D Gradient 2D梯度
+
+在本章的前言离说到了derivative和gradient的概念  
+derivative导数是一个数字, gradient(2D derivative)的结果是一个向量  
+
+我们可以用等高线来解释, 这样更形象  
+一座山峰, $f(x, y) = 0$可以看作是一条某一高度的等高线, 这条曲线的gradient就是在某一个点处指向往上最陡的向量, 我们这么表示:
+$$\nabla f(x, y) = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)$$
+这个式子表示什么意思呢? 我们回忆一下derivative导数的概念, $y=g(x)$的derivarive是:
+$$\frac{d_y}{d_x} = \lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = \lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x}$$
+对于梯度:
+$$\frac{\partial f}{\partial x} = \lim_{\Delta x \to 0}\frac{f(x+\Delta x, y) - f(x, y)}{\Delta x}$$
+我们将其称为partial derivative偏导数, 因为我们只变化x, y保持不变, 求得f的变化的极限  
+书中有证明为什么这样规定梯度, 这里不再详述了  
+
+这样, 我们就可以得到$f(x, y) = x^2 + y^2 - 1 = 0$的gradient是$(2x, 2y)$
+
+##### Implicit 2D lines隐式2D直线
+
+一条斜线:
+$$y = mx +b$$
+用$f(x, y)$来表示就是:
+$$y - mx - b = 0$$  
+因为对这个等式两边乘以一个不为0的数字k, 还是同一条线, 我们对这条线用更通用的表示:
+$$Ax + By + C = 0$$
+
+假设我们知道这条线上的两个点$(x_0, y_0)$, $x_1, y_1$, 我们能确定这3个数字吗?  
+因为只有两个点, 两个方程, 3个未知数, 好像算不出来  
+我们可能会问, 既然$kf(x)$和$f(x)$是同一条线, 那么我们让$k = 1/C$不就可以了吗? 就不用算3个数字了?   
+但是我们怎么能保证C不等于0呢?
+
+我们知道$Ax+By+C$的gradient vector是$(A, B)$, 这个向量是和这条直线垂直的, 也就是和这两个点的连线是垂直的  
+这两个点的连线向量是$(x_1 - x_0, y_1 - y_0)$, 那么$(A, B) = (y_0 - y_1, x_1 - x_0)$, 垂直的话dot product等于0, 这样:
+$$(y_0 - y_1)x + (x_1 - x_0)y + C = 0$$
+因为$(x_0, y_0)$在这条线上, 代入这个式子, 算出来C的值, 从而得到:
+$$(y_0 - y_1)x + (x_1 - x_0)y + x_0y_1 -x_1y_0 = 0$$
+
+我们还可以算出来某个点$(a, b)$到这条线的垂直距离  
+点到这条线的垂直距离应该是梯度向量距离的倍数, 因为梯度也是垂直于这条线的:
+$$distance = k\sqrt(A^2 + B^2)$$
+这个点可以表示为$(x, y) + k(A, B)$, 所以:
+$$f(a, b), f(x + kA, y + kB) = Ax + kA^2 + By + kB^2 + C = k(A^2 + B^2)$$
+从而:
+$$distance = \frac{f(a, b)}{\sqrt{A^2 + B^2}}$$
+
+我们可以让gradient vector变成一个单位向量, 这样计算更方便:
+$$f(x, y) = \frac{y_0 - y_1}{\sqrt{(x_1 - x_0)^2 + (y_0-y_1)^2}}x + \frac{x_1-x_0}{\sqrt{(x_1 - x_0)^2 + (y_0 - y_1)^2}}y + \frac{x_0y_1 - x_1y_0}{\sqrt{(x_1-x_0)^2 +(y_0 - y_1)^2}} = 0$$
+
+##### Implicit Quadric Curves隐式二次曲线
+
+假如x和y是平方, 那么就是曲线  
+比如下面这个等式就是一个圆:
+$$(x-x_c)^2 + (y-y_c)^2 - r^2 = 0$$
+这个等式就是一个长半径是a, 短半径是b的椭圆:
+$$\frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} - 1 = 0$$
 
 <a id="markdown-_26-linear-interpolation线性插值" name="_26-linear-interpolation线性插值"></a>
 ### _2.6 Linear Interpolation线性插值
