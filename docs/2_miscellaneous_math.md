@@ -26,6 +26,7 @@
       - [Implicit Quadric Curves隐式二次曲线](#implicit-quadric-curves隐式二次曲线)
   - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
   - [_2.7 Triangles三角形](#_27-triangles三角形)
+    - [_2.7.1 2D Triangles](#_271-2d-triangles)
   - [Frequently Asked Questions](#frequently-asked-questions)
   - [notes](#notes)
   - [Exercises](#exercises)
@@ -399,7 +400,7 @@ $$(y_0 - y_1)x + (x_1 - x_0)y + x_0y_1 -x_1y_0 = 0$$
 点到这条线的垂直距离应该是梯度向量距离的倍数, 因为梯度也是垂直于这条线的:
 $$distance = k\sqrt{(A^2 + B^2)}$$
 这个点可以表示为$(x, y) + k(A, B)$, 所以:
-$$f(a, b), f(x + kA, y + kB) = Ax + kA^2 + By + kB^2 + C = k(A^2 + B^2)$$
+$$f(a, b) = f(x + kA, y + kB) = Ax + kA^2 + By + kB^2 + C = k(A^2 + B^2)$$
 从而:
 $$distance = \frac{f(a, b)}{\sqrt{A^2 + B^2}}$$
 
@@ -419,6 +420,66 @@ $$\frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} - 1 = 0$$
 
 <a id="markdown-_27-triangles三角形" name="_27-triangles三角形"></a>
 ### _2.7 Triangles三角形
+
+三角形在2D和3D图像里起到非常重要的作用  
+因为三角形是最基本的图形, 四边形可以拆成两个三角形, 三角形往下拆还是三角形  
+三角形构成一个平面, 四边形可能不是  
+
+#### _2.7.1 2D Triangles
+
+一个三角形的面积, 就是四边形的一半, 在第5章里会讲到两个向量的determinant, 也就是四边形的面积, 这样三角形的面积是:
+$$
+\begin{aligned}
+area &= \frac{1}{2}
+\Big|
+\begin{matrix}
+x_b - x_a & x_c - x_a \\
+y_b - y_a & y_c - y_a
+\end{matrix}
+\Big| \\
+&= \frac{1}{2}(x_ay_b + x_by_c +x_cy_a -x_ay_c - x_by_a -x_cy_b)
+\end{aligned}
+$$
+如果abc三个点构成逆时针方向, 则面积是正数, 否者是负数
+
+在图形学里, 为了让颜色渲染更平滑, 消除锯齿现象, 我们需要用到*barycentric coordinate*  
+就是一个三角形一个定点为origin, 两条边为basis, 构成的一个不垂直的坐标系.  
+将正交坐标系下的点转化为这个坐标系下的坐标, 这样就能精确的平滑的只将三角形内的区域着色, 从而消除锯齿现象  
+
+假设以a为origin, (b-a), (c-a)为basis, 那么这个坐标系下的点可表示为:
+$$p = a + \beta(b-a) + \gamma(c-a)$$
+$\beta$以b到ac的距离为单位, $\gamma$以c到ab的距离为单位  
+也就是说, 通过b且与ac平行的线上的点, $\beta = 1$
+通过c且与ab平行的线上的点, $\gamma = 1$
+经过变换:
+$$
+\begin{aligned}
+p &= (1-\beta-\gamma)a + \beta b + \gamma c \\
+\alpha &\equiv 1 - \beta - \gamma \\
+p(\alpha, \beta, \gamma) &= \alpha a + \beta b + \gamma c \\
+\alpha + \beta + \gamma &= 1
+\end{aligned}
+$$
+
+那么$\alpha, \beta, \gamma$如何求得呢?  
+在上面的坐标系定义里, 我们知道, $\beta$就是一个点到ac的距离, 除以b到ac的距离的比值:
+$$\beta = \frac{f_{ac}(x, y)}{f_{ac}(x_b, y_b)}$$
+同理:
+$$\gamma = \frac{f_{ab}(x, y)}{f_{ab}(x_c, y_c)}$$
+
+一个点到一条线的距离, 我们在2.5章节里讲到了  
+我们先根据两个点来将直线的implicit equation表示出来, 2.5章节已推导:
+$$f_{ab}(x, y) \equiv (y_a - y_b)x + (x_b - x_a)y + x_ay_b - x_by_a = 0$$
+这样:
+$$\gamma = \frac{(y_a-y_b)x + (x_b-x_a)y + x_ay_b - x_by_a}{(y_a-y_b)x_c + (x_b-x_a)y_c +x_ay_b - x_by_a}$$
+同理得到:
+$$
+\begin{aligned}
+\beta &= \frac{(y_a-y_c)x + (x_c-x_a)y + x_ay_c - x_cy_a}{(y_a-y_c)x_b + (x_c-x_a)y_b +x_ay_c - x_cy_a} \\
+\alpha &= 1-\beta-\gamma
+\end{aligned}
+$$
+
 
 <a id="markdown-frequently-asked-questions" name="frequently-asked-questions"></a>
 ### Frequently Asked Questions
