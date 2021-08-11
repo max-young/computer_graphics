@@ -4,6 +4,7 @@
   - [_8.1 Rasterization光栅化](#_81-rasterization光栅化)
     - [_8.1.1 Line Drawing](#_811-line-drawing)
     - [_8.1.2 Triangle Rasterization三角形光栅化](#_812-triangle-rasterization三角形光栅化)
+    - [_8.1.3 Clipping](#_813-clipping)
 
 <!-- /TOC -->
 
@@ -100,3 +101,43 @@ for x = x0 to x1 do
 ```
 
 #### _8.1.2 Triangle Rasterization三角形光栅化
+
+在2.7章节里, 我们讲到三角形的barycentric coordinates, 一个点在三角形的barycentric坐标系下可以表示为:  
+$$p = \alpha a + \beta b + \gamma c$$
+假设已知三角形的三个定点的颜色$c_0, c_1, c_2$, 我们要对三角形内的一个点着色, 我们可以这样计算其颜色:
+$$c = \alpha c_0 + \beta c_1 + \gamma c_2$$
+
+接下来的问题是, 我们怎么判断一个像素是否在三角形内, 我们规定, 如果像素的中点在三角形内, 就认为这个像素应该被三角形框定  
+那么怎么判断像素的中点在三角形内呢? 还是2.7章节, 我们根据这个像素中点的坐标, 就能求得$\alpha \beta \gamma$  
+如果求得这三个数都大于等于0小于等于1, 那么这个像素中点就在三角形内(2.7章节里, 这三个变量由此特性)  
+
+所以, brute-force algorithm就可以这样写, 对屏幕上的所有像素进行遍历:
+```
+for all x do
+  for all y do
+    if (α ∊ [0, 1], β ∊ [0, 1], ɣ ∊ [0, 1]) then
+      c = αc0 + βc1 + ɣc2
+      drawpixel(x, y) with color c
+```
+
+显然这个算法的效率不高, 对每个三角形都要遍历所有像素, 我们可以做一个优化, 只对相关的像素做遍历, 我们找到定点的xy边界即可  
+里面的遍历算法也可做一下优化, 采用2.7章节的知识:  
+<img src="./../_images/triangle_rendering.png" width=50%>
+
+**Dealing with Pixels on Triangle Edges**
+
+如何处理边缘问题, 两个相邻三角形, 共用一条边, 应该怎么处理这条变呢?  
+如果这条边的像素不做处理, 那就会留下孔洞  
+如果做两次处理, 颜色就会重叠  
+我们用下面的方法来决定这条边的像素应该用哪个三角形来处理:  
+定义一个屏幕外的点, 这个点和三角形的另外一个顶点如果在这条公共边的同侧, 那么这条公共边就属于这个三角形  
+判断是否在同侧, 就是用屏幕外点到公共边的距离乘以顶点到公共边的距离, 如果大于0, 就在同一侧, 请注意, 距离可以是负数, 这也是2.7章节的知识  
+所以, preseudo code可以写作:  
+<img src="./_images/triangle_edge.png" width=50%>  
+注: 截图前面少了两行:
+$$
+x_{min} = floor(x_i) \\
+x_{max} = ceiling(x_i))
+$$
+
+#### _8.1.3 Clipping
