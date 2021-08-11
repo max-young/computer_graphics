@@ -6,4 +6,5 @@
 * [5 linear algebra](./docs/5_linear_algebra.md)
 * [6 transformation matrices](./docs/6_transformation_matrices.md)
 * [7 viewing](./docs/7_viewing.md)
+* [8 the graphics pipeline](./docs/8_the_graphics_pipeline.md)
 * [14 sampling](./docs/14_sampling.md)
