@@ -293,7 +293,7 @@ ny \\
 (n+f)z - fn \\
 z
 \end{matrix}
-\right] ~
+\right] =
 \left[
 \begin{matrix}
 \frac{nx}{z} \\
@@ -304,7 +304,7 @@ n + f - \frac{fn}{z} \\
 \right]
 $$
 这里的n和f指的是near和far  
-near是指视窗的z坐标, far指的是实景的z坐标, 都是负数
+near是指视窗的z坐标, far指的是视窗的z坐标, 都是负数
 
 这样, 实际的拍照过程, 就要加上这一个投影过程:  
 1. camera transformation将实景坐标系转换到相机坐标系下
