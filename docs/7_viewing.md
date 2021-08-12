@@ -229,7 +229,7 @@ $$
 \begin{matrix}
 2 & 0 & -1 \\
 0 & 3 & 0 \\
-0 & \frac{2}[3] & \frac{1}{3}
+0 & \frac{2}{3} & \frac{1}{3}
 \end{matrix}
 \right]
 \left[
@@ -258,11 +258,14 @@ $$
 看这张图:  
 <img src="./_images/perspective_projection.png">  
 
-实际的情况是这样, 从相机的中心位置, 或者从人眼位置去观测, 将实景投射到视窗上, 是按比例缩放的:  
+上面说到得了正交投影, 是假设看到的视界是一个长方体, 视界的近处是n, 远处是f, 是一束平行的光看过去, 这种情况下, 同样大的物体, 在近处和在远处, 在这个orthographic coordinate下是同样大的.  
+但是实际的情况是这样, 从相机的中心位置, 或者从人眼位置去观测, 将实景投射到视窗上, 是按比例缩放的:  
 假设观测位置是e, 离视窗(显示的坐标系)的距离是d, 离实景的距离是z, 那么y坐标投射到视窗上就变成了:  
+视窗就是正交投影的orthographic coordinate坐标系, 长方体盒子的near平面  
 $$y_s = \frac{d}{z}y$$
 x也是一样  
 $$x_s = \frac{d}{z}x$$
+d其实就是near  
 那么对于z轴呢? 咋一看z轴好像不变, 也需要做一下变换:  
 $$
 \rm P =
@@ -304,12 +307,12 @@ n + f - \frac{fn}{z} \\
 \right]
 $$
 这里的n和f指的是near和far  
-near是指视窗的z坐标, far指的是视窗的z坐标, 都是负数
+near是指视窗的z坐标, far指的是视窗的z坐标, 都是负数, 因为0点是视点, 他们都在-z方向
 
 这样, 实际的拍照过程, 就要加上这一个投影过程:  
 1. camera transformation将实景坐标系转换到相机坐标系下
-2. perspective projection透视投影, 将相机坐标系下的点转做与人眼相适应的转换
-3. 将camera coordinate转换成carnonical coordinate(1X1X1)的标准坐标系
+2. perspective projection透视投影, 将一个梯形体转换到到orthographic coordinate长方体
+3. 将camera coordinate转换成carnonical coordinate(1X1X1)的标准坐标系, 将长方体转换到1X1X1的标准坐标系
 4. 将carnonical coordinate成像, 扩展成任意大小
 所以:
 $$\rm M = M_{vp}M_{orth}PM_{cam}$$  
