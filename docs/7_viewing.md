@@ -273,7 +273,7 @@ $$
 \begin{matrix}
 n & 0 & 0 & 0 \\
 0 & n & 0 & 0 \\
-0 & 0 & n+f & -fb \\
+0 & 0 & n+f & -fn \\
 0 & 0 & 1 & 0
 \end{matrix}
 \right]

@@ -7,4 +7,5 @@
 * [6 transformation matrices](./docs/6_transformation_matrices.md)
 * [7 viewing](./docs/7_viewing.md)
 * [8 the graphics pipeline](./docs/8_the_graphics_pipeline.md)
+* [9 signal processing](./docs/9_signal_processing.md)
 * [14 sampling](./docs/14_sampling.md)

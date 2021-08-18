@@ -4,7 +4,8 @@
   - [_8.1 Rasterization光栅化](#_81-rasterization光栅化)
     - [_8.1.1 Line Drawing](#_811-line-drawing)
     - [_8.1.2 Triangle Rasterization三角形光栅化](#_812-triangle-rasterization三角形光栅化)
-    - [_8.1.3 Clipping](#_813-clipping)
+    - [_8.1.3 Clipping剪裁](#_813-clipping剪裁)
+  - [_8.3 Simple Antialiasing简单反锯齿(反走样)](#_83-simple-antialiasing简单反锯齿反走样)
 
 <!-- /TOC -->
 
@@ -140,4 +141,30 @@ x_{min} = floor(x_i) \\
 x_{max} = ceiling(x_i))
 $$
 
-#### _8.1.3 Clipping
+#### _8.1.3 Clipping剪裁
+
+如果一个对象的一半在视点的后方, 也就是说z坐标是正数, 会怎样呢?  
+在7.3章节里, perpsective transform将camera坐标转换到orthographic坐标  
+x, y会经过缩放, z也会有一个转换:
+$$
+z^{\prime} = n + f - \frac{n}{z}f
+$$
+如果这个对象在视线前方, 那么z的范围应该在n+f范围内.  
+如果在视线后面, 那么z是正直, n是负值, 转换后的z轴就超出n+f了  
+所以我们需要clipping
+
+clipping一半用一个六边形来剪切, 将六边形外的对象切掉  
+有两种方法
+
+### _8.3 Simple Antialiasing简单反锯齿(反走样)
+
+在8.1章节里, 我们会发现画一条直线时, 如果直线是斜着跨过像素, 我们根据规则取到进过的像素时, 就会发现有很多锯齿.  
+这样画出来的线称为标准光栅化(standard rasterization), 或者偏差(锯齿)光栅化(aliased rasterization)
+
+如何去掉这些锯齿(antialiasing)呢? blurring(模糊)是有效的.  
+我们可以把一个像素的值, 和周围的像素值做平均(box filtering), 这样就实现了blurring, 然后我们把模糊化后的线当作一个像素.  
+
+如何实现box filtering呢? supersampling, 对高分辨率的图片(high resolution)降低采样率(downsample).  
+比如在一条线在1024X1024分辨率的图片上占的宽度是4.8pixels, 那它在256X256的图片上占的宽度就是1.2pixels  
+我们用4X4pixels的一个框去1024X1024的图片去采样(本来应该是单个像素采样), 然后对4X4个像素的值取平均, 就得到了256X256上的单个像素的值  
+这样就实现了低采样率, 实现了box filtering
