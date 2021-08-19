@@ -1,24 +1,22 @@
 <!-- TOC -->
 
-- [Linear Algebra线性代数](#linear-algebra线性代数)
-  - [_5.1 Determinants行列式](#_51-determinants行列式)
-  - [_5.2 Matrics矩阵](#_52-matrics矩阵)
-    - [_5.2.1 Matrix Arithmetic矩阵计算](#_521-matrix-arithmetic矩阵计算)
-    - [_5.2.2 Operations on Matrics对矩阵的操作](#_522-operations-on-matrics对矩阵的操作)
-    - [_5.2.3 Vector Operations in Matrix Form通过matrix对vector进行操作](#_523-vector-operations-in-matrix-form通过matrix对vector进行操作)
-    - [_5.2.4 Special Types of Matrics矩阵的特殊类型](#_524-special-types-of-matrics矩阵的特殊类型)
-  - [_5.3 Computing with Matrices and Determinants](#_53-computing-with-matrices-and-determinants)
-    - [_5.3.1 Computing Inverse](#_531-computing-inverse)
+- [_5.1 Determinants行列式](#_51-determinants行列式)
+- [_5.2 Matrics矩阵](#_52-matrics矩阵)
+  - [_5.2.1 Matrix Arithmetic矩阵计算](#_521-matrix-arithmetic矩阵计算)
+  - [_5.2.2 Operations on Matrics对矩阵的操作](#_522-operations-on-matrics对矩阵的操作)
+  - [_5.2.3 Vector Operations in Matrix Form通过matrix对vector进行操作](#_523-vector-operations-in-matrix-form通过matrix对vector进行操作)
+  - [_5.2.4 Special Types of Matrics矩阵的特殊类型](#_524-special-types-of-matrics矩阵的特殊类型)
+- [_5.3 Computing with Matrices and Determinants](#_53-computing-with-matrices-and-determinants)
+  - [_5.3.1 Computing Inverse](#_531-computing-inverse)
 
 <!-- /TOC -->
 
-<a id="markdown-linear-algebra线性代数" name="linear-algebra线性代数"></a>
-## Linear Algebra线性代数
+**Linear Algebra线性代数**
 
 图形程序里最通用的工具恐怕是通过矩阵来改变和变换点和向量.  
 这就需要线性代数的相关知识.  
 
-<a id="markdown-determinants" name="determinants"></a>
+<a id="markdown-_51-determinants行列式" name="_51-determinants行列式"></a>
 ### _5.1 Determinants行列式
 
 determinants直译过来是决定因素的意思, 但是实际上是:
@@ -58,8 +56,10 @@ $$
 
 书中还介绍了克莱姆定理(cramer's rule)
 
+<a id="markdown-_52-matrics矩阵" name="_52-matrics矩阵"></a>
 ### _5.2 Matrics矩阵
 
+<a id="markdown-_521-matrix-arithmetic矩阵计算" name="_521-matrix-arithmetic矩阵计算"></a>
 #### _5.2.1 Matrix Arithmetic矩阵计算
 
 矩阵乘以一个数字, 就是矩阵的每个元素都乘以这个数字:
@@ -140,6 +140,7 @@ A(B + C) &= AB + AC \\
 \end{aligned}
 $$
 
+<a id="markdown-_522-operations-on-matrics对矩阵的操作" name="_522-operations-on-matrics对矩阵的操作"></a>
 #### _5.2.2 Operations on Matrics对矩阵的操作
 
 一个real number x的inverse是$1/x$, x和它的inverse相乘等于1  
@@ -210,6 +211,7 @@ $$(\mathbf A \mathbf B)^{\rm T} = \mathbf B^{\rm T}\mathbf A^{\rm T}$$
 
 接下来讲到了matrix的determinant, 不太明白, 第一节说的是向量的determinant, 怎么一下跳到了matrix的determinant, 可能是之前有向量的matrix表示我还没看到, 暂且搁置
 
+<a id="markdown-_523-vector-operations-in-matrix-form通过matrix对vector进行操作" name="_523-vector-operations-in-matrix-form通过matrix对vector进行操作"></a>
 #### _5.2.3 Vector Operations in Matrix Form通过matrix对vector进行操作
 
 一个二维向量$a = (x_a, y_a)$, 旋转90度, 得到$a^{'} = (-y_a, x_a)$, 我们可以对向量乘以一个matrix得到这样的效果:
@@ -282,6 +284,7 @@ $$
 那么这个这个$3\times 3$的matrix乘以一个列向量, 得到一个列向量, 这个列向量的entries是$3\times 3$的matrix的3个横向量和列向量的dot product  
 如果是两个$3 times 3$的matrix相乘, 可以理解为3个横向量的组合和3个列向量的组合两两点乘, 得到3个横向量(列向量)
 
+<a id="markdown-_524-special-types-of-matrics矩阵的特殊类型" name="_524-special-types-of-matrics矩阵的特殊类型"></a>
 #### _5.2.4 Special Types of Matrics矩阵的特殊类型
 
 *diagonal matrix*: 除了左上角和右下角的对角线上的entries, 其他都是0  
@@ -326,6 +329,7 @@ $$
 $$
 这个矩阵orthogonal, 但是不diagonal, 也不symmetric
 
+<a id="markdown-_53-computing-with-matrices-and-determinants" name="_53-computing-with-matrices-and-determinants"></a>
 ### _5.3 Computing with Matrices and Determinants
 
 我们可以把一个2X2的矩阵看作是两个横向量, 或者两个列向量, 那么我们就可计算一个2X2的矩阵的determinant  
@@ -375,6 +379,7 @@ $$
 那么我们怎么计算一个matrix的determinant呢? 需要用到*Laplace's expansion*  
 这里不再重复了, 稍微有点复杂. 这个原理为什么成立, 我也不知道. 反正拿来用就好
 
+<a id="markdown-_531-computing-inverse" name="_531-computing-inverse"></a>
 #### _5.3.1 Computing Inverse
 
 计算你矩阵, 和上面计算determinant相关, 也是直接拿过来用, 这里不重复说了

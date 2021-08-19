@@ -1,22 +1,20 @@
 <!-- TOC -->
 
-- [_1. Introduction](#_1-introduction)
-  - [_1.1 Graphics Areas图形学领域](#_11-graphics-areas图形学领域)
-  - [_1.2 Major Applications主要用途](#_12-major-applications主要用途)
-  - [_1.3 Graphics APIs图形学接口](#_13-graphics-apis图形学接口)
-  - [_1.4 Graphics Pipeline图形管道](#_14-graphics-pipeline图形管道)
-  - [_1.5 Numerical Issues数值问题](#_15-numerical-issues数值问题)
-  - [_1.6 Efficiency效率](#_16-efficiency效率)
-  - [_1.7 Designing and Coding Graphics Programs](#_17-designing-and-coding-graphics-programs)
-    - [_1.7.1 Class Design](#_171-class-design)
-    - [_1.7.2 Float vs. Double](#_172-float-vs-double)
-    - [_1.7.3 Debugging Graphics Programs](#_173-debugging-graphics-programs)
-  - [Notes](#notes)
+- [_1.1 Graphics Areas图形学领域](#_11-graphics-areas图形学领域)
+- [_1.2 Major Applications主要用途](#_12-major-applications主要用途)
+- [_1.3 Graphics APIs图形学接口](#_13-graphics-apis图形学接口)
+- [_1.4 Graphics Pipeline图形管道](#_14-graphics-pipeline图形管道)
+- [_1.5 Numerical Issues数值问题](#_15-numerical-issues数值问题)
+- [_1.6 Efficiency效率](#_16-efficiency效率)
+- [_1.7 Designing and Coding Graphics Programs](#_17-designing-and-coding-graphics-programs)
+  - [_1.7.1 Class Design](#_171-class-design)
+  - [_1.7.2 Float vs. Double](#_172-float-vs-double)
+  - [_1.7.3 Debugging Graphics Programs](#_173-debugging-graphics-programs)
+- [Notes](#notes)
 
 <!-- /TOC -->
 
-<a id="markdown-_1-introduction" name="_1-introduction"></a>
-## _1. Introduction
+**Introduction**
 
 computer graphics的定义:  
 The term computer graphics describes any use of computers to create and manipulate images

@@ -1,13 +1,11 @@
 <!-- TOC -->
 
-- [Ray Tracing光线追踪](#ray-tracing光线追踪)
-  - [_4.1 The Basic ray-tracing Algorithm](#_41-the-basic-ray-tracing-algorithm)
-  - [_4.2 Perspective透视](#_42-perspective透视)
+- [_4.1 The Basic ray-tracing Algorithm](#_41-the-basic-ray-tracing-algorithm)
+- [_4.2 Perspective透视](#_42-perspective透视)
 
 <!-- /TOC -->
 
-<a id="markdown-ray-tracing光线追踪" name="ray-tracing光线追踪"></a>
-## Ray Tracing光线追踪
+**Ray Tracing光线追踪**
 
 计算机图形学最重要的任务之一是rendering渲染3D对象  
 通俗的说是将在某一个点观测到的4D对象显示在2D图像上.  
@@ -17,6 +15,7 @@ object-order rendering是对每个对象做loop循环处理
 image-order rendering是对每个pixel做loop循环处理  
 image-order rendering更加简单和灵活, 通常会耗时, 但是会生成更好的图像  
 
+<a id="markdown-_41-the-basic-ray-tracing-algorithm" name="_41-the-basic-ray-tracing-algorithm"></a>
 ### _4.1 The Basic ray-tracing Algorithm
 
 object通过pixel被看到. 这需要viewing ray视线和物体之间的intersecton  
@@ -29,6 +28,7 @@ object通过pixel被看到. 这需要viewing ray视线和物体之间的intersec
 
 image-order rendering就是对每个pixel循环执行上面这个过程
 
+<a id="markdown-_42-perspective透视" name="_42-perspective透视"></a>
 ### _4.2 Perspective透视
 
 将3D对象用2D展示在几百年前就被艺术家们研究, 比如绘画, 摄影  

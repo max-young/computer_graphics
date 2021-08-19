@@ -1,16 +1,14 @@
 <!-- TOC -->
 
-- [The Graphics Pipeline](#the-graphics-pipeline)
-  - [_8.1 Rasterization光栅化](#_81-rasterization光栅化)
-    - [_8.1.1 Line Drawing](#_811-line-drawing)
-    - [_8.1.2 Triangle Rasterization三角形光栅化](#_812-triangle-rasterization三角形光栅化)
-    - [_8.1.3 Clipping剪裁](#_813-clipping剪裁)
-  - [_8.3 Simple Antialiasing简单反锯齿(反走样)](#_83-simple-antialiasing简单反锯齿反走样)
+- [_8.1 Rasterization光栅化](#_81-rasterization光栅化)
+  - [_8.1.1 Line Drawing](#_811-line-drawing)
+  - [_8.1.2 Triangle Rasterization三角形光栅化](#_812-triangle-rasterization三角形光栅化)
+  - [_8.1.3 Clipping剪裁](#_813-clipping剪裁)
+- [_8.3 Simple Antialiasing简单反锯齿(反走样)](#_83-simple-antialiasing简单反锯齿反走样)
 
 <!-- /TOC -->
 
-<a id="markdown-the-graphics-pipeline" name="the-graphics-pipeline"></a>
-## The Graphics Pipeline
+**The Graphics Pipeline**
 
 上一章节讲到了各种转换, 将现实坐标系里的对象经过积层转换到屏幕显示空间坐标系  
 这一章就要讲到如何显示到屏幕上, 这就是object-order rendering(渲染)  
@@ -40,6 +38,7 @@ rasterization有两项工作:
 
 rasterization的输出是一系列fragment, fragment就是primitive覆盖的一组pixel
 
+<a id="markdown-_811-line-drawing" name="_811-line-drawing"></a>
 #### _8.1.1 Line Drawing
 
 我们应该怎么在屏幕上画一条线呢?  
@@ -101,6 +100,7 @@ for x = x0 to x1 do
     d = d + (y0 - y1)
 ```
 
+<a id="markdown-_812-triangle-rasterization三角形光栅化" name="_812-triangle-rasterization三角形光栅化"></a>
 #### _8.1.2 Triangle Rasterization三角形光栅化
 
 在2.7章节里, 我们讲到三角形的barycentric coordinates, 一个点在三角形的barycentric坐标系下可以表示为:  
@@ -141,6 +141,7 @@ x_{min} = floor(x_i) \\
 x_{max} = ceiling(x_i))
 $$
 
+<a id="markdown-_813-clipping剪裁" name="_813-clipping剪裁"></a>
 #### _8.1.3 Clipping剪裁
 
 如果一个对象的一半在视点的后方, 也就是说z坐标是正数, 会怎样呢?  
@@ -156,6 +157,7 @@ $$
 clipping一半用一个六边形来剪切, 将六边形外的对象切掉  
 有两种方法
 
+<a id="markdown-_83-simple-antialiasing简单反锯齿反走样" name="_83-simple-antialiasing简单反锯齿反走样"></a>
 ### _8.3 Simple Antialiasing简单反锯齿(反走样)
 
 在8.1章节里, 我们会发现画一条直线时, 如果直线是斜着跨过像素, 我们根据规则取到进过的像素时, 就会发现有很多锯齿.  

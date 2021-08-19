@@ -1,21 +1,19 @@
 <!-- TOC -->
 
-- [Transformation Matrices](#transformation-matrices)
-  - [_6.1 Linear Transformations线性变换](#_61-linear-transformations线性变换)
-    - [_6.1.1 Scaling缩放](#_611-scaling缩放)
-    - [_6.1.2 Shearing](#_612-shearing)
-    - [_6.1.3 Rotation旋转](#_613-rotation旋转)
-    - [_6.1.4 Reflection反射](#_614-reflection反射)
-    - [_6.1.5 Composition and Decomposition of Transformations变换的合成和分解](#_615-composition-and-decomposition-of-transformations变换的合成和分解)
-  - [_6.2 3D Linear Transformations3D线性变换](#_62-3d-linear-transformations3d线性变换)
-  - [_6.3 Translation and Affine Transformations平移和仿射变换](#_63-translation-and-affine-transformations平移和仿射变换)
-  - [_6.4 Inverse of Transformation Matrices矩阵变换的逆](#_64-inverse-of-transformation-matrices矩阵变换的逆)
-  - [_6.5 Coordinate Transformations坐标系变换](#_65-coordinate-transformations坐标系变换)
+- [_6.1 Linear Transformations线性变换](#_61-linear-transformations线性变换)
+  - [_6.1.1 Scaling缩放](#_611-scaling缩放)
+  - [_6.1.2 Shearing](#_612-shearing)
+  - [_6.1.3 Rotation旋转](#_613-rotation旋转)
+  - [_6.1.4 Reflection反射](#_614-reflection反射)
+  - [_6.1.5 Composition and Decomposition of Transformations变换的合成和分解](#_615-composition-and-decomposition-of-transformations变换的合成和分解)
+- [_6.2 3D Linear Transformations3D线性变换](#_62-3d-linear-transformations3d线性变换)
+- [_6.3 Translation and Affine Transformations平移和仿射变换](#_63-translation-and-affine-transformations平移和仿射变换)
+- [_6.4 Inverse of Transformation Matrices矩阵变换的逆](#_64-inverse-of-transformation-matrices矩阵变换的逆)
+- [_6.5 Coordinate Transformations坐标系变换](#_65-coordinate-transformations坐标系变换)
 
 <!-- /TOC -->
 
-<a id="markdown-transformation-matrices" name="transformation-matrices"></a>
-## Transformation Matrices
+**Transformation Matrices**
 
 线性代数linear algebra在图形学中非常有用.  
 比如矩阵的乘法在几何变换(geomatric transformations)中起到关键性的作用
@@ -47,6 +45,7 @@ $$
 
 通过这样一个特性, 我们可以实现很多变换
 
+<a id="markdown-_611-scaling缩放" name="_611-scaling缩放"></a>
 #### _6.1.1 Scaling缩放
 
 我们要对一个图形进行缩放, 图形其实是有很多点组成的, 这些点也可以用二维向量来表示.  
@@ -83,6 +82,7 @@ s_x & 0 \\
 $$
 $s_x$就是$x$的缩放比例, $x_y$就是y的缩放比例, 如果等比例缩放, 那么$s_x = s_y$, 否则则不等于
 
+<a id="markdown-_612-shearing" name="_612-shearing"></a>
 #### _6.1.2 Shearing
 
 对照书上的图更容易理解, 讲一个正方形的上边往右挪, 挪45度  
@@ -127,6 +127,7 @@ s & 1
 $$
 我们也可以把$s$理解为移动角度的$\tan\phi$
 
+<a id="markdown-_613-rotation旋转" name="_613-rotation旋转"></a>
 #### _6.1.3 Rotation旋转
 
 旋转默认是以坐标原点、逆时针旋转  
@@ -144,6 +145,7 @@ $$
 
 值得注意的是, 这个矩阵是一个orthogonal matrix  
 
+<a id="markdown-_614-reflection反射" name="_614-reflection反射"></a>
 #### _6.1.4 Reflection反射
 
 反射就是将图像以x轴或者y轴为轴, 旋转180度  
@@ -167,6 +169,7 @@ reflect(x) =
 \right]
 $$
 
+<a id="markdown-_615-composition-and-decomposition-of-transformations变换的合成和分解" name="_615-composition-and-decomposition-of-transformations变换的合成和分解"></a>
 #### _6.1.5 Composition and Decomposition of Transformations变换的合成和分解
 
 如果我们对一个向量先做reflection-x, 再做rotation, 应该是这样做:
@@ -183,6 +186,7 @@ $$
 这是变换的合成. 变换的分解就是一个逆向的过程. 有很多复杂的变换都可以分解成上面的那些基本的变换.  
 书中的内容较多, 这里我只表达简单的概念, 更多的内容留到实际项目里再去详细理解.
 
+<a id="markdown-_62-3d-linear-transformations3d线性变换" name="_62-3d-linear-transformations3d线性变换"></a>
 ### _6.2 3D Linear Transformations3D线性变换
 
 3D的变化就是对2D的扩展, 比如缩放scale, 2D是对xy缩放, 那么3D就是对xyz缩放:
@@ -198,6 +202,7 @@ s_x & 0 & 0 \\
 $$
 其他变化类似
 
+<a id="markdown-_63-translation-and-affine-transformations平移和仿射变换" name="_63-translation-and-affine-transformations平移和仿射变换"></a>
 ### _6.3 Translation and Affine Transformations平移和仿射变换
 
 在6.1章节的各种transformations里, 不管是缩放还是旋转、反射, 都是将一个点(向量)乘以一个2X2的矩阵, 变换后的坐标格式都是这样的:
@@ -275,6 +280,7 @@ c & d & 0 \\
 \right]
 $$
 
+<a id="markdown-_64-inverse-of-transformation-matrices矩阵变换的逆" name="_64-inverse-of-transformation-matrices矩阵变换的逆"></a>
 ### _6.4 Inverse of Transformation Matrices矩阵变换的逆
 
 矩阵变换的逆, 在几何上有什么意义呢? 
@@ -291,6 +297,7 @@ $$\rm M = \rm R_2(s_x, s_y, s_z)\rm R_1$$
 做逆向操作的话, 矩阵就是
 $$\rm M^{-1} = \rm R_1^T(1/s_x, 1/s_y, 1/s_z)\rm R_2^T$$  
 
+<a id="markdown-_65-coordinate-transformations坐标系变换" name="_65-coordinate-transformations坐标系变换"></a>
 ### _6.5 Coordinate Transformations坐标系变换
 
 举一例子:

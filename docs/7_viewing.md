@@ -1,17 +1,15 @@
 <!-- TOC -->
 
-- [Viewing](#viewing)
-  - [_7.1 Viewing Transformations](#_71-viewing-transformations)
-    - [_7.1.1 The Viewport Transformation](#_711-the-viewport-transformation)
-    - [_7.1.2 The Orthographic Projection Transformation正交投影变换](#_712-the-orthographic-projection-transformation正交投影变换)
-    - [_7.1.3 The Camera Transformation](#_713-the-camera-transformation)
-  - [_7.2 Projective Transformations投影变换](#_72-projective-transformations投影变换)
-  - [_7.3 Perspective projection透视投影](#_73-perspective-projection透视投影)
+- [_7.1 Viewing Transformations](#_71-viewing-transformations)
+  - [_7.1.1 The Viewport Transformation](#_711-the-viewport-transformation)
+  - [_7.1.2 The Orthographic Projection Transformation正交投影变换](#_712-the-orthographic-projection-transformation正交投影变换)
+  - [_7.1.3 The Camera Transformation](#_713-the-camera-transformation)
+- [_7.2 Projective Transformations投影变换](#_72-projective-transformations投影变换)
+- [_7.3 Perspective projection透视投影](#_73-perspective-projection透视投影)
 
 <!-- /TOC -->
 
-<a id="markdown-viewing" name="viewing"></a>
-## Viewing
+**Viewing**
 
 在上一章节, 讲到了二维和三维对象在各自空间里的变换, 以及矩阵在其中起到的重要作用  
 在本章, 会讲到如何将3D对象转换到2D视图, 称之为*viewing transformation*视图变换  
@@ -21,6 +19,7 @@
 现实世界的对象转换到2D图片里只提供了wireframe renderings的能力, 也就是说将一个物体的外廓全部转换, 不会考虑近处阻挡远处的情况.  
 光线追踪需要找到光线照过去最近的物体表面, 最后转换成solid surface. 在本章的后半部分会讲到.
 
+<a id="markdown-_71-viewing-transformations" name="_71-viewing-transformations"></a>
 ### _7.1 Viewing Transformations
 
 大多数图形系统在3D to 2D的过程中会经过三个转换:
@@ -31,6 +30,7 @@
 个人粗浅理解: 第一步是摄取现实对象(和摄像机的位置、角度相关), 第二步是将第一步取的景投射到相机成像元件上(经过不用的投影转换), 第三步是洗照片  
 我们接着往下看
 
+<a id="markdown-_711-the-viewport-transformation" name="_711-the-viewport-transformation"></a>
 #### _7.1.1 The Viewport Transformation
 
 *canonical view volume*是我们想看到的几何空间  
@@ -83,6 +83,7 @@ $$
 
 这一步好像很简单
 
+<a id="markdown-_712-the-orthographic-projection-transformation正交投影变换" name="_712-the-orthographic-projection-transformation正交投影变换"></a>
 #### _7.1.2 The Orthographic Projection Transformation正交投影变换
 
 上面提到的canonical view volume是一个单位三维坐标系, 我们怎么把一个任意大小的空间转换到这个单位三维坐标系呢?  
@@ -127,6 +128,7 @@ z \\
 \right]
 $$
 
+<a id="markdown-_713-the-camera-transformation" name="_713-the-camera-transformation"></a>
 #### _7.1.3 The Camera Transformation
 
 现在讲第一步: 相机取景的那一步
@@ -184,6 +186,7 @@ $$
 通俗的理解就是一个正方体直接压缩到一个平面上  
 但实际的情况不是这样的, 我们接下来就会说到透视变换
 
+<a id="markdown-_72-projective-transformations投影变换" name="_72-projective-transformations投影变换"></a>
 ### _7.2 Projective Transformations投影变换
 
 上一章节里说到了其中一种简单的投影变换
@@ -253,6 +256,7 @@ $$
 另外如果我们对一个正方形执行上面的变换, 会发现得到了一个变形的四边形, 好像有点像近大远小的效果  
 对, 接下来我们就要讲到perspective projection透视变换
 
+<a id="markdown-_73-perspective-projection透视投影" name="_73-perspective-projection透视投影"></a>
 ### _7.3 Perspective projection透视投影
 
 看这张图:  

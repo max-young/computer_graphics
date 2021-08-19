@@ -1,40 +1,38 @@
 <!-- TOC -->
 
-- [_2 Miscellaneous Math多样的数学](#_2-miscellaneous-math多样的数学)
-  - [_2.1 Sets and Mappings](#_21-sets-and-mappings)
-    - [_2.1.1 Inverse Mappings逆向映射](#_211-inverse-mappings逆向映射)
-    - [_2.1.2 Intervals区间](#_212-intervals区间)
-    - [_2.1.3 Logarithms对数](#_213-logarithms对数)
-  - [_2.2 Solving Quadratic Equations求解二次方程](#_22-solving-quadratic-equations求解二次方程)
-  - [_2.3 Trigonometry三角几何](#_23-trigonometry三角几何)
-    - [_2.3.1 Angles角度](#_231-angles角度)
-    - [_2.3.2 Trigonometrics Functions三角函数](#_232-trigonometrics-functions三角函数)
-    - [_2.3.3 Userful Identities](#_233-userful-identities)
-  - [_2.4 Vectors向量](#_24-vectors向量)
-    - [_2.4.1 Vector Operations](#_241-vector-operations)
-    - [_2.4.2 Cartesian Coordinates of a Vector](#_242-cartesian-coordinates-of-a-vector)
-    - [_2.4.3 Dot Product点积](#_243-dot-product点积)
-    - [_2.4.4 Cross Product叉积](#_244-cross-product叉积)
-    - [_2.4.5 Orthonormal Bases and Coordinate Frames正交基和坐标系](#_245-orthonormal-bases-and-coordinate-frames正交基和坐标系)
-    - [_2.4.6 Constructing a Basis from a Single Vector根据一个向量来构建正交基](#_246-constructing-a-basis-from-a-single-vector根据一个向量来构建正交基)
-    - [_2.4.7 Constructing a Basis from Two Vectors](#_247-constructing-a-basis-from-two-vectors)
-    - [Squaring Up a Basis修复](#squaring-up-a-basis修复)
-  - [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
-    - [_2.5.1 2D Implicit Curves 2D隐式曲线](#_251-2d-implicit-curves-2d隐式曲线)
-    - [_2.5.2 The 2D Gradient 2D梯度](#_252-the-2d-gradient-2d梯度)
-      - [Implicit 2D lines隐式2D直线](#implicit-2d-lines隐式2d直线)
-      - [Implicit Quadric Curves隐式二次曲线](#implicit-quadric-curves隐式二次曲线)
-  - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
-  - [_2.7 Triangles三角形](#_27-triangles三角形)
-    - [_2.7.1 2D Triangles](#_271-2d-triangles)
-  - [Frequently Asked Questions](#frequently-asked-questions)
-  - [notes](#notes)
-  - [Exercises](#exercises)
+- [_2.1 Sets and Mappings](#_21-sets-and-mappings)
+  - [_2.1.1 Inverse Mappings逆向映射](#_211-inverse-mappings逆向映射)
+  - [_2.1.2 Intervals区间](#_212-intervals区间)
+  - [_2.1.3 Logarithms对数](#_213-logarithms对数)
+- [_2.2 Solving Quadratic Equations求解二次方程](#_22-solving-quadratic-equations求解二次方程)
+- [_2.3 Trigonometry三角几何](#_23-trigonometry三角几何)
+  - [_2.3.1 Angles角度](#_231-angles角度)
+  - [_2.3.2 Trigonometrics Functions三角函数](#_232-trigonometrics-functions三角函数)
+  - [_2.3.3 Userful Identities](#_233-userful-identities)
+- [_2.4 Vectors向量](#_24-vectors向量)
+  - [_2.4.1 Vector Operations](#_241-vector-operations)
+  - [_2.4.2 Cartesian Coordinates of a Vector](#_242-cartesian-coordinates-of-a-vector)
+  - [_2.4.3 Dot Product点积](#_243-dot-product点积)
+  - [_2.4.4 Cross Product叉积](#_244-cross-product叉积)
+  - [_2.4.5 Orthonormal Bases and Coordinate Frames正交基和坐标系](#_245-orthonormal-bases-and-coordinate-frames正交基和坐标系)
+  - [_2.4.6 Constructing a Basis from a Single Vector根据一个向量来构建正交基](#_246-constructing-a-basis-from-a-single-vector根据一个向量来构建正交基)
+  - [_2.4.7 Constructing a Basis from Two Vectors](#_247-constructing-a-basis-from-two-vectors)
+  - [Squaring Up a Basis修复](#squaring-up-a-basis修复)
+- [_2.5 Curves and Surfaces曲线和曲面](#_25-curves-and-surfaces曲线和曲面)
+  - [_2.5.1 2D Implicit Curves 2D隐式曲线](#_251-2d-implicit-curves-2d隐式曲线)
+  - [_2.5.2 The 2D Gradient 2D梯度](#_252-the-2d-gradient-2d梯度)
+    - [Implicit 2D lines隐式2D直线](#implicit-2d-lines隐式2d直线)
+    - [Implicit Quadric Curves隐式二次曲线](#implicit-quadric-curves隐式二次曲线)
+- [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
+- [_2.7 Triangles三角形](#_27-triangles三角形)
+  - [_2.7.1 2D Triangles](#_271-2d-triangles)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [notes](#notes)
+- [Exercises](#exercises)
 
 <!-- /TOC -->
 
-<a id="markdown-_2-miscellaneous-math多样的数学" name="_2-miscellaneous-math多样的数学"></a>
-## _2 Miscellaneous Math多样的数学
+**Miscellaneous Math多样的数学**
 
 一些图形工作只是将数学直接转换为代码. 数学越清晰, 代码越简洁. 本章只提及图形学相关的数学知识作为参考.
 
@@ -134,6 +132,7 @@ D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个
 <a id="markdown-_23-trigonometry三角几何" name="_23-trigonometry三角几何"></a>
 ### _2.3 Trigonometry三角几何
 
+<a id="markdown-_231-angles角度" name="_231-angles角度"></a>
 #### _2.3.1 Angles角度
 
 两条half_lines(direction)组成的角度angle如何表示呢?  
@@ -147,11 +146,13 @@ D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个
 $$degrees = \frac{180}{\pi}radians$$
 $$radians = \frac{\pi}{180}degrees$$
 
+<a id="markdown-_232-trigonometrics-functions三角函数" name="_232-trigonometrics-functions三角函数"></a>
 #### _2.3.2 Trigonometrics Functions三角函数
 
 勾股定理的证明  
 以及sin, cos, tan, cot等的定义
 
+<a id="markdown-_233-userful-identities" name="_233-userful-identities"></a>
 #### _2.3.3 Userful Identities
 
 sin, cos, tan, cot的一些等式
@@ -343,6 +344,7 @@ $$\bm{v} = \bm{w} \times \bm{u}$$
 
 梯度可以理解为2D导数, 两个参数的曲线, 比如等高线, 参数是x, y坐标, 值是高度, 梯度和x方向的导数以及y方向的导数相关, 详细概念待学习
 
+<a id="markdown-_251-2d-implicit-curves-2d隐式曲线" name="_251-2d-implicit-curves-2d隐式曲线"></a>
 #### _2.5.1 2D Implicit Curves 2D隐式曲线
 
 我们用这样的一个implicit equation隐式方程来表示2D曲线:
@@ -359,6 +361,7 @@ c到p的向量dot product自身, 等于$r^2$
 根据dot product的特性, 我们可以这样简化表示:
 $$\parallel p - c \parallel - r = 0$$
 
+<a id="markdown-_252-the-2d-gradient-2d梯度" name="_252-the-2d-gradient-2d梯度"></a>
 #### _2.5.2 The 2D Gradient 2D梯度
 
 在本章的前言离说到了derivative和gradient的概念  
@@ -376,6 +379,7 @@ $$\frac{\partial f}{\partial x} = \lim_{\Delta x \to 0}\frac{f(x+\Delta x, y) - 
 
 这样, 我们就可以得到$f(x, y) = x^2 + y^2 - 1 = 0$的gradient是$(2x, 2y)$
 
+<a id="markdown-implicit-2d-lines隐式2d直线" name="implicit-2d-lines隐式2d直线"></a>
 ##### Implicit 2D lines隐式2D直线
 
 一条斜线:
@@ -407,6 +411,7 @@ $$distance = \frac{f(a, b)}{\sqrt{A^2 + B^2}}$$
 我们可以让gradient vector变成一个单位向量, 这样计算更方便:
 $$f(x, y) = \frac{y_0 - y_1}{\sqrt{(x_1 - x_0)^2 + (y_0-y_1)^2}}x + \frac{x_1-x_0}{\sqrt{(x_1 - x_0)^2 + (y_0 - y_1)^2}}y + \frac{x_0y_1 - x_1y_0}{\sqrt{(x_1-x_0)^2 +(y_0 - y_1)^2}} = 0$$
 
+<a id="markdown-implicit-quadric-curves隐式二次曲线" name="implicit-quadric-curves隐式二次曲线"></a>
 ##### Implicit Quadric Curves隐式二次曲线
 
 假如x和y是平方, 那么就是曲线  
@@ -425,6 +430,7 @@ $$\frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} - 1 = 0$$
 因为三角形是最基本的图形, 四边形可以拆成两个三角形, 三角形往下拆还是三角形  
 三角形构成一个平面, 四边形可能不是  
 
+<a id="markdown-_271-2d-triangles" name="_271-2d-triangles"></a>
 #### _2.7.1 2D Triangles
 
 一个三角形的面积, 就是四边形的一半, 在第5章里会讲到两个向量的determinant, 也就是四边形的面积, 这样三角形的面积是:
