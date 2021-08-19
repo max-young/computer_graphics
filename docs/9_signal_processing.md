@@ -1,27 +1,26 @@
 <!-- TOC -->
 
-- [Signal Processing](#signal-processing)
-  - [_9.1 Digital Audio: Sampling in 1D数字音频, 1维采样](#_91-digital-audio-sampling-in-1d数字音频-1维采样)
-    - [_9.1.1](#_911)
-  - [_9.2 Convolution卷积](#_92-convolution卷积)
-    - [_9.2.1 Moving Average](#_921-moving-average)
-    - [_9.2.2 Discrete Convolution离散卷积](#_922-discrete-convolution离散卷积)
-    - [_9.2.3 Convolution as a Sum of Shifted Filters](#_923-convolution-as-a-sum-of-shifted-filters)
-    - [_9.2.4 Convolution with Continuous Functions](#_924-convolution-with-continuous-functions)
-    - [_9.2.5 Discrete-Continuous Convolution](#_925-discrete-continuous-convolution)
-    - [_9.2.6 Convolution in More Than One Dimension多维卷积](#_926-convolution-in-more-than-one-dimension多维卷积)
-  - [_9.3 Convolution Filters卷积滤波器](#_93-convolution-filters卷积滤波器)
-    - [_9.3.1 A Gallery of Convolution Filters](#_931-a-gallery-of-convolution-filters)
-    - [_9.3.2 Properties of Filters](#_932-properties-of-filters)
-  - [_9.4 Signal Processing for Images](#_94-signal-processing-for-images)
-    - [_9.4.1 Image Filtering Using Discrete Filters](#_941-image-filtering-using-discrete-filters)
-    - [_9.4.2 Antialiasing in Image Sampling图像采样中的反走样(反锯齿)](#_942-antialiasing-in-image-sampling图像采样中的反走样反锯齿)
-    - [_9.4.3 Reconstruction and Resampling重建和重采样](#_943-reconstruction-and-resampling重建和重采样)
+- [_9.1 Digital Audio: Sampling in 1D数字音频, 1维采样](#_91-digital-audio-sampling-in-1d数字音频-1维采样)
+  - [_9.1.1 Sampling Artifacts and Aliasing](#_911-sampling-artifacts-and-aliasing)
+- [_9.2 Convolution卷积](#_92-convolution卷积)
+  - [_9.2.1 Moving Average](#_921-moving-average)
+  - [_9.2.2 Discrete Convolution离散卷积](#_922-discrete-convolution离散卷积)
+  - [_9.2.3 Convolution as a Sum of Shifted Filters](#_923-convolution-as-a-sum-of-shifted-filters)
+  - [_9.2.4 Convolution with Continuous Functions](#_924-convolution-with-continuous-functions)
+  - [_9.2.5 Discrete-Continuous Convolution](#_925-discrete-continuous-convolution)
+  - [_9.2.6 Convolution in More Than One Dimension多维卷积](#_926-convolution-in-more-than-one-dimension多维卷积)
+- [_9.3 Convolution Filters卷积滤波器](#_93-convolution-filters卷积滤波器)
+  - [_9.3.1 A Gallery of Convolution Filters](#_931-a-gallery-of-convolution-filters)
+  - [_9.3.2 Properties of Filters](#_932-properties-of-filters)
+- [_9.4 Signal Processing for Images](#_94-signal-processing-for-images)
+  - [_9.4.1 Image Filtering Using Discrete Filters](#_941-image-filtering-using-discrete-filters)
+  - [_9.4.2 Antialiasing in Image Sampling图像采样中的反走样(反锯齿)](#_942-antialiasing-in-image-sampling图像采样中的反走样反锯齿)
+  - [_9.4.3 Reconstruction and Resampling重建和重采样](#_943-reconstruction-and-resampling重建和重采样)
+- [_9.5 Sampling Theory采样理论](#_95-sampling-theory采样理论)
 
 <!-- /TOC -->
 
-<a id="markdown-signal-processing" name="signal-processing"></a>
-## Signal Processing
+**Signal Processing**
 
 在图形学中, 我们处理的是连续参数的函数.  
 但是如果显示在屏幕上, 其实并不是连续的, 在上一章节里我们就能看到锯齿现象  
@@ -42,7 +41,7 @@
 <img src="./_images/high_low_sample.png" width=50%>  
 
 <a id="markdown-_911" name="_911"></a>
-#### _9.1.1
+#### _9.1.1 Sampling Artifacts and Aliasing
 
 同样的正弦波(sine wave), 因为低采样率(undersampling), 重建后的曲线完全变形  
 因为低采样率, 高频信号变成了低频信号, 导致aliasing(锯齿/走样)  
@@ -67,6 +66,7 @@ Convolution适用于连续函数continuous function或者离散序列
 我们先从一位离散序列开始, 然后过渡到连续函数、多维连续函数
 下面的说明假设参数取值是无限的
 
+<a id="markdown-_921-moving-average" name="_921-moving-average"></a>
 #### _9.2.1 Moving Average
 
 <img src="./_images/moving_average.png" width=50%>
@@ -84,6 +84,7 @@ $$c[i] = \frac{1}{2r+1}\sum_{j=i-r}^{i+r}a[j]$$
 moving average是convolution的核心.  
 区别只是convolution是weighted average加权平均
 
+<a id="markdown-_922-discrete-convolution离散卷积" name="_922-discrete-convolution离散卷积"></a>
 #### _9.2.2 Discrete Convolution离散卷积
 
 我们对两个sequence做convolution  
@@ -173,6 +174,7 @@ $$(d \ast b)[i] = \sum_{j=0}^{j=0}d[j]b[i-j] = b[i]$$
 $d[i] = ...,0,0,1,0,0,...$  
 这个$d$被称为*discrete impluse*
 
+<a id="markdown-_923-convolution-as-a-sum-of-shifted-filters" name="_923-convolution-as-a-sum-of-shifted-filters"></a>
 #### _9.2.3 Convolution as a Sum of Shifted Filters
 
 对convolution equation做个变化:  
@@ -188,6 +190,7 @@ $$(a \ast b) = \sum_j a[j]b_{\to j}$$
 可以理解为多条偏移sequence的convolution的和, 如下图:  
 <img src="./_images/convolution_sum.png" width=50%>  
 
+<a id="markdown-_924-convolution-with-continuous-functions" name="_924-convolution-with-continuous-functions"></a>
 #### _9.2.4 Convolution with Continuous Functions
 
 对于连续函数的convolution, 和discrete sequence的convolution是类似的:
@@ -230,6 +233,7 @@ $$(\delta \ast f)(x) = \int_{-\infty}^{\infty}\delta(t)f(x-t)dt = f(x)$$
 下面这张图能帮助理解:  
 <img src="./_images/dirac_delta_function.png" width=50%>  
 
+<a id="markdown-_925-discrete-continuous-convolution" name="_925-discrete-continuous-convolution"></a>
 #### _9.2.5 Discrete-Continuous Convolution
 
 discrete sequence和continuous function如何互相转换呢?  
@@ -260,6 +264,7 @@ return s
 用多个shift函数之和来理解也很好:  
 <img src="./../_images/shift_reconstruction.png" width=50%>
 
+<a id="markdown-_926-convolution-in-more-than-one-dimension多维卷积" name="_926-convolution-in-more-than-one-dimension多维卷积"></a>
 #### _9.2.6 Convolution in More Than One Dimension多维卷积
 
 在图形学里, 我们处理的是二维图像, 二维如何做convolution呢?  
@@ -269,10 +274,12 @@ $$(a \ast b)[i, j] = \sum_{i^{\prime} = -r}^{i^{\prime} = r} \sum_{j^{\prime} = 
 对于continuous function的理解和reconstruction的理解也同理:  
 <img src="./_images/two_dimension_convolution.png" width=50%>
 
+<a id="markdown-_93-convolution-filters卷积滤波器" name="_93-convolution-filters卷积滤波器"></a>
 ### _9.3 Convolution Filters卷积滤波器
 
 上面的章节里说到了用convolution做filtering的机制, 下面我们介绍一些特殊的filter滤波器
 
+<a id="markdown-_931-a-gallery-of-convolution-filters" name="_931-a-gallery-of-convolution-filters"></a>
 #### _9.3.1 A Gallery of Convolution Filters
 
 - **The Box Filter**
@@ -332,6 +339,7 @@ filter可以做变换, 变高一点, 变矮一点
 
 上面两个filter的组合优化
 
+<a id="markdown-_932-properties-of-filters" name="_932-properties-of-filters"></a>
 #### _9.3.2 Properties of Filters
 
 filters有一些术语:  
@@ -363,11 +371,13 @@ $$b_2[x, y] = b_1[x]b_1[y]$$
 
 convolution的计算同理, 9.2.6章节做了简单的说明, 这里暂且不详述, 用到时再详看不迟
 
+<a id="markdown-_94-signal-processing-for-images" name="_94-signal-processing-for-images"></a>
 ### _9.4 Signal Processing for Images
 
 我们讲到了sampling采样, filtering过滤, reconstruction重建, 以及相关的计算  
 我们看看它们在图像处理上的作用
 
+<a id="markdown-_941-image-filtering-using-discrete-filters" name="_941-image-filtering-using-discrete-filters"></a>
 #### _9.4.1 Image Filtering Using Discrete Filters
 
 我们在手机上用到的图片锐化、图片模糊就是用到了filter
@@ -376,6 +386,7 @@ convolution的计算同理, 9.2.6章节做了简单的说明, 这里暂且不详
 blur模糊最好处理, 用box filter, tent filterm gaussian filter都可以实现  
 sharpen锐化、drop shadow去除阴影, 相对较复杂, 需要几个filter结合来实现
 
+<a id="markdown-_942-antialiasing-in-image-sampling图像采样中的反走样反锯齿" name="_942-antialiasing-in-image-sampling图像采样中的反走样反锯齿"></a>
 #### _9.4.2 Antialiasing in Image Sampling图像采样中的反走样(反锯齿)
 
 在图像合成中, 我们需要对一个图像image进行采样表示(这个图像有continuous数学公式表示, 或者我们进行像素采样).  
@@ -385,6 +396,7 @@ sharpen锐化、drop shadow去除阴影, 相对较复杂, 需要几个filter结�
 不同的filter效果不一样, 比如gaussian filter的效果比box filter更好, 但是代价是更模糊.  
 antialiasing的核心就是在sharpen和aliasing之间做平衡.
 
+<a id="markdown-_943-reconstruction-and-resampling重建和重采样" name="_943-reconstruction-and-resampling重建和重采样"></a>
 #### _9.4.3 Reconstruction and Resampling重建和重采样
 
 最常见的图像操作是resampling, 包括调整采样率、调整大小  
@@ -395,4 +407,25 @@ antialiasing的核心就是在sharpen和aliasing之间做平衡.
 更好的方法是对discrete sequence进行construction得到continuous function表达, 然后再进行resampling. reconstruction的filter需要仔细选择. 流程如下图所示:  
 <img src="./_images/resampling.png" width=50%>  
 
-我们降级到1D来说明这个过程
+我们降级到1D来说明这个过程, resample的过程就是:
+```
+function resample(sequence a, float x0, float ∆x, int n, filter f)
+  create sequence b of length n
+  for i = 0 to n-1 do
+    b[i] = reconstruct(a, f, x0 + i∆x)
+  return b
+```
+从一个sequence a resample得到sequence b  
+b的长度是n, 从$x_0$开始采样. reconstruct是9.2.5章节的函数  
+经历了两个过程, reconstruct重建, 然后重新采样.  
+重建之后为了antialiasing, 可以再做一次smooth. reconstruct和smooth都是filtering, 满足结合律, 可以将两者合并, 如下图:  
+<img src="./_images/1D_resample.png">  
+两个filter结合后, 被称为resampling filter
+
+2D的图像处理, 留到用时再细看
+
+### _9.5 Sampling Theory采样理论
+
+如果只对视线感兴趣, 这一章可以不看了.  
+不过采样理论可以让你对上面的内容有更深的理解, 而且能帮助你写出更高效的代码.  
+暂且搁置. 其实还挺感兴趣的.
