@@ -17,6 +17,11 @@
   - [_9.4.2 Antialiasing in Image Sampling图像采样中的反走样(反锯齿)](#_942-antialiasing-in-image-sampling图像采样中的反走样反锯齿)
   - [_9.4.3 Reconstruction and Resampling重建和重采样](#_943-reconstruction-and-resampling重建和重采样)
 - [_9.5 Sampling Theory采样理论](#_95-sampling-theory采样理论)
+  - [_9.5.1 The Fourier Transform傅立叶变换](#_951-the-fourier-transform傅立叶变换)
+  - [_9.5.2 Convolution and Fourier Transform卷积和傅立叶变换](#_952-convolution-and-fourier-transform卷积和傅立叶变换)
+  - [_9.5.3 A Gallery of Fourier Transform](#_953-a-gallery-of-fourier-transform)
+  - [_9.5.4 Dirac Impulses in Sampling Theory迪拉克脉冲](#_954-dirac-impulses-in-sampling-theory迪拉克脉冲)
+  - [_9.5.5 Sampling and Aliasing采样和走样](#_955-sampling-and-aliasing采样和走样)
 
 <!-- /TOC -->
 
@@ -426,6 +431,70 @@ b的长度是n, 从$x_0$开始采样. reconstruct是9.2.5章节的函数
 
 ### _9.5 Sampling Theory采样理论
 
-如果只对视线感兴趣, 这一章可以不看了.  
+如果只对实现j感兴趣, 这一章可以不看了.  
 不过采样理论可以让你对上面的内容有更深的理解, 而且能帮助你写出更高效的代码.  
-暂且搁置. 其实还挺感兴趣的.
+
+#### _9.5.1 The Fourier Transform傅立叶变换
+
+傅里叶变换与卷积，是支撑采样理论的主要数学概念。
+
+傅立叶变换可以把一个函数拆解成很多个不同频率的正弦波  
+比如说一个box function可以由无限多个正弦波得到:
+$$\int_{-\infty}^{\infty}\frac{sin\pi u}{\pi u}cos2\pi ux du$$
+傅立叶变换通用的表示为:
+$$f(x) = \int_{-\infty}^{\infty}\hat{f}(u)e^{2\pi iux}du$$
+反过来:
+$$\hat{f}(u) = \int_{-\infty}^{\infty}f(x)e^{-2\pi iux}dx$$
+$\hat{f}$称作原函数$f$的傅里叶变换  
+$\hat{f}$告诉我们如何用一系列正弦波的积分构造$f$  
+$f$的傅立叶变换$\hat{f}$也可表示为$\mathfrak{F}\{f\}$
+
+$\hat{f}$可以有无限多个正弦波组成, 在书中最开始举的最简单的例子里, 一个函数由一个sequnece的正弦波组成, 完美的情况下, 这个sequence应该可以替换成cotinuous function, 也就是说一个函数可以有一个连续函数的正弦波组成, 这个连续函数就是$\hat{f}$, 它表示了正弦波的频率, 也就表示了: 如果$f(x)$由无限多个正弦波构成, 正弦波的频率分布就可以用$\hat{f}$表示  
+(后面的du是积分的参数, 也就是切分的大小.)
+
+#### _9.5.2 Convolution and Fourier Transform卷积和傅立叶变换  
+
+两个函数的卷积的傅立叶变换, 等于两个函数的傅立叶变换相乘
+$$\mathfrak{F}\{f \ast g \} = \hat{f}\hat{g}$$ 
+两个函数的傅立叶变换的卷积, 是两个函数相乘后的卷积
+$$\hat{f} \ast \hat{g} = \mathfrak{F}\{fg\}$$
+
+傅立叶变换参与到卷积中, 引出一个全新的概念: the frequency domain频域
+<img src="./_images/frequency_domain.png" width=50%>
+
+上面说到的filter有的不能用函数来表示, 比如box filterm, 就可以用傅立叶变换函数来表示了:  
+<img src="./_images/fourier_filter.png" width=50%>
+
+#### _9.5.3 A Gallery of Fourier Transform
+
+之前介绍的几种filter就可以用他们的傅立叶变换来表示:  
+- box filter
+$$\mathfrak{F}\{f_{box}\} = \frac{sin\pi u}{\pi u} = sinc\ \pi u$$
+- tent filter
+$$\mathfrak{F}\{f_{tent}\} = \frac{sin^2\pi u}{\pi^2 u^2} = sinc^2\ \pi u$$
+- B-spline filter
+$$\mathfrak{F}\{f_B\} = \frac{sin^4\pi u}{\pi^4 u^4} = sinc^4\ \pi u$$
+- Gaussian filter
+$$\mathfrak{F}\{f_G\} = e^{-(2\pi u)^2/2}$$
+
+#### _9.5.4 Dirac Impulses in Sampling Theory迪拉克脉冲
+
+dirac函数是指除了0位置, 其他位置都是0, 0位置的值是无穷大, 这个函数的面积是1  
+所以我们对一个函数进行等距采样时, 就是对这个函数等距乘以dirac函数, 得到一个脉冲串impulse train, 距离是T, 那么这个脉冲串可以表示为:
+$$s_T(x) = \sum_{i=-\infty}^{\infty}\delta(x-Ti)$$
+
+如果我们对整数频率的正弦波用脉冲串取样后求和, 就会得到$\infty$, 如果非整数, 求和会趋近0
+
+周期为$T$的impulse train的forier transform是一个周期为$1/T$的impulse train  
+这里只说结论, 为什么? 不知道, 自己去查
+
+#### _9.5.5 Sampling and Aliasing采样和走样
+
+在采样sampling和重建reconstruction的过程中, 频域frequency domain起到什么作用呢?  
+fourier transform能够解释为什么我们在sampling和restruction时需要filtering  
+
+
+我们对一个函数做脉冲采样, 就是$fs_T$, 再对其做fourier transform, 也即是得到采样之后的频域: $\hat{f}\hat{s}_T$, 根据impulse train的特性:
+$$\hat{f} \ast \hat{s}_T = \hat{f} \ast s_{1/T}$$
+从而得到:
+$$(\hat{f} \ast s_{1/T} = \sum_{i=-\infty}^{\infty}\hat{f}(u - i/T)$$

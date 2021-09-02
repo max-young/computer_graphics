@@ -1,4 +1,4 @@
 
 ---
 
-Maintained by [Max Young](https://github.com/max-young). Proudly published with [docsify](https://docsify.js.org/).
+Maintained by [Max Young](https://max-young.github.io/). Proudly published with [docsify](https://docsify.js.org/).
