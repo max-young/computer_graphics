@@ -22,6 +22,7 @@
   - [_9.5.3 A Gallery of Fourier Transform](#_953-a-gallery-of-fourier-transform)
   - [_9.5.4 Dirac Impulses in Sampling Theory迪拉克脉冲](#_954-dirac-impulses-in-sampling-theory迪拉克脉冲)
   - [_9.5.5 Sampling and Aliasing采样和走样](#_955-sampling-and-aliasing采样和走样)
+  - [_9.5.6 Ideal Filters vs. Useful Filters](#_956-ideal-filters-vs-useful-filters)
 
 <!-- /TOC -->
 
@@ -493,8 +494,44 @@ $$s_T(x) = \sum_{i=-\infty}^{\infty}\delta(x-Ti)$$
 在采样sampling和重建reconstruction的过程中, 频域frequency domain起到什么作用呢?  
 fourier transform能够解释为什么我们在sampling和restruction时需要filtering  
 
-
 我们对一个函数做脉冲采样, 就是$fs_T$, 再对其做fourier transform, 也即是得到采样之后的频域: $\hat{f}\hat{s}_T$, 根据impulse train的特性:
 $$\hat{f} \ast \hat{s}_T = \hat{f} \ast s_{1/T}$$
 从而得到:
 $$(\hat{f} \ast s_{1/T} = \sum_{i=-\infty}^{\infty}\hat{f}(u - i/T)$$
+这意味着什么呢? 本来图片函数的频域是正常的抛物线, 进过采样之后变成了一个周期为$1/T$的线  
+也就是说，用impulse train对函数进行convolution会产生一系列等距的频谱拷贝。对这个看似奇怪的结果的一个很好的直观解释是，所有这些副本只是表达了一个事实（正如我们在第9.1.1节看到的那样），即一旦我们采样了，相差采样频率的整数倍的频率是无法区分的。  
+
+这样就导致了高频部分的重叠overlap, 从而产生aliasing    
+reconstruction也是会造成重叠overlap  
+<img src="./_images/aliasing.png" width=50%>  
+
+- **Preventing Aliasing in Sampling**
+
+  有两种方法: 1提高采样频率, 2filtering
+
+  提高采样频率比较好理解, T足够小, 那么1/T足够大, 大到能够覆盖整个频域, 就不会出现重叠的现象了, 如下图:  
+  <img src="./_images/sample_rates_and_aliasing.png" width=50%>  
+
+  filtering滤波, 我们把高频部分过滤掉(或者说模糊掉), 这样就能减少overlap引起的aliasing了, 如下图:  
+  <img src="./_images/low_pass_filtering_and_aliasing.png" width=50%>
+  我们看到strong blur相比middle blue过滤掉了更多的高频信号, 从而减少overlap
+
+- **Preventing Aliasing in Reconstruction**
+
+  reconstruction也是一样, 需要用低通滤波器low-pass filter过滤掉高频信号, 减少aliasing:  
+  <img src="./_images/low_pass_prevent_aliasing.png" width=50%>  
+  我们再对比一下不同的filter的效果:  
+  <img src="./_images/different_reconstruction_filter_prevent_aliasing.png" width=50%>  
+  一个好的reconstruction filter必须是一个好的lowpass filter
+
+- **Preventing Aliasing in Resampling**
+
+  我们重采样时, 比如一个高采样率的结果, 再用低采样率采一遍, 并不是直接从1000个采样点里取其中的800个点  
+  而是根据这1000个采样点reconstruction, 根据合适的lowpass filter去除重复的频谱和高频信号, 再进行采样:  
+  <img src="../_images/lowpass_filter_and_resampling.png" width=50%>
+
+#### _9.5.6 Ideal Filters vs. Useful Filters
+
+the sinc filter并不常用  
+Gaussian filter有很好的效果
+
