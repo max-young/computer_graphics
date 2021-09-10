@@ -6,6 +6,7 @@
   - [_7.1.3 The Camera Transformation](#_713-the-camera-transformation)
 - [_7.2 Projective Transformations投影变换](#_72-projective-transformations投影变换)
 - [_7.3 Perspective projection透视投影](#_73-perspective-projection透视投影)
+- [_7.5 Field of View视野](#_75-field-of-view视野)
 
 <!-- /TOC -->
 
@@ -88,8 +89,8 @@ $$
 
 上面提到的canonical view volume是一个单位三维坐标系, 我们怎么把一个任意大小的空间转换到这个单位三维坐标系呢?  
 
-我们把这个任意大小的坐标系和canonical view volume一样, 观测方向是$-z$, $x = -1$是screen的左侧, $y = -1$是screen的底部  
-但是大小不一样, $[l, r]\times[b, t]times[f, n]$, 分别对应left, right, bottom, top, far, near  
+我们任意大小的坐标系和canonical view volume一样, 观测方向是$-z$, $x = -1$是screen的左侧, $y = -1$是screen的底部  
+但是大小不一样, $[l, r]\times[b, t]\times[f, n]$, 分别对应left, right, bottom, top, far, near  
 我们称之为*orthographic view volume*  
 (这里我们为了讲解整个3D to 2D的过程, 这一步投影变换选取最简单的正交投影做讲解)
 
@@ -332,3 +333,22 @@ $$
 \end{matrix}
 \right]
 $$
+
+### _7.5 Field of View视野
+
+我们可以用(l, r, b, t)以及n来定义视窗, 为了方便起见, 我们规定:  
+$$
+l = -r \\
+b = -t 
+$$
+这样我们就能用3个参数来定义视窗了, 这些参数可以通过其他参数来获得.  
+比如长宽比, 可以通过图像的像素比来获得:  
+$$
+\frac{n_x}{n_y} = \frac{r}{t}
+$$
+$n_x, n_y$分别是横向和纵向的像素数量  
+我们还可以通过*field of view*来获得n和t的比例, field of view是指从视点能观看到的纵向角度, 也就是从视点看bottom和top的夹角, 这样:
+$$
+\tan{\frac{\theta}{2} = \frac{t}{|n|}}
+$$
+注: n是负的, 所以加上绝对值
