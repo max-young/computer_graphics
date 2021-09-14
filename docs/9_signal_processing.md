@@ -268,7 +268,7 @@ for i = ⌈x-r⌉ to ⌊x+r⌋ do
 return s
 ```
 用多个shift函数之和来理解也很好:  
-<img src="./../_images/shift_reconstruction.png" width=50%>
+<img src="./_images/shift_reconstruction.png" width=50%>
 
 <a id="markdown-_926-convolution-in-more-than-one-dimension多维卷积" name="_926-convolution-in-more-than-one-dimension多维卷积"></a>
 #### _9.2.6 Convolution in More Than One Dimension多维卷积

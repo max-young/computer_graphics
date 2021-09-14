@@ -4,6 +4,10 @@
   - [_8.1.1 Line Drawing](#_811-line-drawing)
   - [_8.1.2 Triangle Rasterization三角形光栅化](#_812-triangle-rasterization三角形光栅化)
   - [_8.1.3 Clipping剪裁](#_813-clipping剪裁)
+- [_8.2 Operations Before and After Rasterization](#_82-operations-before-and-after-rasterization)
+  - [_8.2.1 Simple 2D Drawing](#_821-simple-2d-drawing)
+  - [_8.2.2 A Minimal 3D Pipeline](#_822-a-minimal-3d-pipeline)
+  - [_8.2.3 Using a z-Buffer for Hidden Surfaces](#_823-using-a-z-buffer-for-hidden-surfaces)
 - [_8.3 Simple Antialiasing简单反锯齿(反走样)](#_83-simple-antialiasing简单反锯齿反走样)
 
 <!-- /TOC -->
@@ -26,7 +30,10 @@ rasterization是德语图像化的意思
 rendering有很多方法, 本章介绍基本的一种, 原理都是相通的  
 rendering的过程包括:  
 <img src="./_images/graphics_pipeline.png" width=50%>  
-application指的是存储vertex的文件, 经过vertex processing得到primitive(暂且译作多边形), 经过rasterization stage得到fragment, 然后经过fragment processing和blending(融合)就可以显示了
+application指的是存储vertices顶点集的文件  
+经过vertex processing得到primitive(暂且译作多边形)  
+经过rasterization stage得到fragment(pixel covered by the primitive)  
+然后经过fragment processing和blending stage就可以显示了
 
 <a id="markdown-_81-rasterization光栅化" name="_81-rasterization光栅化"></a>
 ### _8.1 Rasterization光栅化
@@ -123,7 +130,7 @@ for all x do
 
 显然这个算法的效率不高, 对每个三角形都要遍历所有像素, 我们可以做一个优化, 只对相关的像素做遍历, 我们找到定点的xy边界即可  
 里面的遍历算法也可做一下优化, 采用2.7章节的知识:  
-<img src="./../_images/triangle_rendering.png" width=50%>
+<img src="./_images/triangle_rendering.png" width=50%>
 
 **Dealing with Pixels on Triangle Edges**
 
@@ -154,8 +161,42 @@ $$
 如果在视线后面, 那么z是正直, n是负值, 转换后的z轴就超出n+f了  
 所以我们需要clipping
 
-clipping一半用一个六边形来剪切, 将六边形外的对象切掉  
+clipping一般用一个六边形来剪切, 将六边形外的对象切掉  
 有两种方法
+
+### _8.2 Operations Before and After Rasterization
+
+在光栅化之前除了要准备顶点向量等数据, 还需要准备色彩等数据  
+光栅化之后还需要进行着色等操作
+
+#### _8.2.1 Simple 2D Drawing
+
+2D Drawing 在fragment stage不需要做任何事情.  
+primitive可以画上同一个颜色, 也可以内插颜色, rasterizer光栅化器提供了相应的接口
+
+#### _8.2.2 A Minimal 3D Pipeline
+
+3D Drawing相比2D多了一些矩阵转换  
+棘手的问题是对象之间的重叠咬合药如何处理.  
+我们需要遵循back-to-front顺序原则, painter's algorithm似乎能解决这个问题, 先画背景, 再画前景.  
+但是并不能解决咬合的问题, 比如两个三角形交叉, 一个三角形的一部分在背景, 一部分在前景, 我们就不能先画一个再画另外一个.  
+或者三个三角形循环重叠, 也不能解决. 而且painter's algorithm效率不高.
+
+#### _8.2.3 Using a z-Buffer for Hidden Surfaces
+
+painter's algorithm很少使用, 取而代之的是另外一种简单高效的hidden surface removal algorithm: z-buffer algorithm  
+算法原理很简单: 跟踪每个图像上的像素位置迄今为止所画的最近距离的fragment的像素, 之后这个位置所画的像素如果距离更远, 则丢弃, 如果更近, 则更新追踪.  
+跟踪的是最近距离加上其颜色等属性, 称之为z-value或者depth, z-buffer是指z-value所组成的一些列网格, 这个算法应用于blending阶段.
+
+**Precision Issues**
+
+为了更高的效率, z-value距离值取正整数(float有更高的开销)  
+在实际工作中, 值需要尽可能的小, 但是又要有足够的精读来区分不同的像素.  
+假设我们用整数range B{0, 1, ..., B-1}来表示z-value的范围  
+那么对应的z轴的值的最大差$\Delta z = (f-n)/B$
+为了节省空间, B用bite表示, 那么$\Delta z = (f-n)/2^b$  
+为了提高效率, 那么尽量使$\Delta z$更小, 所以要么增大b, 要么缩小f-n  
+也就是增大f, 减小n, 书中有证明过程
 
 <a id="markdown-_83-simple-antialiasing简单反锯齿反走样" name="_83-simple-antialiasing简单反锯齿反走样"></a>
 ### _8.3 Simple Antialiasing简单反锯齿(反走样)
