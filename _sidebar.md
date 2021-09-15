@@ -8,4 +8,5 @@
 * [7 viewing](./docs/7_viewing.md)
 * [8 the graphics pipeline](./docs/8_the_graphics_pipeline.md)
 * [9 signal processing](./docs/9_signal_processing.md)
+* [10 surface shading](./docs/10_surface_shading.md)
 * [14 sampling](./docs/14_sampling.md)
