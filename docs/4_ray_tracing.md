@@ -4,6 +4,7 @@
 - [_4.2 Perspective透视](#_42-perspective透视)
 - [_4.5 Shading](#_45-shading)
   - [_4.5.1 Lambertian Shading](#_451-lambertian-shading)
+  - [_4.5.2 Blinn-Phong Shading](#_452-blinn-phong-shading)
 
 <!-- /TOC -->
 
@@ -76,3 +77,13 @@ $n$和$l$是单位向量, $n\cdot l$就是$\cos \theta$
 pixel value的红色部分就等于漫反射系数的红色部分乘以红色光源强度乘以$n\cdot l$, 蓝绿色同理  
 向量$l$通过光源向量减去照射点向量得到  
 不要忘记$nlv$都是单位向量
+
+#### _4.5.2 Blinn-Phong Shading
+
+上一节讲到的Lambert Shading Model只解释了其中的一种光照情况.    
+一个光源照射一个物体会有三种情况: 高光specular highlights、漫反射diffuse reflection、环境光照ambient lighting.  
+高光和观测角度相关, 如果观测角度和照射角度相等, 也就是以发现对称, 我们就会看到特别亮(刺眼), 越接近这个对称角度就越刺眼, 这就是specular highlights  
+Lambert Shading Model解释了第二种情况, 和观测角度无关  
+观景光照是指物体相对于光源的背面, 不受到光源的直接照射, 但是我们依然能够看到这一部分, 因为它受到了光源照射到其他位置后反射的光照.
+
+...

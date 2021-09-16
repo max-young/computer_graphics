@@ -8,6 +8,10 @@
   - [_8.2.1 Simple 2D Drawing](#_821-simple-2d-drawing)
   - [_8.2.2 A Minimal 3D Pipeline](#_822-a-minimal-3d-pipeline)
   - [_8.2.3 Using a z-Buffer for Hidden Surfaces](#_823-using-a-z-buffer-for-hidden-surfaces)
+  - [_8.2.4 Per-vertex Shading逐个三角形着色](#_824-per-vertex-shading逐个三角形着色)
+  - [_8.2.5 Per-fragment Shading逐个像素着色](#_825-per-fragment-shading逐个像素着色)
+  - [_8.2.6 Texture Mapping纹理映射](#_826-texture-mapping纹理映射)
+  - [_8.2.7 Shading Frequency着色频率](#_827-shading-frequency着色频率)
 - [_8.3 Simple Antialiasing简单反锯齿(反走样)](#_83-simple-antialiasing简单反锯齿反走样)
 
 <!-- /TOC -->
@@ -21,7 +25,7 @@
 就需要将这个三角形所占的像素找出来, 然后给这些像素赋值, 就把三角形显示出来了.  
 
 将屏幕或者image上的像素用几何图形occupy圈占出来的过程就是rasterization(光栅化)  
-rasterization依赖praphics pipeline(图形管道)就是过程, 这个过程包括一系列操作, 起于object对象, 终于像素pixel更新
+rasterization依赖praphics pipeline(图形管线)过程, 这个过程包括一系列操作, 起于object对象, 终于像素pixel更新
 
 番外:  
 pixel就是picture element的缩写  
@@ -32,8 +36,12 @@ rendering的过程包括:
 <img src="./_images/graphics_pipeline.png" width=50%>  
 application指的是存储vertices顶点集的文件  
 经过vertex processing得到primitive(暂且译作多边形)  
-经过rasterization stage得到fragment(pixel covered by the primitive)  
-然后经过fragment processing和blending stage就可以显示了
+经过rasterization stage得到fragment(pixel covered by the primitive)(多边形以及其圈占的像素)  
+然后经过fragment processing和blending stage就可以显示了(着色等操作)  
+<img src="./_images/pipeline.png" width=50%>  
+在第四章讲到了shading着色, 我们可以对三角形进行着色, 也可以对单个像素进行着色  
+对三角形着色就发生在vertex processing阶段, 对像素着色就发生在fragment processing阶段  
+GPU(图形处理器)就是图形管线pipeline的硬件实现  
 
 <a id="markdown-_81-rasterization光栅化" name="_81-rasterization光栅化"></a>
 ### _8.1 Rasterization光栅化
@@ -197,6 +205,15 @@ painter's algorithm很少使用, 取而代之的是另外一种简单高效的hi
 为了节省空间, B用bite表示, 那么$\Delta z = (f-n)/2^b$  
 为了提高效率, 那么尽量使$\Delta z$更小, 所以要么增大b, 要么缩小f-n  
 也就是增大f, 减小n, 书中有证明过程
+
+#### _8.2.4 Per-vertex Shading逐个三角形着色
+
+#### _8.2.5 Per-fragment Shading逐个像素着色
+
+#### _8.2.6 Texture Mapping纹理映射
+
+#### _8.2.7 Shading Frequency着色频率
+
 
 <a id="markdown-_83-simple-antialiasing简单反锯齿反走样" name="_83-simple-antialiasing简单反锯齿反走样"></a>
 ### _8.3 Simple Antialiasing简单反锯齿(反走样)
