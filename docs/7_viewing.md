@@ -69,7 +69,7 @@ $$
 canonical coordinate的左下角坐标$(x_{canonical} = -1, y_{canonical} = -1)$计算得到screen下的坐标就是$(x_{screen} = -0.5, y_{screen} = -0.5)$
 canonical coordinate的右下角坐标$(x_{canonical} = 1, y_{canonical} = 1)$计算得到screen下的坐标就是$(x_{screen} = n_x - 0.5, y_{screen} = n_y-0.5)$
 
-这种投影和$z$轴没有关系, 我们得到:
+我们得到:
 $$
 M_{vp} =
 \left[
@@ -82,7 +82,7 @@ M_{vp} =
 \right]
 $$
 
-这一步好像很简单
+这里我们暂不考虑z方向坐标, 但是并不是说没用, 在第8.2.3章节里z-buffer需要用到z坐标
 
 <a id="markdown-_712-the-orthographic-projection-transformation正交投影变换" name="_712-the-orthographic-projection-transformation正交投影变换"></a>
 #### _7.1.2 The Orthographic Projection Transformation正交投影变换
