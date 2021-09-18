@@ -208,23 +208,55 @@ painter's algorithm很少使用, 取而代之的是另外一种简单高效的hi
 
 #### _8.2.4 Per-vertex Shading逐个三角形着色
 
+图形管线将三角形配上颜色然后输出图像.  
+第四章提到了shading着色, 需要照射方向、观测方向、法线来进行计算.  
+着色的方式有几种.  
+一种是对三角形的顶点进行着色, 这种方式也被称为Gouraud Shading.  
+着色用到的坐标系可选择world space或者eye space这样的正交坐标系, 因为计算需要用到几个向量之间的角度.
+
+per-vertex shading的缺点是细节表现不足, 三角形内部的颜色只能通过内插得到(内插可用重心坐标系实现, 2.7章节讲到了)  
+当然, 如果三角形足够小, 细节表现也是不错的.  
+per-vertex shading在管线的vertex processing阶段进行
+
 #### _8.2.5 Per-fragment Shading逐个像素着色
+
+为了解决per-vertex shading的不足, 我们可以把着色过程放到fragment stage阶段进行, 做per-fragment shading  
+per-fragment shading是对单个像素着色, 也被称为phong shading  
+我们需要知道单个像素的相关信息(计算用到的几个向量、参数等信息), 才能进行着色.  
+这些信息需要在vertex stage到fragment stage的过程中传递下去
 
 #### _8.2.6 Texture Mapping纹理映射
 
+texture纹理应用在着色过程中, 加上额外的信息, 避免图像看起来同质、人工.  
+我们对一个球体着色时, 这个球可能不是一个均匀的同质的球, 而是有花纹、纹理, 球上的点的特质(颜色、感光度等等)时不一样的, 从而计算出来的颜色也不一样  
+对应shading model, 就是每个点的漫反射系数、高光系数等是不一样的. (颜色其实就是这些特质的反应)  
+纹理属性和每个点有对应关系, 可以用纹理坐标系来表现(texture coordinate)  
+texture mapping就是找到这种关系, 然后进行着色.
+
 #### _8.2.7 Shading Frequency着色频率
 
+上面提到的着色方法对应不用的着色频率, 不同场景应用不同的着色方法和频率(开销和效果的平衡)  
+大尺寸、细节较少的情况可以使用低频率的per-vertex shading, 尽管pxcel可能很多  
+如果细节较多、纹理多样, 则可以采用per-fragment shading  
+例如在游戏里, 用hardware pipeline做per-fragment shading  
+在photorealistic renderman system真实感渲染器系统里可以用per-vertex shading, 因为primitive被切分成了很多细小的多边形, 大小和像素差不多.
 
 <a id="markdown-_83-simple-antialiasing简单反锯齿反走样" name="_83-simple-antialiasing简单反锯齿反走样"></a>
 ### _8.3 Simple Antialiasing简单反锯齿(反走样)
 
-在8.1章节里, 我们会发现画一条直线时, 如果直线是斜着跨过像素, 我们根据规则取到进过的像素时, 就会发现有很多锯齿.  
-这样画出来的线称为标准光栅化(standard rasterization), 或者偏差(锯齿)光栅化(aliased rasterization)
+和光线追踪一样, 在进行光栅化时, 我们会判断一个像素是否在三角形内, 直线可能是跨过像素, 这个像素部分在内, 这就造成了锯齿(走样)  
+实际上标准光栅化过程也被称为走样(锯齿)光栅化(aliased rasterization)
 
-如何去掉这些锯齿(antialiasing)呢? blurring(模糊)是有效的.  
-我们可以把一个像素的值, 和周围的像素值做平均(box filtering), 这样就实现了blurring, 然后我们把模糊化后的线当作一个像素.  
+如何去掉这些锯齿(antialiasing)呢? 完美的解决方法时对pixel进行切分, 允许部分被primitive覆盖, 但实际操作中不太能实现, blurring(模糊)是有效的.  
+我们可以把一个像素的值, 和周围正方形范围的像素值做平均(box filtering), 这样就实现了blurring, 这样就看起来平滑了, 起到减轻走样的效果
 
-如何实现box filtering呢? supersampling, 对高分辨率的图片(high resolution)降低采样率(downsample).  
-比如在一条线在1024X1024分辨率的图片上占的宽度是4.8pixels, 那它在256X256的图片上占的宽度就是1.2pixels  
+如何实现box filtering呢? supersampling超采样    
+我们要获得256X256的图片, 图片上的一条线的宽度是1.2pixels  
+我们对原始图像做1024X1024的采样, 线的宽度是4.8pixels  
 我们用4X4pixels的一个框去1024X1024的图片去采样(本来应该是单个像素采样), 然后对4X4个像素的值取平均, 就得到了256X256上的单个像素的值  
 这样就实现了低采样率, 实现了box filtering
+
+超采样的开销很大. 由于导致锯齿是因为primitive的边, 而不是着色的突然变化. 所以我们可以从着色频率来着手, 提高着色频率, 而且理想情况下我们只需对一种颜色做处理.  
+(可以理解为, 三角形是走样的, 但是着色可能没到三角形的精度, 我们让着色不走样就可以了, 三角形走样不影响效果, 这样开销就小了)  
+如果是per-vertex shading, 那自然最好, 三角形内部用内插实现平滑, 没有锯齿.  
+如果是per-fragment shading, hardware pipeline会提前存储以及处理好的不同精度的blur结果, 然后应用到着色过程中, 不用实时计算.
