@@ -5,6 +5,8 @@
 - [_4.5 Shading](#_45-shading)
   - [_4.5.1 Lambertian Shading](#_451-lambertian-shading)
   - [_4.5.2 Blinn-Phong Shading](#_452-blinn-phong-shading)
+  - [_4.5.3 Anbient Shading](#_453-anbient-shading)
+  - [_4.5.4 Multiple Point Lights](#_454-multiple-point-lights)
 
 <!-- /TOC -->
 
@@ -57,7 +59,7 @@ pixel的value通过shading model计算得出
 - 观测方向v: 照射点指向观测点的单位向量  
 - 表面法线n: 照射点垂直于照射面的单位向量  
 - 表面属性: 包括color颜色、shininess(光泽、感光度、吸收光线的强度属性)  
-<img src="./_images/shading_model.png" width=50%>  
+<img src="./_images/shading_model.png">  
 
 #### _4.5.1 Lambertian Shading
 
@@ -83,7 +85,39 @@ pixel value的红色部分就等于漫反射系数的红色部分乘以红色光
 上一节讲到的Lambert Shading Model只解释了其中的一种光照情况.    
 一个光源照射一个物体会有三种情况: 高光specular highlights、漫反射diffuse reflection、环境光照ambient lighting.  
 高光和观测角度相关, 如果观测角度和照射角度相等, 也就是以发现对称, 我们就会看到特别亮(刺眼), 越接近这个对称角度就越刺眼, 这就是specular highlights  
-Lambert Shading Model解释了第二种情况, 和观测角度无关  
-观景光照是指物体相对于光源的背面, 不受到光源的直接照射, 但是我们依然能够看到这一部分, 因为它受到了光源照射到其他位置后反射的光照.
+Lambert Shading Model解释了第二种情况-漫反射, 和观测角度无关  
+环境光照是指物体相对于光源的背面, 不受到光源的直接照射, 但是我们依然能够看到这一部分, 因为它受到了光源照射到其他位置后反射的光照.
 
-...
+对于specular highlights, 看这张图:  
+<img src="./_images/blinn-phong.png">  
+观测角度和照射角度与法线的对成方向越接近, 高光就越亮, 所以我们可以和漫反射模型一样, 用一个角度来计算强度  
+但是这个角度计算起来比较麻烦, 我们可以用另外一个角度来替代: 法线和照射方向观测方向的中间方向的夹角, 这个夹角和之前是等价的, 而且计算更方便, 从而我们得到specular highlights的计算公式:
+$$
+\begin{aligned}
+h &= \frac{v+l}{\left\|v+l\right\|} \\
+L &= k_sImax(o, n \cdot h)^p
+\end{aligned}
+$$
+$k_s$是高光系数, 为什么有一个p指数呢? 因为高光衰减特别快, 只在对称的很小的区域比较亮, 加上指数后, 这个曲线就会变得窄  
+高光和漫反射叠加之后:
+$$
+L = k_dImax(0, n\cdot l) + k_sImax(o, n \cdot h)^p
+$$
+
+#### _4.5.3 Anbient Shading
+
+上面已经解释了环境光照, 不受到光源直接照射的区域, 我们依然能够看见, 因为它接受了四面八方的反射光  
+这种情况我们很难定义清楚, 所以我们用很简单的模型来定义:
+$$L = k_aI_a$$
+环境系数乘以环境光照强度  
+这样, 一个区域的完整着色模型就是这三种光照的叠加:
+$$
+L = k_aI_a + k_dImax(0, n\cdot l) + k_sImax(o, n \cdot h)^p
+$$
+
+#### _4.5.4 Multiple Point Lights
+
+如果有多个光源呢? 我们对模型进行叠加superposition:
+$$
+L = k_aI_a + \sum_{i=1}^{N}[k_dI_imax(0, n\cdot l_i) + k_sI_imax(o, n \cdot h_i)^p]
+$$
