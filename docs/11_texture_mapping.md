@@ -2,6 +2,7 @@
 
 - [_11.1 Looking Up Texture Values](#_111-looking-up-texture-values)
   - [_11.2 Texture Coordinate Functions](#_112-texture-coordinate-functions)
+  - [_11.2.1 Geometrically Determined Coordinates几何上确定的坐标系](#_1121-geometrically-determined-coordinates几何上确定的坐标系)
 
 <!-- /TOC -->
 
@@ -61,5 +62,60 @@ texture mapping有两个主要的问题需要解决:
 这个问题并不只是图形学的问题, 对于地图绘图来说, 这个问题存在了几百年. 对三维的地球绘图, 在有限的图纸上保证尽可能的不失真.
 
 texture coordinate map是平衡各种问题的解决办法. 这些问题包括:
-- Bijectivity.
+- Bijectivity双向性
+  我们希望表面的所有点对应texture space不同的点
+- Size distortion尺寸失真
+  整个纹理的比例大致是一样的. 对象表面的距离比例对应纹理表面的距离比例应该大致时一致的.
+- Shape distortion形状失真
+  对象表面如果是圆形, 在纹理上也应该大致是圆形
+- Continuity连续性
+  对象是连续的, 纹理上也应该是连续的. 纹理应避免不连续的情况.
 
+在2.5.8章节我们用两个参数来定义曲面, 我们可以用这两个参数来定义texture coordinate, 这样就实现了对象表面和纹理的对应关系.  
+如果不依靠曲面的参数化表达, 怎么定义纹理坐标系呢? 有两种方法, 一种是根据曲面上点的空间坐标(我的理解是密集采样), 另外一种是根据曲面三角网的顶点坐标来内插其他点的坐标.
+
+#### _11.2.1 Geometrically Determined Coordinates几何上确定的坐标系
+
+geometrically determined coordinates适用于比较简单的场景.  
+我们用这个这个图像来说明, 上面的数字可以代表u,v坐标, 网格线可以看到变形的情况  
+<img src="./_images/texture_test_image.png">
+
+**Planar Projection平面投影**
+
+和第7章的投影变换(正交投影、透视投影)类似, 用矩阵变换就可以转换得到u, v
+$$
+\phi(x, y, z) = (u, v)
+$$
+$$
+\left[
+\begin{matrix}
+  u \\
+  v \\
+  \star \\
+  1
+\end{matrix}
+\right] = M_t 
+\left[
+\begin{matrix}
+  x \\
+  y \\
+  z \\
+  1
+\end{matrix}
+\right]
+$$
+注: z坐标用星号是因为我们不关心z坐标  
+Planar projection不具有injective, 因为如果是一个封闭的对象, 那么这个对象的前面和后面的两个点, 对应的texture coordinate的坐标是一样的  
+但是它在shadow mapping会用到, 在第11.4.4章节会讲到
+
+**Spherical Coordinates球面坐标**
+
+对于一个近似球体的对象, 我们可以用球面坐标来进行转换纹理坐标.  
+和地球的地图类似, 我们可以完整的表达地球上的点的坐标, 但是在两极变形较大.  
+
+转换之后的球面坐标也是三维坐标: $(\rho, \theta, \phi)$, 我们舍弃$\rho$, 把$\theta, \phi$控制在[0, 1]范围  
+在第2.5.8章节里讲到了曲面的参数表达, 我们得到:
+$$\phi(x, y, z) = ([\pi + atan2(y, x)]/2\pi, [\pi - acos(z/||x||)]/\pi)$$
+球面坐标是bijective的, 除了两极
+
+**Cylindrical Coordinates圆柱坐标**
