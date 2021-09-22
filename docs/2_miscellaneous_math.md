@@ -23,6 +23,13 @@
   - [_2.5.2 The 2D Gradient 2D梯度](#_252-the-2d-gradient-2d梯度)
     - [Implicit 2D lines隐式2D直线](#implicit-2d-lines隐式2d直线)
     - [Implicit Quadric Curves隐式二次曲线](#implicit-quadric-curves隐式二次曲线)
+  - [_2.5.3 3D Implicit Surfaces](#_253-3d-implicit-surfaces)
+  - [_2.5.4 Surface Normal to an Implicit Surface](#_254-surface-normal-to-an-implicit-surface)
+  - [_2.5.5 Implicit Planes](#_255-implicit-planes)
+  - [_2.5.6 2D Parametrics Curves二维参数化曲线](#_256-2d-parametrics-curves二维参数化曲线)
+  - [_2.5.7 3D Parametric Curves三位参数曲线](#_257-3d-parametric-curves三位参数曲线)
+  - [_2.5.8 3D Parametric Surfaces](#_258-3d-parametric-surfaces)
+  - [_2.5.9 Summary of Curves and Surfaces](#_259-summary-of-curves-and-surfaces)
 - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
 - [_2.7 Triangles三角形](#_27-triangles三角形)
   - [_2.7.1 2D Triangles](#_271-2d-triangles)
@@ -420,8 +427,214 @@ $$(x-x_c)^2 + (y-y_c)^2 - r^2 = 0$$
 这个等式就是一个长半径是a, 短半径是b的椭圆:
 $$\frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} - 1 = 0$$
 
+#### _2.5.3 3D Implicit Surfaces
+
+和2D曲线一样, 3D曲面可以这样表示:
+$$f(x, y, z) = 0$$
+如果我们定义向量$p = (x, y, z)$, 那么:
+$$f(p) = 0$$
+
+#### _2.5.4 Surface Normal to an Implicit Surface
+
+和2D一样, 3D曲面的发现可以这样表示:
+$$ n = \nabla f(p) = \left(\frac{\partial f(p)}{\partial x}, \frac{\partial f(p)}{\partial y}, \frac{\partial f(p)}{\partial z}\right)$$
+发现指向$f(p) > 0$的方向
+
+#### _2.5.5 Implicit Planes
+
+假设一个无线的平面经过一个点a, 法线是n, 那么对于平面上的点p:
+$$ (p-a)\cdot n = 0 $$
+$p-a$和$n$垂直
+
+如果我们知道平面上的三个点$a, b, c$, 那么:
+$$n = (b-a)\times(c-a)$$  
+从而, 对于平面上的点p:
+$$(p-a)\cdot((b-a)\times(c-a))=0$$
+p和abc是coplanar(共面的)  
+在第5.3章节里讲到determinant(行列式), p, a, b, c在一个平面也满足下面的等式, 3X3矩阵的行列式是0, 这两个等式是等价的:
+$$
+\left|
+\begin{matrix}
+x - x_a & y - y_a & z - z_a \\
+x_b - x_a & y_b - y_a & z_b - z_a \\
+x_c - x_a & y_c - y_a & z_c - z_a
+\end{matrix}
+\right| = 0
+$$
+
+**3D Quadric Surfaces**
+
+球体可以表示为:
+$$f(p) = (p-c)^2 - r^2 = 0$$
+椭圆可以表示为:
+$$f(p) = \frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} + \frac{(z-z_c)^2}{c^2} - 1 = 0$$
+
+**3D Curves from Implicit Surfaces**
+
+3D的曲线怎么表示呢? 3D曲线在实际工作中比较少用到, 曲线实际上是退化的曲面, 我们很希望用简单的$f(p)=0$来表示.  
+但是实际上, 3D曲线是两个曲面交叉而得到:
+$$
+f(p) = 0 \\
+g(p) = 0
+$$
+有没有更简单的方法, 下面我们来讲
+
+#### _2.5.6 2D Parametrics Curves二维参数化曲线
+
+我们想用一个参数来定义2D曲线:
+$$
+\left[
+  \begin{matrix}
+    x \\
+    y
+  \end{matrix}
+\right] = \left[
+  \begin{matrix}
+    g(t) \\
+    h(t)
+  \end{matrix}
+\right]
+$$
+可以简写为:
+$$p = f(t)$$
+
+**2D Parametric Lines二维参数直线**
+
+一条直线经过$p_0 = (x_0, y_0)$和$p_1 = (x_1, y_1)$, 这条直线可表示为:
+$$
+\left[
+\begin{matrix}
+  x \\
+  y
+\end{matrix}
+\right] = 
+\left[
+\begin{matrix}
+  x_0 + t(x_1- x_0) \\
+  y_0 + t(y_1- y_0)
+\end{matrix}
+\right]
+$$
+简写为:
+$$p(t) = p_0 + t(p_1 - p_0)$$
+也可以表示为:
+$$p(t) + o + t(d)$$
+o表示一个点
+
+**2D Parametric Circles二维参数圆**
+
+圆可以这么表达:  
+$$
+\left[
+\begin{matrix}
+  x \\
+  y
+\end{matrix}
+\right] =
+\left[
+  \begin{matrix}
+    x_c + r\cos\phi  \\
+    y_c + r\sin\phi
+  \end{matrix}
+\right]
+$$
+对于椭圆:
+$$
+\left[
+\begin{matrix}
+  x \\
+  y
+\end{matrix}
+\right] =
+\left[
+  \begin{matrix}
+    x_c + a\cos\phi  \\
+    y_c + b\sin\phi
+  \end{matrix}
+\right]
+$$
+
+#### _2.5.7 3D Parametric Curves三位参数曲线
+
+和2D类似, 我们可以这样表示:
+$$
+x = f(t) \\
+y = g(t) \\
+z = h(t)
+$$
+例如一个沿z轴螺旋上升的圆spiral, 可以这样表示:
+$$
+x = \cos t \\
+y = \sin t \\
+z = t
+$$
+
+**3D Parametric Lines**
+
+例如三维的一条线:
+$$
+x = 2 + 7t \\
+y = 1 + 2t \\
+z = 3 - 5t
+$$
+二维直线有一种表示方式是经过一个点, 和另一个向量平行, 三位也是一样:
+$$p = o + td$$
+对于上面的例子:
+$$
+o = (2, 1, 3) \\
+d = (7, 2, -5)
+$$
+如果是一个线段segment, 那么我们定义t在某个区间  
+如果是一个射线, 那么可以定义$t \in [0, \infty]$
+
+#### _2.5.8 3D Parametric Surfaces
+
+surface和curve类似, 但是多了一个参数:
+$$
+x = f(u, v) \\
+y = g(u, v) \\
+z = h(u, v)
+$$
+向量模式就是:
+$$
+\left[
+\begin{matrix}
+  x \\
+  y \\
+  x
+\end{matrix}
+\right] = p(u, v)
+$$
+举一个例子, 对于地球上的一个点, 可以用经纬度来表示, 相当于uv这两个参数
+
+如果我们保持v保持某个数值$v_0$不变, 那么我们就会得到一条曲线$q(t) = p(t, v_0)$, 这条曲线在某个点的导数(切线)表示为$p_u$  
+同样的, 我们保持u在某个数值$u_0$不变, 那么就会得到一条曲线$q(t) = p(u_0, t)$, 这条曲线在某个点的导数(切线)为$p_v$  
+这样, 在曲面上的一个点, 都能找到这样的两条切线向量, 这个曲面在这个点上的的法线normal就是这两个切线向量的cross product:
+$$n = p_u \times p_v$$
+
+#### _2.5.9 Summary of Curves and Surfaces
+
+对于曲线和曲面, 根据function来定义:
+$$S = {p|f(p) = 0}$$
+对于二维或者三位曲线, 用一个参数可以定义:
+$$S = {p(t)|t \in D}$$
+对于三位曲面, 需要两个参数:
+$$S = {p(t)|(u, v) \in D}$$
+曲线的切线可以用导数和梯度来计算  
+曲面的法线可以用两个维度的曲线的切线向量来得到
+
 <a id="markdown-_26-linear-interpolation线性插值" name="_26-linear-interpolation线性插值"></a>
 ### _2.6 Linear Interpolation线性插值
+
+计算机图形学里最基础的操作可能是线性插值.  
+在2.5章节里用一个参数定义曲线, 根据参数t得到曲线上的点, 这其实就是线性插值
+
+对于一系列点, x的值分别是: $x_0, x_1, x_2, ...$, 其都有对应的y值, 我们要根据这些点来内插经过的点  
+我们可以通过两个相邻的点, 来内插着两个点之间的点:
+$$
+f(x) = y_i + \frac{x-x_i}{x_{x+1}-x_i}(y_{y+1}-y_i)
+$$
+这实际上就是2D parameter curve, $\frac{x-x_i}{x_{x+1}-x_i}$就是参数t
 
 <a id="markdown-_27-triangles三角形" name="_27-triangles三角形"></a>
 ### _2.7 Triangles三角形
