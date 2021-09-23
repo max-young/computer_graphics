@@ -3,6 +3,7 @@
 - [_11.1 Looking Up Texture Values](#_111-looking-up-texture-values)
   - [_11.2 Texture Coordinate Functions](#_112-texture-coordinate-functions)
   - [_11.2.1 Geometrically Determined Coordinates几何上确定的坐标系](#_1121-geometrically-determined-coordinates几何上确定的坐标系)
+  - [_11.2.2 Interpolated Texture Coordinates内插纹理坐标系](#_1122-interpolated-texture-coordinates内插纹理坐标系)
 
 <!-- /TOC -->
 
@@ -72,7 +73,7 @@ texture coordinate map是平衡各种问题的解决办法. 这些问题包括:
   对象是连续的, 纹理上也应该是连续的. 纹理应避免不连续的情况.
 
 在2.5.8章节我们用两个参数来定义曲面, 我们可以用这两个参数来定义texture coordinate, 这样就实现了对象表面和纹理的对应关系.  
-如果不依靠曲面的参数化表达, 怎么定义纹理坐标系呢? 有两种方法, 一种是根据曲面上点的空间坐标(我的理解是密集采样), 另外一种是根据曲面三角网的顶点坐标来内插其他点的坐标.
+如果不依靠曲面的参数化表达, 怎么定义纹理坐标系呢? 有两种方法, 一种是根据曲面上点的空间坐标, 另外一种是根据曲面三角网的顶点坐标来内插其他点的坐标. 看下面的章节解释.
 
 #### _11.2.1 Geometrically Determined Coordinates几何上确定的坐标系
 
@@ -119,3 +120,15 @@ $$\phi(x, y, z) = ([\pi + atan2(y, x)]/2\pi, [\pi - acos(z/||x||)]/\pi)$$
 球面坐标是bijective的, 除了两极
 
 **Cylindrical Coordinates圆柱坐标**
+
+对于圆柱形的对象, 我们可以使用圆柱坐标, 用一个圆柱形套在对象外面做投影:
+$$\phi(x, y, z) = (\frac{1}{2\pi}[\pi+atan2(y, x)]/2\pi, \frac{1}{2}[1+\pi])$$
+
+**cubemaps立方体地图**
+
+球星坐标系在两极会造成较大的变形, 提到方案是cubemaps, 可以改善这种情况, 但是会失去一定的连续性.  
+立方体有六个面, 对应六个texture map. 意味着对象的不同区域投影到不同的texture map, 投影就是正交投影.  
+例如: 如果|x|>|y|, |x|>|z|, 那么根据x的正负, 分别投影到+x面或者-x面.  
+OpenGL里有对应的六个面的转换方法, 这里不列公式了, 用到的时候看书吧.
+
+#### _11.2.2 Interpolated Texture Coordinates内插纹理坐标系
