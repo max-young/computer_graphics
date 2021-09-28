@@ -4,6 +4,13 @@
   - [_11.2 Texture Coordinate Functions](#_112-texture-coordinate-functions)
   - [_11.2.1 Geometrically Determined Coordinates几何上确定的坐标系](#_1121-geometrically-determined-coordinates几何上确定的坐标系)
   - [_11.2.2 Interpolated Texture Coordinates内插纹理坐标系](#_1122-interpolated-texture-coordinates内插纹理坐标系)
+  - [_11.2.3 Tiling, Wrapping Modes, and Texture Transformations平铺、环绕模式, 和纹理变换](#_1123-tiling-wrapping-modes-and-texture-transformations平铺环绕模式-和纹理变换)
+  - [_11.2.4 Perspective Correct Interpolation透视校正内插](#_1124-perspective-correct-interpolation透视校正内插)
+  - [_11.2.5 Continuity ans Seams连续性和接缝](#_1125-continuity-ans-seams连续性和接缝)
+- [_11.3 Antialiasing Texture Lookups反走样纹理查找](#_113-antialiasing-texture-lookups反走样纹理查找)
+  - [_11.3.1 The Footprint of a Pixel](#_1131-the-footprint-of-a-pixel)
+  - [_11.3.2 Reconstruction重建](#_1132-reconstruction重建)
+  - [_11.3.3 MipMapping](#_1133-mipmapping)
 
 <!-- /TOC -->
 
@@ -132,3 +139,55 @@ $$\phi(x, y, z) = (\frac{1}{2\pi}[\pi+atan2(y, x)]/2\pi, \frac{1}{2}[1+\pi])$$
 OpenGL里有对应的六个面的转换方法, 这里不列公式了, 用到的时候看书吧.
 
 #### _11.2.2 Interpolated Texture Coordinates内插纹理坐标系
+
+只存储三角形顶点的坐标和属性, 三角形内部用内插的方式来获取坐标和属性  
+内插方法采用barycentric coordinate重心坐标, 中心坐标参照第二章节
+
+rexture mapping的质量和顶点相关, 例如顶点的密度等等
+
+这种方式在某些区域依然有变形, 比如书中举的例子: 鼻翼, 地球两极. 皆因为小的三角形对应面积较大的texture space
+
+#### _11.2.3 Tiling, Wrapping Modes, and Texture Transformations平铺、环绕模式, 和纹理变换
+
+有时图像上的点对应的texture coordinate由于某种原因落到了terxture space的外面  
+有时我们只对一小部分区域着色, 这样texture space有很大一部分区域是黑色的, 为了让这一小部分区域有更精细的细节, 我们要把texture space放大, 让这一小部分变成unit quare  
+对于落在这部分区域之外的部分, 可以赋予一个背景色常量, 也可以用这部分区域的平均值作为背景色  
+
+对于重复图形的图像, 比如地板、砖块墙, 应该只需要一块重复区域的纹理, 这样更节省空间. 详情待实际应用再看.
+
+#### _11.2.4 Perspective Correct Interpolation透视校正内插
+
+#### _11.2.5 Continuity ans Seams连续性和接缝
+
+### _11.3 Antialiasing Texture Lookups反走样纹理查找
+
+texture mapping的第二个基本问题是antialiasing  
+由于纹理是表现细节的关键, 所以纹理是引起aliasing的关键来源  
+纹理aliasing和光栅化aliasing一样, 都涉及到sample、blur、reconstruction等等
+
+#### _11.3.1 The Footprint of a Pixel
+
+我们图像上一个pixel对应的纹理区域称为texture space footprint of the pixel  
+<img src="./_images/footprint_of_pixel.png" width=50%>  
+从图上可以看到图像上一个pixel对应的texture space的区域大小是不一样的.  
+注意: 这里有个理解问题, texture的坐标系和图像的坐标系是没关系的, 他们对实际对象经过不同的转换得到  
+上一章节, 对象经过$\pi$转换得到图像, 经过$\phi$转换得到texture space  
+我们定义$\psi = \phi\cdot\pi^{-1}$, 这样图像上的像素经过$\psi$转换就得到了texture footprint  
+
+antialiasing的方法是计算均值(模糊处理blur), 但是这是一个复杂的工作  
+footprint大小各异, 还可能不是连续的  
+$\psi$经过了两次转换, 所以pixel对应的footprint的大小形状和这两次转换都相关,  
+也就是和视角以及texture的投影方法都相关  
+
+这个复杂的问题怎么解决呢? approximation近似  
+一个pixel的中心是x, 这个pixel对应texture space上一个平行四边形  
+书中有详细解释, 但是没看懂, 用到时再详细研究
+
+#### _11.3.2 Reconstruction重建
+
+一个像素对应的footprint可能很大, 需要做平均  
+也可能小于一个texels纹素的大小, 这样就不连续了, 这就需要reconstruction  
+这和第9章节的reconstruction不太一样, 第9章需要重建的离散数据是规律采样的  
+但是纹理是不规则的, 详情待用到时再研究
+
+#### _11.3.3 MipMapping
