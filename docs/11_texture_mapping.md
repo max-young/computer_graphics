@@ -11,6 +11,10 @@
   - [_11.3.1 The Footprint of a Pixel](#_1131-the-footprint-of-a-pixel)
   - [_11.3.2 Reconstruction重建](#_1132-reconstruction重建)
   - [_11.3.3 MipMapping](#_1133-mipmapping)
+  - [_11.3.4 Basic Texture Filtering with Mipmap用mipmaps进行基本纹理过滤](#_1134-basic-texture-filtering-with-mipmap用mipmaps进行基本纹理过滤)
+  - [_11.3.5 Anisotropic Filtering各向异性过滤](#_1135-anisotropic-filtering各向异性过滤)
+- [_11.4 Applications of Texture Mapping纹理映射的应用](#_114-applications-of-texture-mapping纹理映射的应用)
+  - [_11.4.1 Controlling Shading Parameters控制着色参数](#_1141-controlling-shading-parameters控制着色参数)
 
 <!-- /TOC -->
 
@@ -191,3 +195,58 @@ $\psi$经过了两次转换, 所以pixel对应的footprint的大小形状和这�
 但是纹理是不规则的, 详情待用到时再研究
 
 #### _11.3.3 MipMapping
+
+上一节我们说到一个pixel对应的footprint可能大于一个texel, 为了antialiasing我们需要做平均.   
+但是有时候可能是几千个texels, 实时计算效率就太低了. 我们可以提前计算和存储.  
+这个idea称之为"MIP mapping"或者"mip-mapping"  
+
+一个mipmap是指一系列texture, 它们是指的同一个图像的纹理, 但是分辨率从高到低各不相同.  
+最高的分辨率的texture称为base level或者level0, level1是在两个维度降低一倍分辨率, 也就是level 0的2*2个texels变成level 1的1个texel, 依此类推.  
+level k的一个texel相当于base level的$2^k \times 2^k$个texels  
+
+这些不同分辨率的texture层层堆叠, 我们形象的称之为image pyramid图像金字塔.
+
+#### _11.3.4 Basic Texture Filtering with Mipmap用mipmaps进行基本纹理过滤
+
+我们又了mipmaps, 如果我们计算出图像上的某个pixel对应原始texture上的$D \times D$个texels, 我们就能对应上mipmaps的level $k = log_2D$的一个texel.  
+这是理想状况, 实际情况是pixel对应的texels不一定是规矩的正方形. 就算是正方形, $log_2D$也不一定是整数, 要知道, 我们存储的mipmaps都是整数level  
+怎么办呢? 两种方法, 取最接近的level k(可能会产生seams接缝), 或者取最接近的两个level, 然后做差值(相比第一种更加smooth)
+
+对于不是正方形的情况呢? 我们在11.3.1footprint章节里说到, footprint是一个平行四边形, 我们也有两种方法做处理, 一种是通过面积做处理, 另一种是根据四边形的长边来做处理, 我们说长边long edge这种方法:  
+$$D = max\left\{\left\|u_x\right\|, \left\|u_y\right\|\right\}$$
+preseudo是:
+```
+// u, v是pixel中心对应的texture坐标, J是texels矩阵
+Color mipmap_sample_trilinear(Texture mip[], float u, float v, matrix J)
+{
+  // 最大宽度long edge
+  D = max_column_norm(J)
+  k = log2(D)
+  k0 = floor(k); k1 = k0 + 1
+  // interpolation参数
+  a = k1 - k; b = 1 - a
+  // 涉及到上一节reconstruction的内容, 根据u, v计算texel值
+  c0 = tex_sample_bilinear(mip[k0], u, v)
+  c1 = tex_sample_bilinear(mip[k1], u, v)
+  // interpolation
+  return a * c0 + b * c1
+}
+```
+如果footprint是完美的正方形区域, 且宽度是2的指数, 那么mipmap的antialiasing很完美  
+但是如果不规整, 那就会有缺陷, 下图能看到效果:  
+<img src="./_images/mipmap_antialiasing.png" width=50%>
+其中最后一个图Anisotropic filtering各项异性过滤是另外一种计算方法, 如下:
+
+#### _11.3.5 Anisotropic Filtering各向异性过滤
+
+这个计算方法是根据短边来匹配mipmap, 然后再沿着长边做平均. 这里没有详述.
+
+### _11.4 Applications of Texture Mapping纹理映射的应用
+
+"textures are a very general tool with applications limited only by what theprogrammer can think up"  
+纹理是只有程序员才能理解的通用工具??
+
+#### _11.4.1 Controlling Shading Parameters控制着色参数
+
+在第2章节光线追踪和第10章节着色里说到漫反射计算  
+在计算时有一个参数, 这个参数就可以通过纹理来获得, 来实现不同的光照纹理效果, 而不只是均质的黑白色
