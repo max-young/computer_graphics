@@ -10,4 +10,5 @@
 * [9 signal processing](./docs/9_signal_processing.md)
 * [10 surface shading](./docs/10_surface_shading.md)
 * [11 texture mapping](./docs/11_texture_mapping.md)
+* [13 more ray tracing](./docs/13_more_ray_tracing.md)
 * [14 sampling](./docs/14_sampling.md)
