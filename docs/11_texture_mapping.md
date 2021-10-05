@@ -15,6 +15,14 @@
   - [_11.3.5 Anisotropic Filtering各向异性过滤](#_1135-anisotropic-filtering各向异性过滤)
 - [_11.4 Applications of Texture Mapping纹理映射的应用](#_114-applications-of-texture-mapping纹理映射的应用)
   - [_11.4.1 Controlling Shading Parameters控制着色参数](#_1141-controlling-shading-parameters控制着色参数)
+  - [_11.4.2 Normal Maps and Bump Maps法线图和凹凸贴图](#_1142-normal-maps-and-bump-maps法线图和凹凸贴图)
+  - [_11.4.3 Displacement Maps位移贴图](#_1143-displacement-maps位移贴图)
+  - [_11.4.4 Shadow Maps阴影贴图](#_1144-shadow-maps阴影贴图)
+  - [_11.4.5 Environment Maps环境贴图](#_1145-environment-maps环境贴图)
+- [_11.5 Procedural 3D Textures程序化三维纹理](#_115-procedural-3d-textures程序化三维纹理)
+  - [_11.5.1 3D Stripe Textures三维条纹纹理](#_1151-3d-stripe-textures三维条纹纹理)
+  - [_11.5.2 Solid Noise实体噪声](#_1152-solid-noise实体噪声)
+  - [_11.5.3 Turbulance扰动](#_1153-turbulance扰动)
 
 <!-- /TOC -->
 
@@ -250,3 +258,50 @@ Color mipmap_sample_trilinear(Texture mip[], float u, float v, matrix J)
 
 在第2章节光线追踪和第10章节着色里说到漫反射计算  
 在计算时有一个参数, 这个参数就可以通过纹理来获得, 来实现不同的光照纹理效果, 而不只是均质的黑白色
+
+#### _11.4.2 Normal Maps and Bump Maps法线图和凹凸贴图
+
+上面说的纹理存储的都是颜色值, 颜色值只是一个属性, 我们把这个属性换成别的呢?  
+实际的物体表面不会像理想的几何模型, 它是凹凸不平的, 尽管有些物体已经做到了非常光滑, 但实际情况不会达到理想状态.  
+所以我们把这个属性换成normal法线, 就能表现表现实际的凹凸不平的情况.  
+我们把texture存储的RGB颜色值换成normal发现的3D坐标
+
+但是法线实际上是根据表面计算出来的,如果表面出现变化, 那么normal map发现图也就用不了了.  
+我们可以用bump maps凹凸贴图来替代normal maps, 或者说normal maps可以根据bump maps得到.    
+bump maps存储了一个texels的相对理想模型的高度, 比如理想模型是一个圆, 某个texels纹素可能凹进去低于圆的高度, 也可能凸出高于圆的高度  
+我们存储这个相对高度, 这样, 我们就能计算出法线, 实现光影效果.
+
+#### _11.4.3 Displacement Maps位移贴图
+
+在GAMES101那门课里有一张这样的图, 形象的说明了normal maps、bump maps和displacement maps的区别:  
+<img src="./_images/displacment_maps.png" width=50%>  
+normal maps和bump maps不改变表面, 只改变法线, 相当于实现了一个光影的trick  
+而displacement maps和bump maps一样,也是存储了texels的相对高度  
+但是它真的改变了表面, 让表面上的点沿法线移动相对高度  
+从图中可以看到, displacement maps更加真实
+
+#### _11.4.4 Shadow Maps阴影贴图
+
+和z-buffer有点像, 只不过z-buffer是从视点出发, shadow是从光源出发
+
+#### _11.4.5 Environment Maps环境贴图
+
+环境光照用纹理图来实现
+
+### _11.5 Procedural 3D Textures程序化三维纹理
+
+<img src="./_images/3D_textures.png" width=50%>  
+
+三维纹理会消耗大量内存, 有些情况下我们可以不用存储这么大的纹理, 而通过程序化计算得到
+
+#### _11.5.1 3D Stripe Textures三维条纹纹理
+
+用两个颜色实现不同宽度的条纹, 已经渐变条纹, 书中写了三个函数
+
+#### _11.5.2 Solid Noise实体噪声
+
+条纹是比较规则的形状, 我们要实现类似蛋纹(瓷器裂纹等各种随机但是连续的花纹)的斑驳纹理, 可以通过solid noise, 也被称为Perlin noise(已发明者命名)  
+
+#### _11.5.3 Turbulance扰动
+
+一些自然的纹理在相同的纹理中包含一些特征随机的变化. 例如规整的条纹加上扰动, 变成奇怪的线条, 但是整体而言还是条纹.
