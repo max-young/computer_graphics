@@ -12,4 +12,4 @@
 * [11 texture mapping](./docs/11_texture_mapping.md)
 * [13 more ray tracing](./docs/13_more_ray_tracing.md)
 * [14 sampling](./docs/14_sampling.md)
-* [22 implict modeling](./docs/22_implict_modeling.md)
+* [22 implicit modeling](./docs/22_implicit_modeling.md)
