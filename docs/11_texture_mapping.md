@@ -264,11 +264,11 @@ Color mipmap_sample_trilinear(Texture mip[], float u, float v, matrix J)
 上面说的纹理存储的都是颜色值, 颜色值只是一个属性, 我们把这个属性换成别的呢?  
 实际的物体表面不会像理想的几何模型, 它是凹凸不平的, 尽管有些物体已经做到了非常光滑, 但实际情况不会达到理想状态.  
 所以我们把这个属性换成normal法线, 就能表现表现实际的凹凸不平的情况.  
-我们把texture存储的RGB颜色值换成normal发现的3D坐标
+我们把texture存储的RGB颜色值换成normal法线的向量.
 
-但是法线实际上是根据表面计算出来的,如果表面出现变化, 那么normal map发现图也就用不了了.  
-我们可以用bump maps凹凸贴图来替代normal maps, 或者说normal maps可以根据bump maps得到.    
-bump maps存储了一个texels的相对理想模型的高度, 比如理想模型是一个圆, 某个texels纹素可能凹进去低于圆的高度, 也可能凸出高于圆的高度  
+但是normal map和表面是对应的, 如果表面出现变化, 那么normal map也就用不了了.  
+我们可以用bump maps凹凸贴图来替代normal maps, 或者说normal可以根据bump得到.    
+bump maps存储了一个texels的相对理想模型的高度, 比如理想模型是一个圆, 某个texels纹素可能凹进去低于圆的高度, 也可能凸出高于圆的高度.
 我们存储这个相对高度, 这样, 我们就能计算出法线, 实现光影效果.
 
 #### _11.4.3 Displacement Maps位移贴图
