@@ -17,7 +17,10 @@
   - [_15.4.1 Knots节点](#_1541-knots节点)
   - [_15.4.2 Using Independent Pieces](#_1542-using-independent-pieces)
   - [_15.4.3 Putting Segments Together](#_1543-putting-segments-together)
-- [Cubics](#cubics)
+- [_15.5 Cubics](#_155-cubics)
+  - [_15.5.1 Natural Cubics](#_1551-natural-cubics)
+  - [_15.5.2 Hermite Cubics](#_1552-hermite-cubics)
+  - [_15.5.3 Cardinal Cubics](#_1553-cardinal-cubics)
 
 <!-- /TOC -->
 
@@ -303,6 +306,9 @@ B = C^{-1} = \begin{bmatrix}
 $$
 从而我们可以得到$a = Bp$, 中点的位置、一阶导数、二阶导数都可以用(x, y)的形式表示.
 
+到这里, 我们意识到, 如果有三个点, 我们除了用两条直线段来表示经过这三个点的曲线.  
+也可以通过一个高阶多项式来表示曲线, 而且更平滑.
+
 #### _15.3.4 Basis Matrices for Cubics立方基础矩阵
 
 对于三阶多项式曲线, 如果我们知道起始点的位置和一阶导数, 那么:
@@ -310,7 +316,7 @@ $$
 f(0) = a_0 + 0^1a_1 + 0^2a_2 + 0^3a_3 \\
 f^{\prime}(0) = a_1 + 2\times0^1a_2 + 3\times0^2a_3 \\
 f(1) = a_0 + 1^1a_1 + 1^2a_2 + 1^3a_3 \\
-f^{\prime}(0) = 1\times1^0a_1 + 2\times1^1a_2 + 3\times1^2a_3 \\
+f^{\prime}(1) = 1\times1^0a_1 + 2\times1^1a_2 + 3\times1^2a_3 \\
 $$
 我们就得到
 $$
@@ -411,7 +417,7 @@ $b_2(u)$和$b_3(u)$类似, 如图所示
 如下图所示:  
 <img src="./_images/putting_segments_together.png" width=50%>
 
-### Cubics
+### _15.5 Cubics
 
 在用分片多项式来表示曲线式, 我们一般使用三次多项式, 因为:
 - 三次多项式支持$C^2$ continuity, $C^2$ continuity满足绝大部分需求
@@ -434,5 +440,41 @@ B-splines具有local control特性, 也具有$C^2$ continuity特性, 但是不in
 Cardinal splines和Catmull-Rom splines interpolate控制点, 具有local control特性, 但是不是$C^2$ continuity.  
 natural cubics interpolcate控制点, 也具有$C^2$ Continuity, 但是不能local control
 
+#### _15.5.1 Natural Cubics
 
+已知起点的位置、导数、二阶导数, 以及终点的位置, 那么我们就可以得到:
+$$
+p_0 = f(0) = a_0 + 0^1a_1 + 0^2a_2 + 0^3a_3, \\
+p_1 = f^{\prime}(0) = a_1 + 2\times0^1a_2 + 3\times0^2a_3, \\
+p_2 = f^{\prime\prime}(0) = 2a_2 + 3\times2\times0^1a_3, \\
+p_3 = f(1) = a_0 + a_1 + a_2 + a_3
+$$
+$$
+C = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 2 & 0 \\
+1 & 1 & 1 & 1
+\end{bmatrix}
+$$
+$$
+B = C^{-1} = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 0.5 & 0 \\
+-1 & -1 & -0.5 & 1 \\
+\end{bmatrix}
+$$
+加入有n个控制点, 那么就有n-1个natural cubics.  
+就必须用到dependency schema. 用第一个线段的终点的位置、导数、二阶导数作为下一个线段起点的属性.  
+这样就不具有local control特性了, 这是natural cubics的缺点
 
+#### _15.5.2 Hermite Cubics
+
+15.3.4章节已介绍, 一个线段起始点的位置和一阶导数构成hermite cubics  
+对于n个控制点, 我们可以用第一个点的位置, 第二个点的一阶导数, 第三个点的位置, 第四个点的一阶导数, 构成hermite cubics  
+这样, n个控制点构成(n-2)/2个hermote cubics, 想想, 4个点构成1个, 6个点构成2个, 8个点构成3个......
+
+hermite cubics只有$C^2$连续性, 但是具有local control
+
+#### _15.5.3 Cardinal Cubics
