@@ -10,6 +10,7 @@
 * [9 signal processing](./docs/9_signal_processing.md)
 * [10 surface shading](./docs/10_surface_shading.md)
 * [11 texture mapping](./docs/11_texture_mapping.md)
+* [12 data structures for graphics](./docs/12_data_structures_for_graphics.md)
 * [13 more ray tracing](./docs/13_more_ray_tracing.md)
 * [14 sampling](./docs/14_sampling.md)
 * [15 curves](./docs/15_curves.md)
