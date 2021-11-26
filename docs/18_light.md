@@ -7,6 +7,7 @@
   - [_18.1.4 Irradiance辐射度](#_1814-irradiance辐射度)
   - [_18.1.5 radiance辐射率](#_1815-radiance辐射率)
   - [_18.1.6 BRDF](#_1816-brdf)
+- [_18.2 Transport Equation](#_182-transport-equation)
 
 <!-- /TOC -->
 
@@ -128,7 +129,8 @@ K是光照方向. 可以理解为光照的单位向量, 或者spherical coordina
 differential solid angle微分立体角用球面坐标的等式是:
 $$d_{\sigma} \equiv \sin \theta d \theta d \phi$$
 这样
-$$H = \int_{\phi=0}^{2\pi}\int_{\theta=0}^{\frac{\pi}{2}}L_{f}\cos\theta\sin\theta d\theta d \phi$$
+$$H = \int_{\phi=0}^{2\pi}\int_{\theta=0}^{\frac{\pi}{2}}L_{f}\cos\theta\sin\theta d\theta d \phi = \pi L_f$$
+为什么是$\pi L_f$, 涉及到微积分的计算  
 注意这个半球坐标, $\phi$的范围是$[0, 2\pi]$, $\theta$的范围是$[0, \frac{\pi}{2}]$
 
 进而, 我们可以得到power功率:
@@ -146,12 +148,15 @@ x是表面的点, dA是differential area微分面积
 $$\rho = \frac{L_s}{H}$$
 这个函数称之为BRDF(bidirectional reflectance distribution function双向反射分配函数)  
 我们可以理解为从$k_i$方向过来的光线, 在物体表面一个微小面积获得此方向的能量(irridiance), 然后反射到$k_0$方向的一个立体角的能量(ridiance)  
+显然这个值是和radiance detector的角度相关的  
+借助时机的物理场景来说, 如果是镜面反射, BRDF只会在镜面反射方向有值  
+如果是漫反射, 反射是均匀分布的, 不论在哪个观测角度, BRDF都是一样的
 
 **Directional Hemispherical Reflectance定向半球反射率**
 
 我们的问题是, 入射光有多少比例被反射出去了呢?  
-我们定义Directional Hemispherical Reflectance函数, 来说明$k_i$方向的光线在$k_0$方向有多少被反射了:
-$$R(k_i)=\frac{k_0方向所有反射的能量power}{k_i方向照射过来的能量power}=\frac{E}{H}$$
+我们定义Directional Hemispherical Reflectance函数, 来说明$k_i$方向的光线有多少被反射了:
+$$R(k_i)=\frac{所有反射的能量power,方向记作k_0}{k_i方向照射过来的能量power}=\frac{E}{H}$$
 根据BRDF:
 $$L(k_0) = H\rho(k_i, k_0)$$
 根据radiance的定义:
@@ -165,3 +170,18 @@ H\rho(k_i, k_0) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0} \\
 $$
 我们把所有反射方向加起来, 就得到了反射率:
 $$R(k_i) = \int_{all\ k_0}\rho(k_i, k_0)\cos\theta_0d\sigma_0$$
+
+**Ideal Diffuse BRDF完美漫反射BRDF**
+
+如果是完美的漫反射, 这样的表面称为lambertian, 所有反射角度的BRDF值$\rho$都是一样的, 我们记作$C$, 这样:
+$$
+\begin{aligned}
+R(k_i) &= \int_{all\ k_0}\rho(k_i, k_0)\cos\theta_0d\sigma_0 \\
+&= \int_{\phi_0=0}^{2\pi}\int_{\theta_0=0}^{\frac{\pi}{2}}C\cos\theta_0\sin\theta_0 d\theta_0 d \phi_0 \\
+&= \pi C
+\end{aligned}
+$$
+如果是一个完美的lambertian, 没有能量损失, 那么$R=1$, 从而$\rho = 1/\pi$
+
+### _18.2 Transport Equation
+
