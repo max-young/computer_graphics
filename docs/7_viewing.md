@@ -34,13 +34,14 @@
 <a id="markdown-_711-the-viewport-transformation" name="_711-the-viewport-transformation"></a>
 #### _7.1.1 The Viewport Transformation
 
-*canonical view volume*是我们想看到的几何空间  
+*canonical view volume*是相机坐标系  
 用笛卡尔坐标系表示的话是一个2X2X2的空间坐标系, $(x, y, z) \in [-1, 1]^3$  
 观测方向是$-z$, $x = -1$是screen的左侧, $y = -1$是screen的底部  
 很奇怪, 为什么观测方向是$-z$呢? 好像有点反直觉, 但是这样设定的话, 正好是一个右手坐标系.
 
 我们要将其中的点“打印”到$n_x * n_y$个像素的图片上, 应该怎么转换呢?  
-在第3章里, 我们提到$n_x * n_y$个像素坐标系应该是$[-0.5, n_x - 0.5] \times [-0.5, y_x - 0.5]$, 因为这样坐标原点就正好落在第一个像素的中心位置(我们假设单个像素的单位是1)  
+也就是要将相机坐标系的坐标转换到图片坐标系下  
+在第3章里, 我们提到$n_x * n_y$个像素坐标系范围应该是$[-0.5, n_x - 0.5] \times [-0.5, y_x - 0.5]$, 因为这样坐标原点就正好落在第一个像素的中心位置(我们假设单个像素的单位是1)  
 这个转换只需要进过缩放和平移, 所以我们可以得到:
 $$
 \left[
@@ -66,10 +67,12 @@ y_{canonical} \\
 \right]
 $$
 我们可以看到:  
-canonical coordinate的左下角坐标$(x_{canonical} = -1, y_{canonical} = -1)$计算得到screen下的坐标就是$(x_{screen} = -0.5, y_{screen} = -0.5)$
-canonical coordinate的右下角坐标$(x_{canonical} = 1, y_{canonical} = 1)$计算得到screen下的坐标就是$(x_{screen} = n_x - 0.5, y_{screen} = n_y-0.5)$
+canonical coordinate的左下角坐标$(x_{canonical} = -1, y_{canonical} = -1)$  
+计算得到screen下的坐标就是$(x_{screen} = -0.5, y_{screen} = -0.5)$  
+canonical coordinate的右上角坐标$(x_{canonical} = 1, y_{canonical} = 1)$  
+计算得到screen下的坐标就是$(x_{screen} = n_x - 0.5, y_{screen} = n_y-0.5)$
 
-我们得到:
+我们得到齐次坐标转换矩阵:
 $$
 M_{vp} =
 \left[
