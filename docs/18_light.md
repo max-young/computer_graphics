@@ -185,3 +185,36 @@ $$
 
 ### _18.2 Transport Equation
 
+根据上面BRDF的定义, BRDF等于出射方向$k_0$的radiance除以入射方向的irridiance, irridiance跟surface面积相关, 和入射角没关系.  
+如果我们假设入射只从某一个入射立体角$k_i$过来的光线呢? 我们就能根据入射立体角的ridiance计算得出irridiance, 从而:
+$$\rho = \frac{L_0}{L_i\cos\theta_i\Delta\sigma_i}$$
+从而我们能得到某个入射方向$k_i$在出射方向$k_0$的radiance:
+$$\Delta L_0 = \rho(k_i, k_0)L_i \cos \theta_i \Delta \sigma_i$$
+我们把所有入射方向做积分:
+$$L_s(k_0) = \int_{all\ k_i}\rho(k_i, k_0)L_f(k_i) \cos \theta_i d\sigma_i$$
+
+在games101 rendering低讲里讲到, 这里做积分, 是选取入射方向的半球范围内做采样, 然后做积分, 这种采样和积分效率比较低, 效果也不太好.  
+原因是, 假如光源只占很小的一片区域, 那么, 在半球范围内的采样很大部分是没用的, 因为没有光源照射.  
+所以我们能不能把采样范围只限定在光源范围呢? 如下图:
+
+<img src="./_images/rendering_equation.png" width=30%>
+
+右上角是面光源, 入射角度可以这样计算:
+$$\Delta \sigma_i = \frac{\Delta A^{\prime} \cos \theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}$$
+相当于光源面积做一个旋转, 然后再除以半径的平方  
+从而我们就可以从对入射角的积分转换为对光源上的点做积分
+$$L_s(x, k_0) = \int_{all\ x^{\prime}\ visible\ to\ x}\frac{\rho(k_i, k_0)L_s(x^{\prime}, x-x^{\prime})\cos\theta_i\cos\theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}dA^{\prime}$$
+$x-x^{\prime}$是指$x^{\prime}$到$x$的向量, 也就是光源到入射点的向量
+
+做一下整理:
+$$
+\begin{aligned}
+L_s(x, k_0) &= \int_{all\ x^{\prime}}\frac{\rho(k_i, k_0)L_s(x^{\prime}, x-x^{\prime})v(x, x^{\prime})\cos\theta_i\cos\theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}dA^{\prime} \\
+v(x, x^{\prime}) &= \left\{
+\begin{aligned}
+&1\ if\ x\ and\ x^{\prime}\ are\ mutually\ visible \\
+&0\ otherwise
+\end{aligned}
+\right.
+\end{aligned}
+$$
