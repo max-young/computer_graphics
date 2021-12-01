@@ -23,7 +23,7 @@ image-order rendering更加简单和灵活, 通常会耗时, 但是会生成更�
 <a id="markdown-_41-the-basic-ray-tracing-algorithm" name="_41-the-basic-ray-tracing-algorithm"></a>
 ### _4.1 The Basic ray-tracing Algorithm
 
-object通过pixel被看到. 这需要viewing ray视线和物体之间的intersecton  
+object通过pixel被看到. 这需要viewing ray视线和物体之间的intersection  
 有必要解释一下shade这个词, 字面意识阴影  
 在这里准确的意思是: 物体在视线前方, 挡住了视线, 那么这个物体is shaded  
 光线追踪包括3个过程:  

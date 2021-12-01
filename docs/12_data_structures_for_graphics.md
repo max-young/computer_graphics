@@ -41,7 +41,7 @@ manifold是什么意思呢? (注意, 这里特指2维manifold)
 是指一个表面上的任意一个点以及它临近的小块区域都可以平铺成一个平坦的平面.  
 如果还不太好理解, 我们看看反例:
 
-<img src="../_images/triangle_mesh_manifold.png"> 
+<img src="./_images/triangle_mesh_manifold.png"> 
 
 第一张图的左侧, 边上的点可以形成两个平面. 或者可以这么理解, 边上的点的平面和三角形内部的一个点的平面可以不是同一个平面. 
 第二张图的左侧, 两个平面得压在一起才能得到一个平面. 
@@ -124,7 +124,7 @@ triangles fan如下图:
 
 triangle strip如下图:
 
-<img src="./../_images/triangle_stripe.png" width=30%>
+<img src="./_images/triangle_stripe.png" width=30%>
 
 同样的, 我们把所有顶点的索引放到一个数组里表示这一个带状三角形: [0, 1, 2, 3, 4, 5, 6, 7]  
 012构成一个三角形, 123构成一个三角形, 依此类推  
@@ -266,7 +266,7 @@ Vertex {
 在第六章我们讲到了矩阵转换, 例如旋转、平移等等. 我们对一个物体进行平移旋转时, 其关联物体也会跟着平移旋转, 其自身也会有独立的平移旋转.  
 这就比较复杂了, 我们为了解决这个问题, 一般会采用分层管理, 用scene graph来实现.
 
-<img src="./_images/../../_images/scene_gragh.png" width=50%>
+<img src="./_images/scene_gragh.png" width=50%>
 
 图里是一个铰链, 上面的杆会带动下面的杆运动.  
 对于上面的杆, 旋转平移可以这样转换:
@@ -287,7 +287,7 @@ $$
 
 更形象一点的例子:
 
-<img src="./_images/../../_images/scene_graph_car.png" width=30%>
+<img src="./_images/scene_graph_car.png" width=30%>
 
 一条船上一辆汽车, 汽车的前后轮. 我们分层进行管理.  
 对于轮船, 转换矩阵是$M_0$  
@@ -315,7 +315,7 @@ Spatial data structures大体可分为三类: 根据对象划分, 根据空间�
 - binary space partition
 下图说明了前两种技术:
 
-<img src="./_images/../../_images/spatial_data_structure1.png">
+<img src="./_images/spatial_data_structure1.png">
 
 左边是用uniform spatial subdivision, 对空间进行均匀划分  
 右边是bounding box hierarchies, 根据几何对象的边界进行划分
@@ -329,7 +329,7 @@ Spatial data structures大体可分为三类: 根据对象划分, 根据空间�
 
 接下来的问题是如何进行计算和判断? 我们先简化为二维的场景, 一条射线和一个矩形是否相交. 如下图所示:
 
-<img src="./_images/../../_images/bounding_box.png" width=50%>
+<img src="./_images/bounding_box.png" width=50%>
 
 这个矩形有四个边界: $x_min, x_max, y_min, y_max$  
 $$(x, y) \in [x_{min}, x_{max}] \times [y_{min}, y_{max}]$$
@@ -364,7 +364,7 @@ else
 这种结构可能的问题是两个subtree bounding box会重叠, 让计算变得复杂. 如下图.
 这里不再详述.
 
-<img src="./_images/../../_images/hierrarchical_bounding_boxes.png" width=30%>
+<img src="./_images/hierrarchical_bounding_boxes.png" width=30%>
 
 #### _12.3.3 Uniform Spatial Subdivision
 
@@ -375,7 +375,7 @@ uniform spatial subdivision则相反, 一个点只属于一个bounding box, 但�
 Uniform Spatial Subdivision是按照轴均匀的划分, 称为**axis aligned bounding box(AABB)**  
 当光线和一个几何对象相交时, 则传播停止.
 
-<img src="./_images/../../_images/uniform_spatial_subdivision.png" width=50%>
+<img src="./_images/uniform_spatial_subdivision.png" width=50%>
 
 #### _12.3.4 Axis-Aligned Binary Space Partitioning轴对齐二分空间划分BSP
 
