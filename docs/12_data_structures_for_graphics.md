@@ -41,7 +41,7 @@ manifold是什么意思呢? (注意, 这里特指2维manifold)
 是指一个表面上的任意一个点以及它临近的小块区域都可以平铺成一个平坦的平面.  
 如果还不太好理解, 我们看看反例:
 
-<img src="./_images/triangle_mesh_manifold.png"> 
+<img src="./_images/triangle_mesh_manifold.png" width=30%> 
 
 第一张图的左侧, 边上的点可以形成两个平面. 或者可以这么理解, 边上的点的平面和三角形内部的一个点的平面可以不是同一个平面. 
 第二张图的左侧, 两个平面得压在一起才能得到一个平面. 
