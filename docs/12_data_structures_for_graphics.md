@@ -310,12 +310,12 @@ Spatial data structures大体可分为三类: 根据对象划分, 根据空间�
 这里我们以光线追踪为例来说明空间数据结构. 对象查找和碰撞探测和其原理类似.
 
 本章会讨论三项技术:
-- bounding box hierarchies
+- bounding volume hierarchies(BVH)
 - uniform spatial subdivision规则空间划分
 - binary space partition
 下图说明了前两种技术:
 
-<img src="./_images/spatial_data_structure1.png">
+<img src="./_images/spatial_data_structure1.png" width=30%>
 
 左边是用uniform spatial subdivision, 对空间进行均匀划分  
 右边是bounding box hierarchies, 根据几何对象的边界进行划分
@@ -329,18 +329,18 @@ Spatial data structures大体可分为三类: 根据对象划分, 根据空间�
 
 接下来的问题是如何进行计算和判断? 我们先简化为二维的场景, 一条射线和一个矩形是否相交. 如下图所示:
 
-<img src="./_images/bounding_box.png" width=50%>
+<img src="./_images/bounding_box.png" width=30%>
 
-这个矩形有四个边界: $x_min, x_max, y_min, y_max$  
+这个矩形有四个边界: $x_{min}, x_{max}, y_{min}, y_{max}$  
 $$(x, y) \in [x_{min}, x_{max}] \times [y_{min}, y_{max}]$$
-假设射线的起点是: $(x_e, x_y)$, xy方向的导数是$d_x, d_y$  
+假设射线的起点是: $(x_e, y_e)$, xy方向的导数是$d_x, d_y$  
 这里可以理解为, 起点分别在x和y方向上的运行速度, 或者我们可以理解为起点是光源, 这两个参数是光束.  
 这样我们就能计算出射线分别和这个矩形的四条边界相交的时间:
 $$
-t_{xmin} = (x_min - x_e)/d_x \\
-t_{xmax} = (x_max - x_e)/d_x \\
-t_{ymin} = (y_min - y_e)/d_y \\
-t_{ymin} = (y_max - y_e)/d_y \\
+t_{xmin} = (x_{min} - x_e)/d_x \\
+t_{xmax} = (x_{max} - x_e)/d_x \\
+t_{ymin} = (y_{min} - y_e)/d_y \\
+t_{ymin} = (y_{max} - y_e)/d_y \\
 $$
 和x轴的两个边界相交的时间段, 和y轴的两个边界相交的时间段, 这两个时间段如果有交集的话, 这个射线就和这个box相交. 如果没有交集, 那就是不相交.  
 物理上可以这么理解, 如果射线通过x轴的两个边界时, 也通过y轴的两个边界, 那这个时间段就是在矩形内.  
@@ -361,10 +361,10 @@ else
 
 这一章节讲的是如何对一个bounding box进行分割. 分割成一个二叉树, 直到这个bounding box只包含一个几何对象.  
 分割是按照几何对象来进行划分,可以沿着一个轴分割, 可以按几何对象的数量, 可以按照体积.  
-这种结构可能的问题是两个subtree bounding box会重叠, 让计算变得复杂. 如下图.
-这里不再详述.
 
 <img src="./_images/hierrarchical_bounding_boxes.png" width=30%>
+
+在GAMES101里讲的比较详细, 作业6也和这个相关
 
 #### _12.3.3 Uniform Spatial Subdivision
 
