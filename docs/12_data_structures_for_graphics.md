@@ -345,12 +345,14 @@ $$
 和x轴的两个边界相交的时间段, 和y轴的两个边界相交的时间段, 这两个时间段如果有交集的话, 这个射线就和这个box相交. 如果没有交集, 那就是不相交.  
 物理上可以这么理解, 如果射线通过x轴的两个边界时, 也通过y轴的两个边界, 那这个时间段就是在矩形内.  
 还不好理解的话, 我们反过来理解, 如果涉嫌通过x轴的两个边界时, 这个时间段没有通过y轴的两个边界, 那么这条射线肯定完全从矩形的左侧或者右侧通过, 避开了矩形的左上角和右下角  
-pseudocode如下:
-```
-if (t_xmin > t_ymax) or (t_ymin > t_xmax) then
-  return false
+3D情况下, C++判断如下:
+```C++
+float t_enter = std::max(tXMin, std::max(tYMin, tZMin));
+float t_exit =  std::min(tXMax, std::min(tYMax, tZMax));
+if (t_enter < t_exit && t_exit >= 0)
+    return true;
 else
-  return true
+    return false;
 ```
 
 书中还讨论了$d_x$$d_y$为负值或者为0的情况, 这里不再详述  
