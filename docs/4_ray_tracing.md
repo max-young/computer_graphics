@@ -15,6 +15,12 @@
   - [_4.5.2 Blinn-Phong Shading](#_452-blinn-phong-shading)
   - [_4.5.3 Anbient Shading](#_453-anbient-shading)
   - [_4.5.4 Multiple Point Lights](#_454-multiple-point-lights)
+- [_4.6 A Ray-Tracing Program](#_46-a-ray-tracing-program)
+  - [_4.6.1 Object-Oriented Design for a Ray-Tracing Program面向对象的光线追踪程序](#_461-object-oriented-design-for-a-ray-tracing-program面向对象的光线追踪程序)
+- [_4.7 Shadows阴影](#_47-shadows阴影)
+- [_4.8 Ideal Specular Reflection理想镜面反射](#_48-ideal-specular-reflection理想镜面反射)
+- [_4.9 Historical Notes](#_49-historical-notes)
+- [Frequently Asked Questions](#frequently-asked-questions)
 
 <!-- /TOC -->
 
@@ -266,3 +272,68 @@ $$
 $$
 L = k_aI_a + \sum_{i=1}^{N}[k_dI_imax(0, n\cdot l_i) + k_sI_imax(o, n \cdot h_i)^p]
 $$
+
+
+### _4.6 A Ray-Tracing Program
+
+<img src="/_images/ray_tracing_program.png" width=30%>
+
+是否hit the project可以用4.4.4章节的知识来解决  
+hit之后可以获取对象的引用, 或者其属性, 然后来进行着色
+
+#### _4.6.1 Object-Oriented Design for a Ray-Tracing Program面向对象的光线追踪程序
+
+我们对object(surface)创建一个类
+```
+class surface
+  virtual box hit(ray e + td, real t0, real t1, hit-record rec)
+  virtual box bounding-box()
+```
+hit函数判断光线是否和surface相交, 相交的时间t在t0和t1之间, 相交的记录记录在rec里, 例如相交的时间t  
+bounding-box是surface的最下包围盒, 例如对于一个球体:
+```
+box sphere::bounding-box()
+  vector3 min = center - vector3(radius, radius, radius)
+  vector3 max = center + vector3(radius, radius, radius)
+  return box(min, max)
+```
+
+### _4.7 Shadows阴影
+
+我们在视点看某场景下的某个对象, 如果视线和对象相交, 那么我们就能看到对象.  
+如果我们从对象处看光源, 如果能看到光源, 那么说明这个对象在光源照射下, 假设看不到光源, 也就是说视线和这个场景下的某个对象相交了, 那么这个对象就处在阴影下.  
+所以为代码可以扩展一下:
+
+<img src="./_images/shadow.png" width=30%>
+
+总结一下, 如果从视点出发的射线和对象相交, 那么就会有环境光照ambient lighting  
+如果从对象出发往光源方向的视线与场景下的对象都不相交, 那么这个对象就在光源的照射下, 那么我们再加上diffuse lighting漫反射和specular lighting高光  
+注意: 在计算对象出发往光源防线的视线时, 起始时间是从$\epsilon$开始的, 这个值是自定义的一个很小的数, 是为了避免数值精度引起的计算误差
+
+### _4.8 Ideal Specular Reflection理想镜面反射
+
+ideal specular reflection也被称为mirror reflection  
+
+<img src="./_images/ideal_specular_reflection.png" width=15%></br>
+<img src="./_images/ideal_specular_reflection1.png" width=15%>
+  
+我们可以计算出反射向量:
+$$r = d - 2(d\cdot n)n$$
+
+我们从视线d看surface, 看到的颜色应该是和在surface看镜面反射方向看到的颜色是一样的. 但是光会衰减, 我们需要乘以一个系数来转换, 系数就是$raycolor(p+sr, \epsilon, \infty)$, 另外, 可能有很多光线照射到surface, 那么:
+$$color c = c + k_mraycolor(p+sr, \epsilon, \infty)$$
+k_m是RGB三通道颜色
+
+这里涉及到一个理解, 光源并不一定是灯泡、太阳, 任何物体都是光源, 我们看到一个物体, 这个物体反射了太阳光到我们眼睛里, 这个物体也是光源, 所以在一个场景下, 光源会经过很多次(甚至是无限多次)的反射, 这就相当复杂了.  
+我们会定一个反射数量的阈值, 例如我们规定只反射5次, 来解决这个问题
+
+### _4.9 Historical Notes
+
+real-time ray tracing越来越普遍
+
+### Frequently Asked Questions
+
+- ray tracing 为什么不再需要透视矩阵转换了
+
+  在第七章里, 我们把现实世界的坐标经过旋转平移转换到视角坐标, 然后还要经过投影变换, 转换到canonical view coordinate, 然后再经过z-buffer判断显示什么, 然后成像  
+  ray tracing是从视角(摄像机)出发, 方向是二维图像上的像素, 然后照射到对象上, 计算出二维图像上应该显示什么, 实际上是模拟了现实的观测, 相当于投影转换的逆  
