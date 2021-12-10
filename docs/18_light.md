@@ -168,7 +168,7 @@ H\rho(k_i, k_0) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0} \\
 \frac{\Delta E}{H} = \rho(k_i, k_0)\Delta\sigma_0\cos\theta_0
 \end{aligned}
 $$
-我们把所有反射方向加起来, 就得到了反射率:
+我们把所有反射方向加起来, 就得到了某个入射方向$k_i$的反射率:
 $$R(k_i) = \int_{all\ k_0}\rho(k_i, k_0)\cos\theta_0d\sigma_0$$
 
 **Ideal Diffuse BRDF完美漫反射BRDF**
