@@ -142,9 +142,9 @@ x是表面的点, dA是differential area微分面积
 我们想描述物体表面的反射.  
 需要用反射的某个值除以入射的某个值得到一个比例, 来定义反射.
 
-<img src='./_images/BRDF.png' width=30%>
+<img src='./_images/BRDF.png' width=70%>
 
-我们在入射点安装一个irridiance meter, 在$k_0$方位安装一个radiance detector. 这样我们得到:  
+我们在入射点安装一个irridiance meter, 在$k_0$方位安装一个radiance detector, 我们用反射方向$k_0$的ridiance除以入射方向的irridiance, 这样我们得到:  
 $$\rho = \frac{L_s}{H}$$
 这个函数称之为BRDF(bidirectional reflectance distribution function双向反射分配函数)  
 我们可以理解为从$k_i$方向过来的光线, 在物体表面一个微小面积获得此方向的能量(irridiance), 然后反射到$k_0$方向的一个立体角的能量(ridiance)  
@@ -157,7 +157,7 @@ $$\rho = \frac{L_s}{H}$$
 我们的问题是, 入射光有多少比例被反射出去了呢?  
 我们定义Directional Hemispherical Reflectance函数, 来说明$k_i$方向的光线有多少被反射了:
 $$R(k_i)=\frac{所有反射的能量power,方向记作k_0}{k_i方向照射过来的能量power}=\frac{E}{H}$$
-根据BRDF:
+反射方向$k_0$的irridiance是入射方向$k_i$的ridiance乘以BRDF
 $$L(k_0) = H\rho(k_i, k_0)$$
 根据radiance的定义:
 $$L(k_0) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0}$$
