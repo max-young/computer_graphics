@@ -252,7 +252,7 @@ $$
 $k_s$是高光系数, 为什么有一个p指数呢? 因为高光衰减特别快, 只在对称的很小的区域比较亮, 加上指数后, 这个曲线就会变得窄  
 高光和漫反射叠加之后:
 $$
-L = k_dImax(0, n\cdot l) + k_sImax(o, n \cdot h)^p
+L = k_dImax(0, n\cdot l) + k_sImax(0, n \cdot h)^p
 $$
 
 #### _4.5.3 Anbient Shading
@@ -263,14 +263,14 @@ $$L = k_aI_a$$
 环境系数乘以环境光照强度  
 这样, 一个区域的完整着色模型就是这三种光照的叠加:
 $$
-L = k_aI_a + k_dImax(0, n\cdot l) + k_sImax(o, n \cdot h)^p
+L = k_aI_a + k_dImax(0, n\cdot l) + k_sImax(0, n \cdot h)^p
 $$
 
 #### _4.5.4 Multiple Point Lights
 
 如果有多个光源呢? 我们对模型进行叠加superposition:
 $$
-L = k_aI_a + \sum_{i=1}^{N}[k_dI_imax(0, n\cdot l_i) + k_sI_imax(o, n \cdot h_i)^p]
+L = k_aI_a + \sum_{i=1}^{N}[k_dI_imax(0, n\cdot l_i) + k_sI_imax(0, n \cdot h_i)^p]
 $$
 
 

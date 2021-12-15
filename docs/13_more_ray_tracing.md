@@ -1,5 +1,12 @@
+<!-- TOC -->
+
+- [_13.1 Transparency and Refraction透明度和折射](#_131-transparency-and-refraction透明度和折射)
+
+<!-- /TOC -->
+
 **More Ray Tracing光线追踪的更多内容**
 
+<a id="markdown-_131-transparency-and-refraction透明度和折射" name="_131-transparency-and-refraction透明度和折射"></a>
 ### _13.1 Transparency and Refraction透明度和折射
 
 在第四章, 讲到了镜面反射, 但是对于导体物质dielectric, 例如钻石、玻璃、空气等, 它们除了反射还会发生折射.  
@@ -41,6 +48,8 @@ $$R(\theta) = R_0 + (1-R_0)(1-\cos\theta)^5$$
 $$R_0 = \left(\frac{n_t - 1}{n_t + 1}\right)^2$$
 
 这里表示的是从空气照射到介质, 我们可以把1换成别的介质的折光率
+
+还有别的算法, 参照[菲涅尔方程](https://zh.wikipedia.org/wiki/%E8%8F%B2%E6%B6%85%E8%80%B3%E6%96%B9%E7%A8%8B)的光强方程
 
 <img src='./_images/fresnel_equation.png' width=60%>  
 

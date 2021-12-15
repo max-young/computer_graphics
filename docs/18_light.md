@@ -142,12 +142,12 @@ x是表面的点, dA是differential area微分面积
 我们想描述物体表面的反射.  
 需要用反射的某个值除以入射的某个值得到一个比例, 来定义反射.
 
-<img src='./_images/BRDF.png' width=70%>
+<img src='./_images/BRDF.png' width=40%>
 
-我们在入射点安装一个irridiance meter, 在$k_0$方位安装一个radiance detector, 我们用反射方向$k_0$的ridiance除以入射方向的irridiance, 这样我们得到:  
+我们在入射点安装一个irridiance meter, 在$k_o$方位安装一个radiance detector, 我们用反射方向$k_o$的ridiance除以入射方向的irridiance, 这样我们得到:  
 $$\rho = \frac{L_s}{H}$$
 这个函数称之为BRDF(bidirectional reflectance distribution function双向反射分配函数)  
-我们可以理解为从$k_i$方向过来的光线, 在物体表面一个微小面积获得此方向的能量(irridiance), 然后反射到$k_0$方向的一个立体角的能量(ridiance)  
+我们可以理解为从$k_i$方向过来的光线, 在物体表面一个微小面积获得此方向的能量(irridiance), 然后反射到$k_o$方向的一个立体角的能量(ridiance)  
 显然这个值是和radiance detector的角度相关的  
 借助时机的物理场景来说, 如果是镜面反射, BRDF只会在镜面反射方向有值  
 如果是漫反射, 反射是均匀分布的, 不论在哪个观测角度, BRDF都是一样的
@@ -156,60 +156,62 @@ $$\rho = \frac{L_s}{H}$$
 
 我们的问题是, 入射光有多少比例被反射出去了呢?  
 我们定义Directional Hemispherical Reflectance函数, 来说明$k_i$方向的光线有多少被反射了:
-$$R(k_i)=\frac{所有反射的能量power,方向记作k_0}{k_i方向照射过来的能量power}=\frac{E}{H}$$
-反射方向$k_0$的irridiance是入射方向$k_i$的ridiance乘以BRDF
-$$L(k_0) = H\rho(k_i, k_0)$$
+$$R(k_i)=\frac{所有反射的能量power,方向记作k_o}{k_i方向照射过来的能量power}=\frac{E}{H}$$
+反射方向$k_o$的irridiance是入射方向$k_i$的ridiance乘以BRDF
+$$L(k_o) = H\rho(k_i, k_o)$$
 根据radiance的定义:
-$$L(k_0) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0}$$
+$$L(k_o) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0}$$
 从而:
 $$
 \begin{aligned}
-H\rho(k_i, k_0) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0} \\
-\frac{\Delta E}{H} = \rho(k_i, k_0)\Delta\sigma_0\cos\theta_0
+H\rho(k_i, k_o) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0} \\
+\frac{\Delta E}{H} = \rho(k_i, k_o)\Delta\sigma_0\cos\theta_0
 \end{aligned}
 $$
 我们把所有反射方向加起来, 就得到了某个入射方向$k_i$的反射率:
-$$R(k_i) = \int_{all\ k_0}\rho(k_i, k_0)\cos\theta_0d\sigma_0$$
+$$R(k_i) = \int_{all\ k_o}\rho(k_i, k_o)\cos\theta_0d\sigma_0$$
 
 **Ideal Diffuse BRDF完美漫反射BRDF**
 
 如果是完美的漫反射, 这样的表面称为lambertian, 所有反射角度的BRDF值$\rho$都是一样的, 我们记作$C$, 这样:
 $$
 \begin{aligned}
-R(k_i) &= \int_{all\ k_0}\rho(k_i, k_0)\cos\theta_0d\sigma_0 \\
+R(k_i) &= \int_{all\ k_o}\rho(k_i, k_o)\cos\theta_0d\sigma_0 \\
 &= \int_{\phi_0=0}^{2\pi}\int_{\theta_0=0}^{\frac{\pi}{2}}C\cos\theta_0\sin\theta_0 d\theta_0 d \phi_0 \\
 &= \pi C
 \end{aligned}
 $$
-如果是一个完美的lambertian, 没有能量损失, 那么$R=1$, 从而$\rho = 1/\pi$
+如果是一个完美的lambertian, 没有能量损失, 那么漫反射率$R=1$, 从而$\rho = 1/\pi$  
+如果漫反射率$R(k_i) = r$, 那么:
+$$\rho(k_i, k_o) = \frac{r}{\pi}$$
 
 ### _18.2 Transport Equation
 
-根据上面BRDF的定义, BRDF等于出射方向$k_0$的radiance除以入射方向的irridiance, irridiance跟surface面积相关, 和入射角没关系.  
+根据上面BRDF的定义, BRDF等于出射方向$k_o$的radiance除以入射方向的irridiance, irridiance跟surface面积相关, 和入射角没关系.  
 如果我们假设入射只从某一个入射立体角$k_i$过来的光线呢? 我们就能根据入射立体角的ridiance计算得出irridiance, 从而:
 $$\rho = \frac{L_0}{L_i\cos\theta_i\Delta\sigma_i}$$
-从而我们能得到某个入射方向$k_i$在出射方向$k_0$的radiance:
-$$\Delta L_0 = \rho(k_i, k_0)L_i \cos \theta_i \Delta \sigma_i$$
+从而我们能得到某个入射方向$k_i$在出射方向$k_o$的radiance:
+$$\Delta L_0 = \rho(k_i, k_o)L_i \cos \theta_i \Delta \sigma_i$$
 我们把所有入射方向做积分:
-$$L_s(k_0) = \int_{all\ k_i}\rho(k_i, k_0)L_f(k_i) \cos \theta_i d\sigma_i$$
+$$L_s(k_o) = \int_{all\ k_i}\rho(k_i, k_o)L_f(k_i) \cos \theta_i d\sigma_i$$
 
 在games101 rendering低讲里讲到, 这里做积分, 是选取入射方向的半球范围内做采样, 然后做积分, 这种采样和积分效率比较低, 效果也不太好.  
 原因是, 假如光源只占很小的一片区域, 那么, 在半球范围内的采样很大部分是没用的, 因为没有光源照射.  
 所以我们能不能把采样范围只限定在光源范围呢? 如下图:
 
-<img src="./_images/rendering_equation.png" width=30%>
+<img src="./_images/rendering_equation.png" width=20%>
 
 右上角是面光源, 入射角度可以这样计算:
 $$\Delta \sigma_i = \frac{\Delta A^{\prime} \cos \theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}$$
 相当于光源面积做一个旋转, 然后再除以半径的平方  
 从而我们就可以从对入射角的积分转换为对光源上的点做积分
-$$L_s(x, k_0) = \int_{all\ x^{\prime}\ visible\ to\ x}\frac{\rho(k_i, k_0)L_s(x^{\prime}, x-x^{\prime})\cos\theta_i\cos\theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}dA^{\prime}$$
+$$L_s(x, k_o) = \int_{all\ x^{\prime}\ visible\ to\ x}\frac{\rho(k_i, k_o)L_s(x^{\prime}, x-x^{\prime})\cos\theta_i\cos\theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}dA^{\prime}$$
 $x-x^{\prime}$是指$x^{\prime}$到$x$的向量, 也就是光源到入射点的向量
 
 做一下整理:
 $$
 \begin{aligned}
-L_s(x, k_0) &= \int_{all\ x^{\prime}}\frac{\rho(k_i, k_0)L_s(x^{\prime}, x-x^{\prime})v(x, x^{\prime})\cos\theta_i\cos\theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}dA^{\prime} \\
+L_s(x, k_o) &= \int_{all\ x^{\prime}}\frac{\rho(k_i, k_o)L_s(x^{\prime}, x-x^{\prime})v(x, x^{\prime})\cos\theta_i\cos\theta^{\prime}}{\left\|x-x^{\prime}\right\|^2}dA^{\prime} \\
 v(x, x^{\prime}) &= \left\{
 \begin{aligned}
 &1\ if\ x\ and\ x^{\prime}\ are\ mutually\ visible \\

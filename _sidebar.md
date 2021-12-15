@@ -16,4 +16,5 @@
 * [15 curves](./docs/15_curves.md)
 * [18 light](./docs/18_light.md)
 * [22 implicit modeling](./docs/22_implicit_modeling.md)
+* [23 global illumination](./docs/23_global_illumination.md)
 * [24 reflection models](./docs/24_reflection_models.md)
