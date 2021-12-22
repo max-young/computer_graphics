@@ -7,6 +7,7 @@
   - [_24.1.4 Translucent Materials半透明材料](#_2414-translucent-materials半透明材料)
   - [_24.1.5 layered Materials分层材料](#_2415-layered-materials分层材料)
 - [_24.2 Implementing Reflection Models实现反射模型](#_242-implementing-reflection-models实现反射模型)
+  - [_24.3 Specular Reflection Models镜面反射模型](#_243-specular-reflection-models镜面反射模型)
 
 <!-- /TOC -->
 
@@ -69,3 +70,15 @@ $$L_s(k_o) \approx \frac{1}{N}\sum_{j=1}{N}\frac{\rho(k_j, k_o)L_f(k_j)\cos\thet
 GAMES101 ray tracing第四讲里讲的比较简单  
 对于一个入射点, 光线的照射角度范围是一个半球, 因为下半球照射不到, 我们在这个半球范围内均匀采样, 那么光线采样的概率就是半球面积分之一, 半球面积是$2\pi$, 所以:
 $$p(k_j) = \frac{1}{2\pi}$$ 
+
+#### _24.3 Specular Reflection Models镜面反射模型
+
+这一节的内容跟13.1章节相关
+
+对于金属, 我们定义垂直角度的reflectance反射率是$R_0(\lambda)$, 那么入射角度$\theta$的反射率是:
+$$R(\theta, \lambda) = R_0(\lambda) + (1-R_0(\lambda))(1-\cos\theta)^5$$
+对于金属, 垂直方向的反射率可以观测得到
+
+对于导体, 垂直方向的反射率可以根据refractive index折射率$n(\lambda)$计算得到:
+$$R_0(\lambda) = \left(\frac{n(\lambda)-1}{n(\lambda)+1}\right)^2$$
+例如水的折射率是1.33, 玻璃的折射率是1.4-1.7, 钻石的折射率是2.4
