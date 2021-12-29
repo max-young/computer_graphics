@@ -14,6 +14,7 @@
 * [13 more ray tracing](./docs/13_more_ray_tracing.md)
 * [14 sampling](./docs/14_sampling.md)
 * [15 curves](./docs/15_curves.md)
+* [16 computer animation](./docs/16_computer_animation.md)
 * [18 light](./docs/18_light.md)
 * [22 implicit modeling](./docs/22_implicit_modeling.md)
 * [23 global illumination](./docs/23_global_illumination.md)

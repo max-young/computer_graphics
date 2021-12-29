@@ -1,4 +1,4 @@
-# computer_graphics
+# Computer Graphics
 
 #### 一、语言
 
@@ -15,6 +15,11 @@
 
 线性代数, 学习图形学时, 需要什么补什么
 
+#### 五、参考资料
+[知乎问答: "零基础如何学习计算机图形学"](https://www.zhihu.com/question/41468803)  
+[什么是计算机图形学?](http://staff.ustc.edu.cn/~lgliu/Resources/CG/What_is_CG.htm)   
+[计算机图形学：虚拟和现实世界的融合](https://www.msra.cn/zh-cn/news/executivebylines/tech-bylines-graphics)
+
 #### 四、图形学
 
 1. 图形学入门  
@@ -22,7 +27,6 @@
 [B站-现代计算机图形学入门-闫令琪](https://www.bilibili.com/video/av90798049)  
 [书籍-Fundamentals of Computer Graphics](https://book.douban.com/subject/26868819/)
 
-#### 五、参考资料
-[知乎问答: "零基础如何学习计算机图形学"](https://www.zhihu.com/question/41468803)  
-[什么是计算机图形学?](http://staff.ustc.edu.cn/~lgliu/Resources/CG/What_is_CG.htm)   
-[计算机图形学：虚拟和现实世界的融合](https://www.msra.cn/zh-cn/news/executivebylines/tech-bylines-graphics)
+2. real time rendering
+
+   - [ ] OpenGL, GLSL着色语言
