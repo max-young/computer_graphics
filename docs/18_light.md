@@ -82,17 +82,17 @@ $$H = \Delta q / (\Delta A \Delta t \Delta \lambda)$$
 #### _18.1.5 radiance辐射率
 
 irridiance告诉了我们一个点获得的light  
-另外一个问题一个点可以获取四面八方的光, 那么从某个角度照射过来的光是多少呢?  
-这句话很关键.
+另外一个问题一个点可以获取四面八方的光, 那么从这个点出发在某个方向反射出去的光是多少呢?  
+(这句话很关键!)
 
-<img src="./_images/radiance1.png" width=10%>
+<img src="./_images/radiance1.png" width=30%>
 
-有一个观测装置,光从右侧照入, 在面积为$\Delta A$的照射面右侧放一个圆锥体, 这个圆锥的solid angle立体角的范围是$\Delta \sigma$, 在圆锥体的左侧观测这个立体角范围内的光照强度, 这样, 我们在irridiance的基础上再除以这个角度:
+有一个观测装置, 在面积为$\Delta A$的发光体右侧放一个圆锥体, 这个圆锥的solid angle立体角的范围是$\Delta \sigma$, 在圆锥体的右侧观测这个立体角范围内的光照强度, 这样, 我们在irridiance的基础上再除以这个角度:
 $$response = \frac{\Delta H}{\Delta \sigma} = \frac{\Delta q}{\Delta A \Delta \sigma  \Delta t \Delta \lambda}$$  
 (之后我们会隐去光谱$\Delta \lambda$)  
 我们会想, 这个圆锥体的长度, 或者说光线长度会影响这个值吗? 答案是不会:
 
-<img src="./_images/radiance2.png" width=30%>
+<img src="./_images/radiance2.png" width=40%>
 
 上面两种情况, $\Delta A$是一样的, $\Delta q$是一样的吗?  
 答案是一样, 因为面积和距离平方成正比, 但是强度和距离平方成反比(因为衰减, 因为一个光源的power是恒定的, 以光源为中心画一个半径为1的球, 和半径为r的球, 两个球观测到的光子数量是一样的, 但是球的面积不一样, 所以强度和$r^2$成反比)  
@@ -100,7 +100,7 @@ $$response = \frac{\Delta H}{\Delta \sigma} = \frac{\Delta q}{\Delta A \Delta \s
 
 但是这个参数和角度有关系  
 
-<img src="./_images/radiance3.png" width=10%>
+<img src="./_images/radiance3.png" width=30%>
 
 如上图, 假设圆锥和观测表面不垂直, 其实就是入射角度和表面法线不平行, 那么实际的照射面积是$\Delta A \cos \theta$,  
 回忆一下第4章的shading. 从而:
