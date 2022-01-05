@@ -28,7 +28,7 @@
 - projection transformation: 投影转换, 将点从camera space转换到canonical view colume
 - viewport transformation: 视窗转换, 将canonical view colume转换到screen space(显示空间)
 
-个人粗浅理解: 第一步是摄取现实对象(和摄像机的位置、角度相关), 第二步是将第一步取的景投射到相机成像元件上(经过不用的投影转换), 第三步是洗照片  
+个人粗浅理解: 第一步是摄取现实对象(和摄像机的位置、角度相关), 第二步是将第一步取的景投射到相机成像元件上, 第三步是洗照片  
 我们接着往下看
 
 <a id="markdown-_711-the-viewport-transformation" name="_711-the-viewport-transformation"></a>
