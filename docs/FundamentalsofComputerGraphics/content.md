@@ -19,7 +19,3 @@
 * [22 implicit modeling](./docs/FundamentalsofComputerGraphics/22_implicit_modeling.md)
 * [23 global illumination](./docs/FundamentalsofComputerGraphics/23_global_illumination.md)
 * [24 reflection models](./docs/FundamentalsofComputerGraphics/24_reflection_models.md)
-
-**REAL_TIME RENDERING**
-
-* [shadow](./docs/temp.md)

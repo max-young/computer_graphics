@@ -188,13 +188,13 @@ $$\rho(k_i, k_o) = \frac{r}{\pi}$$
 
 根据上面BRDF的定义, BRDF等于出射方向$k_o$的radiance除以入射方向的irridiance, irridiance跟surface面积相关, 和入射角没关系.  
 如果我们假设入射只从某一个入射立体角$k_i$过来的光线呢? 我们就能根据入射立体角的ridiance计算得出irridiance, 从而:
-$$\rho = \frac{L_0}{L_i\cos\theta_i\Delta\sigma_i}$$
+$$\rho = \frac{L_o}{L_i\cos\theta_i\Delta\sigma_i}$$
 从而我们能得到某个入射方向$k_i$在出射方向$k_o$的radiance:
-$$\Delta L_0 = \rho(k_i, k_o)L_i \cos \theta_i \Delta \sigma_i$$
+$$\Delta L_o = \rho(k_i, k_o)L_i \cos \theta_i \Delta \sigma_i$$
 我们把所有入射方向做积分:
 $$L_s(k_o) = \int_{all\ k_i}\rho(k_i, k_o)L_f(k_i) \cos \theta_i d\sigma_i$$
 
-在games101 rendering低讲里讲到, 这里做积分, 是选取入射方向的半球范围内做采样, 然后做积分, 这种采样和积分效率比较低, 效果也不太好.  
+在games101 rendering里讲到, 这里做积分, 是选取入射方向的半球范围内做采样, 然后做积分, 这种采样和积分效率比较低, 效果也不太好.  
 原因是, 假如光源只占很小的一片区域, 那么, 在半球范围内的采样很大部分是没用的, 因为没有光源照射.  
 所以我们能不能把采样范围只限定在光源范围呢? 如下图:
 
