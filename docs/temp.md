@@ -12,6 +12,7 @@
     - [_7.4.1 Resolution Enhancement](#_741-resolution-enhancement)
   - [_7.5 Percentage-Closer Filtering](#_75-percentage-closer-filtering)
   - [_7.6 Percentage-Closer Soft Shadows](#_76-percentage-closer-soft-shadows)
+    - [_7.7 Filtered Shadow Maps](#_77-filtered-shadow-maps)
 
 <!-- /TOC -->
 
@@ -131,11 +132,12 @@ shadow map也有分辨率, 如果分辨率较低, 就会造成下面的效果:
 
 ### _7.5 Percentage-Closer Filtering
 
-对shadow map进行扩展可以实现soft shadow的效果. 基本的方法是对一个点的周围区域进行采样, 获得shadow map的depth, 然后做blending. 这种方法叫做percentage-closer filtering(PCF).
+对shadow map进行扩展可以实现soft shadow的效果. 基本的方法是对一个点对应的shadow map的周围区域进行采样, 获得shadow map的多个depth, 然后做blending. 这种方法叫做percentage-closer filtering(PCF).
 
 <img src="./_images/real_time_rendering/pcf.png" width=70%>
 
-对于面光源, 会产生penumbra, 软阴影的实现方法是对面光源进行采样, 获得能看到的光源面积比例. 对于点光源, 要实现soft shadow的效果, 方法是相反的, 是对采样点周围的区域进行采样, 看被光源照亮的比例.
+对于面光源, 会产生penumbra, 软阴影是receiver上的点能看到的光源面积比例, 可以对光源进行采样, 来得到这个比例. 更普遍的实现方法是, 把面光源当成点光源, 对采样点周围的区域进行采样, 看被光源照亮的比例. 为什么要当成点光源呢? 因为shadow map只能用点光源来生成. 实际操作可以去面光源的中间点.    
+例如我门采样3*3=9的shadow map区域, 然后得到6个能被光源照射到, 3个不能, 比例是0.667, 这个数字就是前置知识里rendering equation里的visibility.
 
 PCF的效果受很多因素的影响, 比如: 采样面积、采样数量, 采样方法, 采样权重等等.  
 <img src="./_images/real_time_rendering/pcf_sampling.png" width=70%>  
@@ -143,14 +145,51 @@ PCF的效果受很多因素的影响, 比如: 采样面积、采样数量, 采�
 
 上面说到了为了解决self-shadowing的问题, 引入了bias, PCF有可能会加重self-shadowing的问题, 因为采样多了, bias也累加了. 所以bias需要做优化. 有一些优化的方法, 比如按照一个锥形去做bias, 或者沿着法线做bias, 等等.
 
-PCF的一个问题是, 在所有的阴影区域都会生成相同程度的soft shadow. 有些情况下是不合适的, 比如之前的图里面, 越靠近人的脚, 硬阴影更多.
+PCF的一个问题是, 软阴影的程度跟采样大小相关, 采样区域越大, 软阴影越大. 这一点很好理解, 假如receiver上的一个点处在umbra中, 如果采样区域很小, 都在umbra中, 那么它仍然在umbra中, 但是如果采样区域很大, 可能有的采样点处在pemumbra中, 那么这个处在umbra中的点也会变成soft shadow.  
+那么问题来了, 采样大小是固定的, 在所有的阴影区域都会生成相同程度的soft shadow. 有些情况下是不合适的, 比如之前的图里面, 越靠近人的脚, 硬阴影更多......
 
 ### _7.6 Percentage-Closer Soft Shadows
 
+为什么越靠近人的脚, shadow更hard, 靠近人的头部, shadow更soft呢?  
+GAMES202给了这样一张图:
 
+<img src="./_images/real_time_rendering/pcss.png" width=30%>  
 
+能看到的光源面积和penumbra的面积, 以及occluder的交叉点, 构成了相似三角形, 如果我们将occluder(blocker)往下移动, penumbra的面积也会变小, 也就是说receiver和occluder越近, penumbra越小, shadow越hard, 这就解释了上面说的现象, penumbra的面积是:
+$$w_{Penumbra} = (d_{RECEIVER} - d_{BLOCKER}) \cdot w_{Light} / d_{Blocker}$$
 
+我们根据这个现象, 对PCF进行优化, 根据receiver和occluder的距离和receiver和light的距离的比例来决定采样的大小.  
+这个方法的问题是, 如何找到occluder? 应该在多大区域找occulder? GAMES202里提到一种方法是, 从receiver上的点看向面光源, 这就形成了一个视锥体, 在这个锥体里去寻找occulder
 
+PCSS有一些优化方法, 书中提到, 对shadow map生成不同resolution的mipmap, 对于penumbra, 采样面积更大, 需要更daresolution的mipmap, 相反则只需要低resolution的mipmap.  
 
+另外, 对于完全照亮和完全在阴影中的区域, 我们除了生成平均depth的mipmap, 还可以生成同样分辨率的但是值是这个区域的最小depth的mipmap和最大depth的mipmap, 这样我们就可以先直接判断其是否完全在阴影中, 还是完全被照亮, 就不需要再去做区域采样了.
 
+在上一章节里我们提到penumbra的形成是只能被部分光源照亮, PCSS的做法能生成soft shadow, 但这是不符合物理意义的. 有人也在按照实际物理的方式来做软阴影, 效果很好, 但是开销很大, 还没有普及.
 
+#### _7.7 Filtered Shadow Maps
+
+这一张主要讲的是VSM(variance shadow map). 这个算法会额外预先存储一张shadow map, 这张shadow map的depth是原始值的平方. 为什么呢?  
+上一章节讲到PCSS, 这个算法的步骤应该是:  
+
+1. 在一定范围内寻找occluder, 并且算出平均depth
+2. 根据occluder的平均depth匹配采样区域大小
+3. 在采样区域做PCF  
+
+我们想要提高这个算法的效率, 我们可以直观的感受到第1步和第3步会比较耗时, 因为直观的做法就是做loop循环.  
+我们单说第三步, 正常的做法就是在采样区域做循环, 用texel的depth和receiver上的点的depth做比较.  
+我们想要得到的是采样里多少比例是处在光照中? 这个比例满足这样的一个等式:
+$$p_{max}(t) = \frac{\sigma^2}{\sigma^2+(t-M_1)^2}$$  
+这个等式实际上是根据切比雪夫不等式得来的, 切比雪夫不等式是小于等于, 我们可以认为是约等于.  
+t是receiver上的点的depth, $M_1$是采样区域的平均depth, $\sigma$是variance方差.  
+问题来了, 方差是什么? 采样区域的texels的depth是随机的, 一般都满足正态分布, 正态分布的方差可以怎么计算:
+$$\sigma^2 = M_2 - M_1^2$$
+$M_2$是depth的平方的shadow map的均值. 这就是为什么要生成一张depth平方的shadow map的原因.  
+这样第三步我们就不用进行循环, 一步就能得到PCF了. 
+
+那么对于第一步呢? 我们是要取得depth小于$t$的均值$M_{occlu}$, 我们假设大于$t$的均值是$M_{unocclu}$, 这两个值的均值乘以其所占比例, 然后相加, 应该等于采样区域的均值.  
+大于$t$的比例我们可以根据上面的切比雪夫不等式来得到, $M_{unocclu}$我们可以取值为$t$(奇妙是不是...), 然后我们就得到了$M_{occlu}$, 这样, 第一步也不用进行循环处理了, 一步就能得到.
+
+VSM有个问题是, 如果一个点被两个occluder遮挡, 一个occluder完全遮挡, 另外一个没有, 实际情况应该是完全处在阴影中, 但是根据这个算法(切比雪夫不等式)就会算出有一部分没被遮挡, 就会出现漏光的情况.  
+
+moment shadow mapping能解决这个问题, 这里不表述了.
