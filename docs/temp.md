@@ -12,7 +12,7 @@
     - [_7.4.1 Resolution Enhancement](#_741-resolution-enhancement)
   - [_7.5 Percentage-Closer Filtering](#_75-percentage-closer-filtering)
   - [_7.6 Percentage-Closer Soft Shadows](#_76-percentage-closer-soft-shadows)
-    - [_7.7 Filtered Shadow Maps](#_77-filtered-shadow-maps)
+  - [_7.7 Filtered Shadow Maps](#_77-filtered-shadow-maps)
 
 <!-- /TOC -->
 
@@ -161,13 +161,16 @@ $$w_{Penumbra} = (d_{RECEIVER} - d_{BLOCKER}) \cdot w_{Light} / d_{Blocker}$$
 我们根据这个现象, 对PCF进行优化, 根据receiver和occluder的距离和receiver和light的距离的比例来决定采样的大小.  
 这个方法的问题是, 如何找到occluder? 应该在多大区域找occulder? GAMES202里提到一种方法是, 从receiver上的点看向面光源, 这就形成了一个视锥体, 在这个锥体里去寻找occulder
 
-PCSS有一些优化方法, 书中提到, 对shadow map生成不同resolution的mipmap, 对于penumbra, 采样面积更大, 需要更daresolution的mipmap, 相反则只需要低resolution的mipmap.  
+PCSS有一些优化方法, 书中提到, 对shadow map生成不同resolution的mipmap, 对于penumbra, 采样面积更大, 需要更高resolution的mipmap, 相反则只需要低resolution的mipmap.  
 
 另外, 对于完全照亮和完全在阴影中的区域, 我们除了生成平均depth的mipmap, 还可以生成同样分辨率的但是值是这个区域的最小depth的mipmap和最大depth的mipmap, 这样我们就可以先直接判断其是否完全在阴影中, 还是完全被照亮, 就不需要再去做区域采样了.
 
 在上一章节里我们提到penumbra的形成是只能被部分光源照亮, PCSS的做法能生成soft shadow, 但这是不符合物理意义的. 有人也在按照实际物理的方式来做软阴影, 效果很好, 但是开销很大, 还没有普及.
 
-#### _7.7 Filtered Shadow Maps
+这个方法在寻找occluder和做PCF的时候都是通过采样来处理的, 如果采样率比较高, 效果肯定更好, 但是如果为了效率去降低采样率, 就会产生噪声, 好像很难两全. 不过我们可以通过一些方法来降噪.  
+接下来的7.7章节会讲PCSS的优化方法VSM, 虽然很巧妙, 但是随着降噪方法的发展, VSM用的越来越少.
+
+### _7.7 Filtered Shadow Maps
 
 这一张主要讲的是VSM(variance shadow map). 这个算法会额外预先存储一张shadow map, 这张shadow map的depth是原始值的平方. 为什么呢?  
 上一章节讲到PCSS, 这个算法的步骤应该是:  
