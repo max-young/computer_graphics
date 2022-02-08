@@ -39,11 +39,11 @@ $$
 $$
 注意这个等式里有一个开根号, 假如里面是负数呢? 这就代表折射不成立, 全部反射了, 这叫total internal reflection, 比如镜子, 就是这个特性.
 
-计算出了折射角度后, 接下来的问题是, 有多少光折射, 有多少光反射呢? 这就涉及到折射率reflectivity.  
+计算出了折射角度后, 接下来的问题是, 有多少光折射, 有多少光反射呢? 这就涉及到反射率reflectivity.  
 根据实际的生活经验, 反射率是跟入射角度相关的, 入射角度越小, 也就是越垂直于照射表面, 折射的光(透过的光)越多, 反射的光越少. 如果入射角度是90度, 也就是平行于表面, 那么反射率就是1, 没有折射.  
-有Fresnel equations菲涅尔方程来表示这个特性, Schlik approximation简化了这个方程:
+有Fresnel equations菲涅尔方程来表示入射角$\Theta$方向的折射率, Schlik approximation简化了这个方程:
 $$R(\theta) = R_0 + (1-R_0)(1-\cos\theta)^5$$
-当垂直照射时, $\theta=0, \cos\theta=1$:
+当垂直照射时, $\theta=0, \cos\theta=1$, 折射率$R(\Theta)$就等于$R_0$, $R_0$可以通过折光率得到:
 
 $$R_0 = \left(\frac{n_t - 1}{n_t + 1}\right)^2$$
 

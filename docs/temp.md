@@ -13,6 +13,7 @@
   - [_7.5 Percentage-Closer Filtering](#_75-percentage-closer-filtering)
   - [_7.6 Percentage-Closer Soft Shadows](#_76-percentage-closer-soft-shadows)
   - [_7.7 Filtered Shadow Maps](#_77-filtered-shadow-maps)
+  - [_7.8 distance field soft shadow](#_78-distance-field-soft-shadow)
 
 <!-- /TOC -->
 
@@ -196,3 +197,7 @@ $M_2$是depth的平方的shadow map的均值. 这就是为什么要生成一张d
 VSM有个问题是, 如果一个点被两个occluder遮挡, 一个occluder完全遮挡, 另外一个没有, 实际情况应该是完全处在阴影中, 但是根据这个算法(切比雪夫不等式)就会算出有一部分没被遮挡, 就会出现漏光的情况.  
 
 moment shadow mapping能解决这个问题, 这里不表述了.
+
+### _7.8 distance field soft shadow
+
+比较前沿的研究方向
