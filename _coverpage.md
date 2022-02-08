@@ -1,12 +1,13 @@
-![logo](_media/icon.svg)
+<!-- ![logo](_media/icon.svg) -->
 
-# docsify <small>4.12.1</small>
+# Computer Graphics Notes &nbsp;&nbsp;<small>Max Young</small>
 
-> A magical documentation site generator.
+<!-- A magical documentation site generator.
 
 - Simple and lightweight
 - No statically built html files
-- Multiple themes
+- Multiple themes -->
 
-[GitHub](https://github.com/docsifyjs/docsify/)
-[Getting Started](#docsify)
+[Fundamental](docs/FundamentalsofComputerGraphics/)
+[RealTimeRendering](docs/RealTimeRendering/)
+[MyBlog](https://max-young.github.io/)

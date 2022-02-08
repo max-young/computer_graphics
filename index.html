@@ -10,18 +10,20 @@
   <!-- latex -->
   <script src="https://cdn.jsdelivr.net/npm/katex-copytex@1.0.2/dist/katex-copytex.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/katex-copytex@1.0.2/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
 </head>
 <body>
-  <nav>
-    <a href="https://max-young.github.io/">博客首页</a>
-  </nav>
   <div id="app"></div>
   <!-- latex -->
   <!-- <script>window.texme = { style: 'none' }</script>
   <script src="https://cdn.jsdelivr.net/npm/texme@0.9.0"></script> -->
   <script>
     window.$docsify = {
-      name: 'computer graphics',
+      name: 'Computer Graphics Notes',
+      coverpage: true,
+      onlyCover: false,
+      loadNavbar: false,
       loadSidebar: true,
       loadNavbar: true,
       subMaxLevel: 3,
@@ -43,5 +45,20 @@
   <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
   <!-- using the footer plugin from CDN -->
   <script src="//cdn.jsdelivr.net/npm/@alertbox/docsify-footer/dist/docsify-footer.min.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+  <script>
+    const gitalk = new Gitalk({
+      clientID: '50c778ee7ea8fe21c780',
+      clientSecret: 'f6a9cae9fdbf10b2721e75bf5bb656d12dd0f862',
+      repo: 'computer_graphics',
+      owner: 'max-young',
+      admin: ['max-young'],
+      // facebook-like distraction free mode
+      distractionFreeMode: false,
+      id: decodeURI(window.location.pathname)
+    })
+  </script>
 </body>
 </html>

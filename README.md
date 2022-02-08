@@ -1,8 +1,8 @@
-# Computer Graphics
+# Computer Graphics学习计划
 
 #### 一、语言
 
-- [x] 学堂在线清华大学C++课程(已完成)
+- [x] 学堂在线清华大学C++课程
 
 #### 二、算法
 
