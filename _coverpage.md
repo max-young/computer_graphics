@@ -8,6 +8,6 @@
 - No statically built html files
 - Multiple themes -->
 
-[Fundamentals](docs/FundamentalsofComputerGraphics/)
+[FundamentalsOfComputerGraphics](docs/FundamentalsofComputerGraphics/)
 [RealTimeRendering](docs/RealTimeRendering/)
 [MyBlog](https://max-young.github.io/)

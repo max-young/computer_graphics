@@ -1,3 +1,6 @@
 * [home](docs/RealTimeRendering/)
+* [5 Shading Basics](docs/RealTimeRendering/5_shading_basics.md)
 * [7 Shadows](docs/RealTimeRendering/7_shadows.md)
 * [8 Light and Color](docs/RealTimeRendering/8_light_and_color.md)
+* [9 Physical Based Shading](docs/RealTimeRendering/9_physical_based_shading.md)
+* [10 Local Illumination](docs/RealTimeRendering/10_local_illumination.md)
