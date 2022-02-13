@@ -156,19 +156,19 @@ $$\rho = \frac{L_s}{H}$$
 我们的问题是, 入射光有多少比例被反射出去了呢?  
 我们定义Directional Hemispherical Reflectance函数, 来说明$k_i$方向的光线有多少被反射了:
 $$R(k_i)=\frac{所有反射的能量power,方向记作k_o}{k_i方向照射过来的能量power}=\frac{E}{H}$$
-反射方向$k_o$的irridiance是入射方向$k_i$的ridiance乘以BRDF
+反射方向$k_o$的ridiance是入射方向$k_i$照射到surface上的的irridiance乘以BRDF
 $$L(k_o) = H\rho(k_i, k_o)$$
 根据radiance的定义:
-$$L(k_o) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0}$$
+$$L(k_o) = \frac{\Delta E}{\Delta \sigma_o\cos\theta_o}$$
 从而:
 $$
 \begin{aligned}
-H\rho(k_i, k_o) = \frac{\Delta E}{\Delta \sigma_0\cos\theta_0} \\
-\frac{\Delta E}{H} = \rho(k_i, k_o)\Delta\sigma_0\cos\theta_0
+H\rho(k_i, k_o) = \frac{\Delta E}{\Delta \sigma_o\cos\theta_o} \\
+\frac{\Delta E}{H} = \rho(k_i, k_o)\Delta\sigma_o\cos\theta_o
 \end{aligned}
 $$
 我们把所有反射方向加起来, 就得到了某个入射方向$k_i$的反射率:
-$$R(k_i) = \int_{all\ k_o}\rho(k_i, k_o)\cos\theta_0d\sigma_0$$
+$$R(k_i) = \int_{all\ k_o}\rho(k_i, k_o)\cos\theta_od\sigma_o$$
 
 **Ideal Diffuse BRDF完美漫反射BRDF**
 
@@ -180,6 +180,7 @@ R(k_i) &= \int_{all\ k_o}\rho(k_i, k_o)\cos\theta_0d\sigma_0 \\
 &= \pi C
 \end{aligned}
 $$
+这里涉及到积分, 对半球的立体角和立体角的余弦积分, 得到$\pi$  
 如果是一个完美的lambertian, 没有能量损失, 那么漫反射率$R=1$, 从而$\rho = 1/\pi$  
 如果漫反射率$R(k_i) = r$, 那么:
 $$\rho(k_i, k_o) = \frac{r}{\pi}$$

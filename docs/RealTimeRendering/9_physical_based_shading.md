@@ -5,6 +5,11 @@
   - [_9.1.2 Media介质](#_912-media介质)
   - [_9.1.3 Surfaces表面](#_913-surfaces表面)
   - [_9.1.4 Subsurface Scattering下表面散射](#_914-subsurface-scattering下表面散射)
+- [_9.2 The Camera](#_92-the-camera)
+- [_9.3 The BRDF](#_93-the-brdf)
+- [_9.4 Illumination](#_94-illumination)
+- [_9.5 Fresnel Reflectance](#_95-fresnel-reflectance)
+  - [_9.5.1 External Reflection外部反射](#_951-external-reflection外部反射)
 
 <!-- /TOC -->
 
@@ -102,3 +107,100 @@ refraction不只发生于透明物体, 也发生于不透明物体, 只是不透
 但是如果pixel较小, 不能覆盖出射光的位置, 就需要用奥*global subsurface scattering*  
 
 同一张图可能同时用到local subsurface scattering和global subsurface scattering, 例如一个小孩在玩气球, 小孩在近处, 气球在远处, 小孩的皮肤和气球都有subsurface scattering的特性, 因为小孩离得近, 渲染其皮肤需要用到global subsurface scattering, rendering气球需要用到local subsurface scattering.
+
+### _9.2 The Camera
+
+在rendering时我们计算的是着色点到观测位置的radiance. camera也是一样的原理.  
+关于camera的知识可以看[GAMES101的第19节课](https://www.bilibili.com/video/BV1X7411F744?p=19)
+
+### _9.3 The BRDF
+
+在[fundamentals of computer graphics](docs/FundamentalsofComputerGraphics/18_light.md#_1816-brdf)和GAMES101里, 我们知道BRDF反应了物体的材质, 英文全称是bidirectional reflectance distribution function. 它是一个函数, 可以表示物体的材质的反射率.
+
+这一章节我们进行详细解释.  
+我们需要计算camera接收到的radiance, 那么这个值和camera的位置, 以及着色点和camera的向量有关系, 我们这么表示$L_i(c, -v)$, $L$是radiance的表示, 在8.1章节里讲过, $c$代表camera的位置, $v$代表着色点到camera的向量, 因为这里是以camera的角度来讲, 所以我们价格负号.
+
+rendering的scene场景是由渲染对象已经充满其中的media组成的, 一般情况下, medium是由纯净的空气构成, 不会发生scattering和absorption(8.1章节讲过), 所以camera接收到的radiance等于着色点向camera发出来的radiance:
+$$L_i(c, -v) = L_o(p, v)$$
+$p$代表着色点的位置  
+对于不是纯净的气体的情况, 我们称其为participating media. 在其他章节会讲.
+
+计算radiance需要根据shading model(5.1章节)来计算  
+randiance可能是从surface自己发出, 也可能是从其他地方发出经过surface反射, 我们这里不考虑transparency和global subsurface scattering, 只考虑surface reflection和local subsurface scattering. 统称为local reflectance, 它只和入射光l以及观测方向v相关, 入射光和反射光的radiance之间的关系可以通过BRDF(bidirectional reflectance distribution function)来量化, 表示为$f(l, v)$.
+
+在现实世界中一个表面很难有相同的BRDF, 比如一个金属表面可能有划痕、斑点、污渍, 这都造成BRDF在空间中的变化. 我们称之为spatial varying BRDF(SVBRDF), 或者spatial BRDF(SBRDF), 这种情况很普遍, 我们使用上都简称为BRDF.
+
+在三维世界里, $l$和$v$相对于surface的normal, 必须由两个分量表示: 仰角$\theta$和方位角$\phi$, 如下图所示:  
+![](BRDF_lv.png)  
+这样, 计算BRDF就由4个因子来计算了. 有一种重要的特殊情况是isotropic(各向同性) BRDF, 我们只需要知道$l$和$v$的方位角的夹角, 就能确定BRDF的值, 这样4个因子降低为3个因子. isotropic BRDF是指l和v的相对位置固定, 旋转surface, BRDF的值保持不变.
+
+我们可以根据BRDF的值来计算radiance的值, 通过reflectance equation:
+$$L_o(p, v) = \int_{l \in \Omega} f(l, v)L_i(p, l)(n \cdot l)dl$$
+这里是将着色点p接收到的radiance做了integral, 因为它会接受到以发现为轴的半球范围内的所有radiance, $\Omega$代表这个半球, 另外这还和入射角相关, 所以乘上了$n$和$l$的dot product.  
+将p去掉, 简化为:
+$$L_o(v) = \int_{l \in \Omega} f(l, v)L_i(l)(n \cdot l)dl$$
+
+BRDF要求$l$和$v$必须在surface的上方, 实际操作中因为发现插值或者发现贴图可能导致其在下方, 我们可以通过clamping operation来解决.  
+
+物理上还要求BRDF满足两个条件:
+一个是互换性, $f(l, v) = f(v, l)$, 实际操作中如果不满足这个等式, artifact也不会很明显, 离线渲染可能会苛刻一些.  
+另外是能量守恒, 反射光的强度不能大于入射光的强度, 同样的, 离线渲染要求比较苛刻, real time rendering只需近似即可.
+
+书中还将到了反射率, directional-hemisphereical reflectance($R(l)$)定向半球反射率(这个推导见[fundamentals of computer graphics](docs/FundamentalsofComputerGraphics/18_light.md#_1816-brdf)), 和hemisphere-directional reflectance($R(v)$)半球定向反射率:
+$$
+\begin{aligned}
+  R(l) = \int_{v \in \Omega} f(l, v)(n \cdot v)dv \\
+  R(v) = \int_{l \in \Omega} f(l, v)(n \cdot l)dl
+\end{aligned}
+$$  
+前者是一个入R(l) = \int_射方向$l$, 打到surface上, 反射到四面八方, 然后把四面八方反射的radiance积分起来, 得到一个比值. 后者是将一个点从四面八方接受到的radiance积分除以某个观测方向上的radiance, 得到比值. 因为BRDF有互换性, 两者计算出来是一样的, 我们统称为*directional albedo*  
+directional-hemisphere reflectance($R(l)$)更符合直觉, 一条光线打到surface上的一个点, 往半球范围内反射, 把半球范围内的反射的radiance再除以入射光线的radiance可不就是反射率吗. 所以$R(l)$值的范围是[0, 1], 0就代表光都被吸收了, 1代表都被反射了.
+
+最简单的场景是BRDF是一个定值, 这种场景称为lambertian, 满足lambertian shading model, 这样我们可以计算出$R(l) = \pi f(l, v)$, 这在fundamentals of computer graphics中有介绍. 对一个半球再乘以一个余弦积分得到$\pi$
+
+### _9.4 Illumination
+
+在上面我们说到reflectance equation:
+$$L_o(v) = \int_{l \in \Omega}f(l, v)L_i(l)(n \cdot l)dl$$
+在global illumination里, $L_i(l)$不只来源于光源, 还来自于其他反射, 需要复杂的计算.  
+在local illumination里, $L_i(l)$来自于光源, 是给定的.
+
+directional light场景下, BRDF是固定的, L_i(l)也是固定的, 这样reflectance equation可以这样计算:
+$$
+\begin{aligned}
+  L_o(v) = \int_{l \in \Omega}f(l, v)L_i(l)(n \cdot l)dl \\
+  L_o(v) = f(l, v)L_i(l)\int_{l \in \Omega}(n \cdot l)dl \\
+  L_o(v) = \pi f(l, v)L_i(l) \\
+  L_o(v) = \pi f(l_c, v)c_{light}(n \cdot l_c) \\
+\end{aligned}
+$$
+对于punctial light场景, 也是一样的, 只是光照强度根据距离有衰减, 如果有多个光源, 则加起来就好.
+
+### _9.5 Fresnel Reflectance
+
+在一个scene中, 光从medium传播到object经过surface, 这个intersion的过程可以通过*Fresnel Equation*来描述, 这是由18-19世纪的法国科学家fresnel发明的, 英年早逝, 39岁死于结核病.  
+但是它由一个限制条件, 这个surface必须是平面, irregularities必须小于1个可见光波长, 或者大于100倍可见光波长.  
+光线作用于surface时会发生reflection和refraction, 会分成reflected part和refracted part.  
+reflectance的光线和入射光以surface的normal为轴对称, 方向向量可以这样计算(图上画一下就知道了):
+$$r = 2(n \cdot l)n - l$$
+反射部分的量记作Fresnel reflectance F, 和入射角$\theta_i$相关.  
+之前我们学过[9.1.3 折射率](#_913-surfaces表面), 我们把入射方的refractive index记作$n_1$, 进入方的refractive index记作$n_2$, Fresnel Equation描述了$\theta_i, n_1, n_2$之间的关系.
+
+#### _9.5.1 External Reflection外部反射
+
+external reflection是指光线从一个折射率低的介质往折射率高的介质照射. 比如从空气照着到另外的物体. 空气的折射率可以近似为1.  
+上面说到fresnel equation描述了反射的光量, 它和入射角以及两个介质的refractive index有关.  
+那么对于制定的物体, 从空气照射, 唯一的变量就只有入射角了.
+
+如果入射角是0度, 也就是垂直于表面照射, fresnel equation得到的结果记为$F_0$, 这个值称为这个物体的characteristic specular color.  
+如果入射角慢慢变大到90度, fresenl equation的值$F(\theta_i)$就会变成1, 全部反射.  
+
+我们把fresnel equation的参数$\theta_i$换成入射光向量和发现向量, 这样就变成了$F(n, l)$, 这个函数就是和这个物体的refractive index以及n和l的函数. 这个refractive index不太好测量, 比较复杂. 有没有更简单的方法呢? Schlick发明了一个近似表达:
+$$F(n, l) \approx F_0 + (1 - F_0)(1 - (n \cdot l)^+)^5$$
+这个近似非常精确. 而$F_0$比较容易计算:
+$$F_0 = \left(\frac{n-1}{n+1}\right)^2$$
+这个式子指的是从空气进入refractive index为n的物体. 更通用的写法:
+$$F_0 = \left(\frac{n_2-n_1}{n_2+n_1}\right)^2$$
+fresenl equation更通用的写法:
+$$F(n, l) \approx F_0 + (F_{90} - F_0)(1 - (n \cdot l)^+)^p$$
+根据实际情况可以修改$F_{90}$和$p$的值. 可得到不同的效果.
