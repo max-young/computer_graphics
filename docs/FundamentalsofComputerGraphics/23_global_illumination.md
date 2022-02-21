@@ -15,7 +15,7 @@
 而且有些物体只受到间接光照, 例如天花板.  
 下图的左边的图只有间接光照, 中间的图只有直接光照, 右图是混合之后的效果:
 
-<img src="./_images/global_illumination.png" width=40%>
+<img src="./_images/FundamentalsOfComputerGraphics/global_illumination.png" width=70%>
 
 试想一下间接光照就很复杂, 无限反射.  
 本章介绍两种算法: particle tracing粒子追踪, path tracing路径追踪  
@@ -26,9 +26,11 @@
 
 ### _23.2 Path Tracing
 
- particle tracing在很多对象的场景下会有问题. path tracing可以解决这个问题并得到很好的渲染效果.  
- path tracing是一种概率方法, 只计算间接光照, 从视点出发, 追踪线路到光源.  
- <img src="./_images/path_tracing.png" width=30%>
+ particle tracing在diffuse的场景下比较适合.  
+ 但是在更通用的场景, 比如有很多对象, BRDF多种多样, 就不太适合了.  
+ path tracing可以解决这个问题并得到很好的渲染效果.    
+ path tracing是一种概率方法, 一般来说只计算间接光照, 从视点出发, 追踪线路到光源.  
+ <img src="./_images/FundamentalsOfComputerGraphics/path_tracing.png" width=70%>
 
  我们先用一种粗暴的方法来解决, full transport equation是:
  $$L_s(k_o) = L_e(k_o) + \int_{all\ k_i}\rho(k_i, k_o)L_f(k_i)\cos\theta_id\sigma_i$$

@@ -28,40 +28,42 @@
 
 **Signal Processing**
 
-在图形学中, 我们处理的是连续参数的函数.  
-但是如果显示在屏幕上, 其实并不是连续的, 在上一章节里我们就能看到锯齿现象  
+在图形学中, 我们处理的是连续参数的函数, 比如图形的几何函数表达.  
+但是如果显示在屏幕上, 是一个一个像素, 并不是连续的, 在上一章节里我们就能看到锯齿现象  
 这就是因为我们只能对连续的函数做或密或疏的采样来显示  
 
 所以**采样sampling**在图形学里是很重要的课题.  
 还有, 根据采样来**重建reconstruction**也是很重要的课题  
-为什么? 看下面的图
 
 <a id="markdown-_91-digital-audio-sampling-in-1d数字音频-1维采样" name="_91-digital-audio-sampling-in-1d数字音频-1维采样"></a>
 ### _9.1 Digital Audio: Sampling in 1D数字音频, 1维采样  
 
-<img src="./_images/sampling_and_reconstruction.png" width=50%>  
+![](sampling_and_reconstruction.png)
 
-这张图展示了声音从录制采样保存、到采样重建输出的过程.  
-录制和再输出的过程都设计到采样, 如果采样不合理、没有做到平滑等等因素, 都会导致声音的失真  
+这张图展示了声音从录制采样保存、到采样重建输出的过程:  
+录制时话筒处的声波震动引起电压的变化, 数模转换器(analog-digital converter)测量电压并存储数字.  
+播放时读取数字, 数字转换器(digital-analog converter)将数字转换电压震动喇叭为声波.  
+
+录制设计到采样, 播放涉及到重建, 如果采样频率过低、或者重建做的不够好, 都会导致声音的失真  
 下面这张图就展示了低采样率导致失真的原因:  
-<img src="./_images/high_low_sample.png" width=50%>  
+![](high_low_sample.png)
 
 <a id="markdown-_911" name="_911"></a>
 #### _9.1.1 Sampling Artifacts and Aliasing
 
-同样的正弦波(sine wave), 因为低采样率(undersampling), 重建后的曲线完全变形  
-因为低采样率, 高频信号变成了低频信号, 导致aliasing(锯齿/走样)  
+如上图所示, 同样的正弦波(sine wave), 高频采样能很好的反映这个正弦波, 但是下面的图, 因为低采样率(undersampling), 重建后的曲线完全不一样, 低频的正弦曲线更符合这个采样  
+因为低采样率导致不能还原原始的高频信号, 重建后变成了低频信号, 这种现象称之为aliasing(锯齿/走样)  
 表现在音频上就会出现异响杂音, 图像会出现moire patterns(摩尔纹)
 
 对于采样和重建, 我们的疑问是:
 - 多高的采样率能得到比较好的结果
-- 什么类型的过滤器适合采样和重建(不同频率的数据采样对结果也会有影响)
+- 什么类型的过滤器适合采样和重建(参照8.3章节)
 - 什么程度的平滑能改善走样
 
 <a id="markdown-_92-convolution卷积" name="_92-convolution卷积"></a>
 ### _9.2 Convolution卷积
 
-Convolution是数学上的概念, 是指由两个函数生成另外一个函数, 表示为:
+Convolution是对函数进行操作, 可以两个函数生成另外一个函数, 表示为:
 $$f \ast g$$
 $f$ is convolved with $g$  
 $f \ast g$ is the convolution of $f$ and $g$ 
@@ -70,19 +72,18 @@ Convolution适用于连续函数continuous function或者离散序列
 适用于单个参数的函数, 也适用于多个参数的函数
 
 我们先从一位离散序列开始, 然后过渡到连续函数、多维连续函数
-下面的说明假设参数取值是无限的
 
 <a id="markdown-_921-moving-average" name="_921-moving-average"></a>
 #### _9.2.1 Moving Average
 
-<img src="./_images/moving_average.png" width=50%>
+![](moving_average.png)
 
 如上图所示, 我们要对左边的曲线做平滑处理, 怎么做呢?  
 我们对线上的某一个点, 取其左边距离r的范围, 以及右边r的范围, 对这个2r的范围的取值做平均, 替代当前点的值  
 
 那么, 对于连续函数$g(x)$来说, 平滑之后的函数就是:
 $$h(x) = \frac{1}{2r}\int_{x-r}^{x+r}g(t)dt$$
-这个函数涉及到integral积分, dx是积分变量, wikipedis搜积分
+这个函数涉及到integral积分, dx是积分变量
 
 对于离散序列:  
 $$c[i] = \frac{1}{2r+1}\sum_{j=i-r}^{i+r}a[j]$$
@@ -93,23 +94,26 @@ moving average是convolution的核心.
 <a id="markdown-_922-discrete-convolution离散卷积" name="_922-discrete-convolution离散卷积"></a>
 #### _9.2.2 Discrete Convolution离散卷积
 
-我们对两个sequence做convolution  
-上面提到了对一个sequence做moving average, 只涉及到一个sequence, 我们对moving
-average做一下变化, 将另外一个sequence参与进去:
-$$(a \ast b)[i] = \sum_{j=-r}^{r}a[j]b[i-j]$$
+<img src="./_images/FundamentalsOfComputerGraphics/discrete_convolution.png" width=50%>  
+
+sequence a用sequence b做convolution  
+把b定义为一个半径为r的sequence, $b[0] = 6/16, b[\pm 1] = 4/16, b[\pm 2] = 1/16$  
+注: 这里和图上不一样, 图上的b是一个无限大的sequence, 这里描述的b时banjing为2的sequence  
+
+上面提到了对一个sequence做moving average, 只涉及到自身, 我们对moving average做一下变化, 将另外一个sequence参与进去:
+$$(a \ast b)[i] = \sum_{j=i-r}^{i+r}a[j]b[i-j]$$
+也就是说我们对sequence a上的一个值的前后2个值加上自身的值, 共5个值, 乘以sequence b对应索引的值, 求和, 得到convolution后的值.  
 增加了一个参数i, 用preseudo表示就是:
 
 ```
-function convolve(sequence a, sequence b, int r, int i)
+function convolve(sequence a, sequence b, int i)
   s = 0
-  for j = -r to r
+  r = b.radius
+  for j = i-r to i+r
     s = s + a[j]b[i-j]
   return s
 ```
-
-看这张图:  
-<img src="./_images/discrete_convolution.png" width=50%>  
-b本来很不规则, 在经过和a的convolution之后, 变得比较平滑了
+sequence a经过convolution之后, 变得smooth了
 
 - **Convolution Filters**
 
@@ -432,26 +436,47 @@ b的长度是n, 从$x_0$开始采样. reconstruct是9.2.5章节的函数
 
 ### _9.5 Sampling Theory采样理论
 
-如果只对实现j感兴趣, 这一章可以不看了.  
-不过采样理论可以让你对上面的内容有更深的理解, 而且能帮助你写出更高效的代码.  
-
 #### _9.5.1 The Fourier Transform傅立叶变换
 
 傅里叶变换与卷积，是支撑采样理论的主要数学概念。
 
-傅立叶变换可以把一个函数拆解成很多个不同频率的正弦波  
-比如说一个box function可以由无限多个正弦波得到:
+傅立叶变换可以把一个函数拆解成无穷多个不同权重不同频率的sinusoids正弦波    
+比如说square wave可以由无限多个正弦波得到, 如下图所示:
+
+<img src="_images/FundamentalsOfComputerGraphics/square_wave.png" width=70%>
+
+数学表达式是:  
+$$\sum_{n=1,3,5,...}^{\infty}\frac{4}{\pi n}\sin2\pi nx$$
+
+原始函数不必须是周期函数, 普通函数也可以拆解成sinusoids, 只是数量需要的更多, 我么把sum换成integral, box fuction可以拆解成:
 $$\int_{-\infty}^{\infty}\frac{sin\pi u}{\pi u}cos2\pi ux du$$
-傅立叶变换通用的表示为:
+余弦的频率是u(因为一个完整的余弦的长度是$1/u$, x从0到$1/u$经过一个完整的余弦), 权重是$sin\pi u/\pi u$  
+如下图所示:  
+<img src="_images/FundamentalsOfComputerGraphics/box_function_fourier.png" width=70%>  
+
+参数为u的权重函数$\sin \pi u/\pi u$称为原始函数f的fourier transform(傅立叶变换), 表示为$\hat{f}$, 它的函数曲线分布称之为fourier spectrum傅立叶频谱
+这样原始函数可以表示为:
 $$f(x) = \int_{-\infty}^{\infty}\hat{f}(u)e^{2\pi iux}du$$
-反过来:
+这个等式称之为inverse fourier transform
+反过来可以求得这个权重函数:
 $$\hat{f}(u) = \int_{-\infty}^{\infty}f(x)e^{-2\pi iux}dx$$
 $\hat{f}$称作原函数$f$的傅里叶变换  
 $\hat{f}$告诉我们如何用一系列正弦波的积分构造$f$  
 $f$的傅立叶变换$\hat{f}$也可表示为$\mathfrak{F}\{f\}$
 
-$\hat{f}$可以有无限多个正弦波组成, 在书中最开始举的最简单的例子里, 一个函数由一个sequnece的正弦波组成, 完美的情况下, 这个sequence应该可以替换成cotinuous function, 也就是说一个函数可以有一个连续函数的正弦波组成, 这个连续函数就是$\hat{f}$, 它表示了正弦波的频率, 也就表示了: 如果$f(x)$由无限多个正弦波构成, 正弦波的频率分布就可以用$\hat{f}$表示  
-(后面的du是积分的参数, 也就是切分的大小.)
+函数$f(x)$和它的fourier transform $\mathfrak{F}\{f\}$之间的关系有下面的性质:
+1. 他们的平方积分相等
+  $$\int(f(x))^2dx = \int(\hat{f}(u))^2du$$
+  另外:
+  $$\mathfrak{F}\{af\} = a\mathfrak{F}\{f\}$$
+2. 如果我们把函数$f(x)$的x轴缩放, 那么其fourier也要对应的缩放:
+   $$\mathfrak{F}\{f(x/b)\} = b\hat{f}(bx)$$
+   如下图所示, 原函数在x轴方向放大, fourier transform缩小, 但是为了保证总积分不变(第一个特性), y轴相应的放大:  
+   <img src="_images/FundamentalsOfComputerGraphics/stretch_function.png" width=70%>  
+   所以如果我们对box function调整宽度和高度, 宽度放大b倍, 高度放大a倍, 那么对应的fourier transform就变成:
+   $$ab\frac{\sin\pi bu}{\pi bu}$$
+3. $f$的平均值等于$\hat{f}(0)$
+4. 如果$f$是实数, 那么$\hat{f}$是even function, 即$\hat{f}(u) = \hat{f}(-u)$. 反之亦然.
 
 #### _9.5.2 Convolution and Fourier Transform卷积和傅立叶变换  
 
@@ -460,8 +485,9 @@ $$\mathfrak{F}\{f \ast g \} = \hat{f}\hat{g}$$
 两个函数的傅立叶变换的卷积, 是两个函数相乘后的卷积
 $$\hat{f} \ast \hat{g} = \mathfrak{F}\{fg\}$$
 
-傅立叶变换参与到卷积中, 引出一个全新的概念: the frequency domain频域
-<img src="./_images/frequency_domain.png" width=50%>
+傅立叶变换参与到卷积中, 引出一个全新的概念: the frequency domain频域  
+**复杂的convolution操作在频域里知识做简单的乘积**  
+<img src="_images/FundamentalsOfComputerGraphics/frequency_domain.png" width=70%>
 
 上面说到的filter有的不能用函数来表示, 比如box filterm, 就可以用傅立叶变换函数来表示了:  
 <img src="./_images/fourier_filter.png" width=50%>
@@ -484,26 +510,28 @@ dirac函数是指除了0位置, 其他位置都是0, 0位置的值是无穷大, 
 所以我们对一个函数进行等距采样时, 就是对这个函数等距乘以dirac函数, 得到一个脉冲串impulse train, 距离是T, 那么这个脉冲串可以表示为:
 $$s_T(x) = \sum_{i=-\infty}^{\infty}\delta(x-Ti)$$
 
-如果我们对整数频率的正弦波用脉冲串取样后求和, 就会得到$\infty$, 如果非整数, 求和会趋近0
+如果我们对整数倍数频率的正弦波用脉冲串取样后求和, 就会得到$\infty$, 如果非整数倍数, 求和会趋近0
 
-周期为$T$的impulse train的forier transform是一个周期为$1/T$的impulse train  
-这里只说结论, 为什么? 不知道, 自己去查
+周期为$T$的impulse train的fourier transform是一个周期为$1/T$的impulse train, 如下图:  
+<img src="_images/FundamentalsOfComputerGraphics/impulse_train.png" width=70%>   
+因为周期为1的impulse train的fourier transform就是其自身.  
+那么根据fourier transform的特性, 如果周期变成T, fourier transform就变成了
 
 #### _9.5.5 Sampling and Aliasing采样和走样
 
 在采样sampling和重建reconstruction的过程中, 频域frequency domain起到什么作用呢?  
 fourier transform能够解释为什么我们在sampling和restruction时需要filtering  
 
-我们对一个函数做脉冲采样, 就是$fs_T$, 再对其做fourier transform, 也即是得到采样之后的频域: $\hat{f}\hat{s}_T$, 根据impulse train的特性:
+我们对一个函数做脉冲采样, 就是这个函数乘以脉冲串, 就是$fs_T$, 再对其做fourier transform, 也即是得到采样之后的频域: $\hat{f}\hat{s}_T$, 根据impulse train的特性:
 $$\hat{f} \ast \hat{s}_T = \hat{f} \ast s_{1/T}$$
 从而得到:
-$$(\hat{f} \ast s_{1/T} = \sum_{i=-\infty}^{\infty}\hat{f}(u - i/T)$$
+$$(\hat{f} \ast s_{1/T})(u) = \sum_{i=-\infty}^{\infty}\hat{f}(u - i/T)$$
 这意味着什么呢? 本来图片函数的频域是正常的抛物线, 进过采样之后变成了一个周期为$1/T$的线  
 也就是说，用impulse train对函数进行convolution会产生一系列等距的频谱拷贝。对这个看似奇怪的结果的一个很好的直观解释是，所有这些副本只是表达了一个事实（正如我们在第9.1.1节看到的那样），即一旦我们采样了，相差采样频率的整数倍的频率是无法区分的。  
 
 这样就导致了高频部分的重叠overlap, 从而产生aliasing    
 reconstruction也是会造成重叠overlap  
-<img src="./_images/aliasing.png" width=50%>  
+<img src="_images/FundamentalsOfComputerGraphics/aliasing.png" width=70%>  
 
 - **Preventing Aliasing in Sampling**
 

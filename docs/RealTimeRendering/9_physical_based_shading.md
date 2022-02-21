@@ -10,6 +10,19 @@
 - [_9.4 Illumination](#_94-illumination)
 - [_9.5 Fresnel Reflectance](#_95-fresnel-reflectance)
   - [_9.5.1 External Reflection外部反射](#_951-external-reflection外部反射)
+  - [_9.5.2 Typical Fresnel Reflectance Values](#_952-typical-fresnel-reflectance-values)
+    - [Fresnel Reflecrance Values for Dielectrics](#fresnel-reflecrance-values-for-dielectrics)
+    - [Fresnel Reflecrance Values for Metals](#fresnel-reflecrance-values-for-metals)
+    - [Fresnel Reflecrance Values for Semiconductors](#fresnel-reflecrance-values-for-semiconductors)
+    - [Fresnel Reflecrance Values in Water](#fresnel-reflecrance-values-in-water)
+    - [Parameterizing Fresnel Values](#parameterizing-fresnel-values)
+  - [_9.5.3 Internal Reflection内部反射](#_953-internal-reflection内部反射)
+- [_9.6 Microgeometry](#_96-microgeometry)
+- [_9.7 Microfacet Theory微表面理论](#_97-microfacet-theory微表面理论)
+- [_9.8 BRDF Models for Surface Reflection](#_98-brdf-models-for-surface-reflection)
+- [_9.9 BRDF Models for Subsurface Scattering](#_99-brdf-models-for-subsurface-scattering)
+  - [_9.9.1 Subsurface Albedo](#_991-subsurface-albedo)
+  - [_9.12 Layered Materials](#_912-layered-materials)
 
 <!-- /TOC -->
 
@@ -92,7 +105,7 @@ refraction不只发生于透明物体, 也发生于不透明物体, 只是不透
 
 在rendering里, 我们采用的是geometrical optics几何光学, 它不考虑干涉或者衍射的现象, 因为干涉和衍射和波动相关, geometrical optics把light看成ray, 而不是wave. 上面refraction的图里, 右下角就是geometrical optics的表示法, 另外三张图就是wave的表示法. wave optics会有专题研究.
 
-表面的不规则会影响光线的传播, 加入这种不规则小于一个像素, 那么这个像素下光线的传播也是不规则的, 这就涉及到microgeometry微观几何. 例如书中举的例子, 同样形状的一个物体, 但是microgeometry不一样, 呈现出来的光泽也不一样.
+表面的不规则会影响光线的传播, 假如这种不规则小于一个像素, 那么这个像素下光线的传播也是不规则的, 这就涉及到microgeometry微观几何. 例如书中举的例子, 同样形状的一个物体, 但是microgeometry不一样, 呈现出来的光泽也不一样.
 
 在渲染中, 我们并不会把surface的microgeometry显示的建模, 也就是说用将这些细微的几何变化表示出来, 而是还把它当作连续的表面, 对其法线的变化进行统计, 从而, 拿reflect反射来说, 光线照到surface, 因为microgeometry的不规则, 反射不止往一个方向传播, 而是根据发现的分布统计得到反射方向的比例.
 
@@ -156,7 +169,16 @@ $$
 前者是一个入R(l) = \int_射方向$l$, 打到surface上, 反射到四面八方, 然后把四面八方反射的radiance积分起来, 得到一个比值. 后者是将一个点从四面八方接受到的radiance积分除以某个观测方向上的radiance, 得到比值. 因为BRDF有互换性, 两者计算出来是一样的, 我们统称为*directional albedo*  
 directional-hemisphere reflectance($R(l)$)更符合直觉, 一条光线打到surface上的一个点, 往半球范围内反射, 把半球范围内的反射的radiance再除以入射光线的radiance可不就是反射率吗. 所以$R(l)$值的范围是[0, 1], 0就代表光都被吸收了, 1代表都被反射了.
 
-最简单的场景是BRDF是一个定值, 这种场景称为lambertian, 满足lambertian shading model, 这样我们可以计算出$R(l) = \pi f(l, v)$, 这在fundamentals of computer graphics中有介绍. 对一个半球再乘以一个余弦积分得到$\pi$
+最简单的场景lambertian, 只有diffuse(subsurface scattering), BRDF是一个定值, 这样我们可以计算出$R(l) = \pi f(l, v)$, 这在fundamentals of computer graphics中有介绍. 对一个半球再乘以一个余弦积分得到$\pi$  
+lambertian场景下反射率$R(l)$就是subsurface albedo(9.9.1有介绍) $\rho_{ss}$, 这样:
+$$f(l, v) = \frac{\rho_{ss}}{\pi}$$
+
+下面这张图可以帮助理解BRDF:  
+![](BRDF_examples.png)  
+我门知道BRDF反映了入射光和出射光的关系.  
+一个方向的入射光会往四面八方反射, 只是不同方向强度不一样.  
+因为subsurface scattering, 会发生diffuse reflection, 在lambertian surface的情况下, 会往半球的所有方向反射, 且强度一样, 这就是左上角图的情况.  
+fresenl specular reflection反映了在镜面方向上会发生比较强的反射, 在上面中间的图上在镜面反射方向会多出来一个长椭圆形, 这是因为microfacet不规则的情况, specular reflection会呈现出模糊, 这个长椭圆形称之为specular lobe.
 
 ### _9.4 Illumination
 
@@ -199,8 +221,109 @@ external reflection是指光线从一个折射率低的介质往折射率高的�
 $$F(n, l) \approx F_0 + (1 - F_0)(1 - (n \cdot l)^+)^5$$
 这个近似非常精确. 而$F_0$比较容易计算:
 $$F_0 = \left(\frac{n-1}{n+1}\right)^2$$
-这个式子指的是从空气进入refractive index为n的物体. 更通用的写法:
-$$F_0 = \left(\frac{n_2-n_1}{n_2+n_1}\right)^2$$
 fresenl equation更通用的写法:
 $$F(n, l) \approx F_0 + (F_{90} - F_0)(1 - (n \cdot l)^+)^p$$
 根据实际情况可以修改$F_{90}$和$p$的值. 可得到不同的效果.
+
+#### _9.5.2 Typical Fresnel Reflectance Values
+
+物质在光学上被氛围三类:
+1. dielectrics电介质, 它是绝缘体
+2. metals金属, 导体
+3. semiconductors半导体
+
+##### Fresnel Reflecrance Values for Dielectrics
+
+例如玻璃, 木头, 塑料, 石头, 混凝土等等都是dielectrics, 水也是dielectrics, 我们一般都会觉得水是导电的, 但这这是因为水里面含有杂质.  
+dielectrics的特性是$F_0$很低, 而且对于不同频率的光都差不多, 0.04可以作为默认值, 书中列了一些dielectrics的$F_0$的值.  
+那么光都去哪儿了? scatter或者absorb.
+
+##### Fresnel Reflecrance Values for Metals
+
+金属的特性是$F_0$很高, 都大于0.5, 不同频率的光的$F_0$不一样.  
+剩余的光都被吸收了, 不会发生subsurace scattering和transparency.
+
+##### Fresnel Reflecrance Values for Semiconductors
+
+semiconductors的物质包括晶体硅等, $F_0$介于最亮的dielectrics和最暗的metals之间, 也就是反射率最高的电介质和反射率最低的金属, $F_0$介于0.2和0.45之间.   
+绝大多数场景不会有晶体硅这样的物质需要渲染, 我们也要避免$F_0$的取值介于0.2和0.45之间.
+
+##### Fresnel Reflecrance Values in Water
+
+这个式子指的是从空气进入refractive index为n的物体. 更通用的计算$F_0$写法:
+$$F_0 = \left(\frac{n_2-n_1}{n_2+n_1}\right)^2$$
+$n_1$不再是1了, 水是1.33, 这样, 因为不同的$F_0$的值, 同样的物体在空气中和在水中呈现的颜色是有差别的.
+
+##### Parameterizing Fresnel Values
+
+$F_0$可以描述characteristic specular color, 有些工业界的公司会用另外的参数来替代$F_0$, 比如用metallic金属度m, 如果m=1, 则$F_0$等于$c_surface$surface color, $\rho_{ss}$duffuse color是黑色, 如果m=0, 则$F_0$等一一个设定的dielectric value, $\rho_{ss}$等于$c_surface$.
+
+#### _9.5.3 Internal Reflection内部反射
+
+internal reflection指的是光线从refractive index比较高的介质往refractive index比较低的介质传播, 比如从水传播到空气.  
+
+external reflection的折射角$\theta_t$小于入射角$\theta_i$, internal refletion的折射角$\theta_t$大于入射角$\theta_i$. $theta_t$不能大于90度, 所以internal refraction时, 入射角$\theta_i$小于90度的时候, 就达到了最大程度的reflectance. 不像external refraction, 入射角$\theta_i$等于90度的时候, 才能达到最大程度的reflectance. 这就是为什么我们在水下看水里的气泡时, 觉得非常的亮.
+
+### _9.6 Microgeometry
+
+9.1.3章节提到了surface的不规则, 当不规则的大小小于一个可见光的wavelength的时候, 我们很难用几何来表示, 我们用发现分布来表示.  
+
+如果发现分布的比较均匀, 那么看起来就会显得模糊和暗淡, 表现出isotric各项同性.  
+反之则会显得比较亮, 表现出anisotropic各项异性. 比如锅具的表面, 放大了看, 微表面是平行的线.
+
+微表面的高度也会对外观造成影响, 比如高度比较高, 从侧面看的话, 凹进去的不规则表面被挡住了, 就表现出光滑. 如果从正面看, 则会看到粗糙的情况.
+
+### _9.7 Microfacet Theory微表面理论
+
+facet theory是BRDF模型基于微表面的数值分析.
+
+单元微表面的normal记为m, 对应的BRDF记作$f_{\mu}(l, v, m)$  
+normal的分布称之为normal distribution function(NDF), 记作$D(m)$  
+$D(m)$的积分就是微表面的面积, 如果投影到宏观表面的normal上, 就得到1:
+$$\int_{m \in \Theta}D(m)(n \cdot m)dm = 1$$
+如果投影到视线的向量上, 就得到了实现向量和宏观表面的normal的余弦:
+$$\int_{m \in \Theta}D(m)(v \cdot m)dm = v \cdot n$$
+
+视线看向微表面的时候是有遮挡的, 也就是微表面的一部分的normal和视线的dot product是小于0的, 就是上面的$v \cdot m$, 我们只需要大于0的部分(看得见的部分), 这部分才需要被渲染, 所以, 我们引入了一个*masking function*: $G_1(m, v)$, 表示normal为m被视线v看到的比例, 然后我门还要把$v \cdot m$做一个clampping operation, 得到:
+$$\int_{m \in \Theta}G_1(m, v)D(m)(v \cdot m)^+dm = v \cdot n$$
+
+后面介绍了$G_1$的算法, 它跟m的方向没有关系.
+
+宏观表面的BRDF可以这样计算:
+$$f(l, v) = \int_{m \in \Omega}f_{\mu}(l, v, m)G_2(l, v, m)D(m)\frac{(m\cdot l)^+}{|n \cdot l|}\frac{(m\cdot v)^+}{|n\cdot v|}dm$$
+
+$G_2$是对$G_1$的扩展, $G_1$的算法只跟m, v有关, $G_2$的算法还跟l有关.
+
+### _9.8 BRDF Models for Surface Reflection
+
+对于只有specular reflection的场景, 视线v只有和反射方向平行, 才会看到光线. 根据v和l可以计算出中线的向量h, 称之为half vector.  
+也就是说只有m和h相等的时候, 才会看到光线. h可以这样计算:
+$$h = \frac{l+v}{\|l+v\|}$$
+另外微表面的BRDF也只有在这种情况下才有值, 其他方向都是0, 而且这个值就是反射率fresnel equation.  
+这样, 根据上一章节计算宏观BRDF的equation, 我们不用积分, 只用考虑这种情况, 得到:
+$$f_{spec}(l, v) = \frac{F(h, l)G_2(l, v, h)D(h)}{4|n \cdot l||n \cdot h|}$$
+$D(h)$表示的是$h$在NDF中占的比例, $G_2$是这些microfacet能被l和v看到的比例.  
+这个equation反应的是specular reflection. 完整的BRDF应该还要包括diffuse reflection, 也就是subsurface scattering.
+
+### _9.9 BRDF Models for Subsurface Scattering
+
+#### _9.9.1 Subsurface Albedo
+
+subsurface albedo是指scattering的能量和进入介质的总能量之比, 剩下的能量就被吸收了. surface albedo用$\rho_{ss}}$表示.
+
+subsurface albedo和wavelength相关, 所以他能转化为颜色来表示物体的diffuse color.
+dielectric的fresnel reflection的比例较低, 更多的是进入介质被scatter或者absorb, 所以想相比于specular color $F_0$, subsurface albedo更能反映dielectric的颜色. 比如雪的subsurface albedo达到0.8, 显得很亮.  
+
+测量获取subsurface albedo时必须分离specular reflectance.
+
+#### _9.12 Layered Materials
+
+在现实世界中, 材质总是叠加在一起. 比如表面被水、冰、灰尘覆盖, 等等
+
+最简单的场景是被一层clear coat透明涂层覆盖, 显著的特点是会发生两次折射, 如果是下面的材料是金属, 那么第二次反射表现会比较显著. 如果是dielectric, 则不会.
+
+clear coat可能会有颜色, 原因是其具有absorption. 多少光被吸收取决于光在其中传播的距离, 这取决于入射的角度和观测的角度. 另外还取决于clear coat的refractive index.
+
+另外, 两种材质surface的法线可能会不一样, 例如水流过一个路面的洼地.
+
+很多引擎视线了对layered material的支持, 甚至包括多层layered.
