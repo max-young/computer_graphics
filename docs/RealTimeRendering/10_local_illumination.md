@@ -40,6 +40,8 @@ $$E = \int_{l \in \omega_l}L_l(n \cdot l)dl \approx \pi c_{light} (n \cdot l_c)^
 $$E = \pi c_{light} \left(\frac{(n \cdot l) + k_{wrap}}{1+k_{wrap}}\right)^+$$
 $k_wrap$可以自己做调整, 如果是0, 就是punctual light, 如果是1, 就是覆盖整个半球的area light.
 
+// TODO 10.1.2 LTC
+
 ### _10.2 Environment Lighting
 
 我们到现在为止讨论的都是直接光照, 但是实际场景里一个点接受到的光照, 除了radiance比较强的直接光照, 还有从四面八方接受到的radiance比较弱的间接光照, 这些光照可能是其他物体反射的, 这就涉及到global illumination.  
@@ -95,3 +97,6 @@ $$
 提前filter或者将均匀filter的不同分辨率的map结合起来进行实时计算
 
 #### _10.5.2 Split-Integral Approximation for Microfacet BRDFs
+
+// TODO split sum
+// TODO PBR, spherical harmonics

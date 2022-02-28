@@ -5,3 +5,4 @@
 * [8 Light and Color](docs/RealTimeRendering/8_light_and_color.md)
 * [9 Physical Based Shading](docs/RealTimeRendering/9_physical_based_shading.md)
 * [10 Local Illumination](docs/RealTimeRendering/10_local_illumination.md)
+* [11 Global Illumination](docs/RealTimeRendering/11_global_illumination.md)

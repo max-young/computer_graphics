@@ -305,6 +305,9 @@ $$f_{spec}(l, v) = \frac{F(h, l)G_2(l, v, h)D(h)}{4|n \cdot l||n \cdot h|}$$
 $D(h)$表示的是$h$在NDF中占的比例, $G_2$是这些microfacet能被l和v看到的比例.  
 这个equation反应的是specular reflection. 完整的BRDF应该还要包括diffuse reflection, 也就是subsurface scattering.
 
+// _9.8.2 TODO kulla
+// TODO NDF model GGX
+
 ### _9.9 BRDF Models for Subsurface Scattering
 
 #### _9.9.1 Subsurface Albedo
