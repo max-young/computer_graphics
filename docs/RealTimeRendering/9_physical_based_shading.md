@@ -312,7 +312,7 @@ $D(h)$表示的是$h$在NDF中占的比例, $G_2$是这些microfacet能被l和v�
 
 #### _9.9.1 Subsurface Albedo
 
-subsurface albedo是指scattering的能量和进入介质的总能量之比, 剩下的能量就被吸收了. surface albedo用$\rho_{ss}}$表示.
+subsurface albedo是指scattering的能量和进入介质的总能量之比, 剩下的能量就被吸收了. surface albedo用$\rho_{ss}$表示.
 
 subsurface albedo和wavelength相关, 所以他能转化为颜色来表示物体的diffuse color.
 dielectric的fresnel reflection的比例较低, 更多的是进入介质被scatter或者absorb, 所以想相比于specular color $F_0$, subsurface albedo更能反映dielectric的颜色. 比如雪的subsurface albedo达到0.8, 显得很亮.  

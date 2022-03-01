@@ -7,6 +7,7 @@
 - [_11.3 Ambient Occlusion](#_113-ambient-occlusion)
   - [_11.3.1 Ambient Occlusion Theory](#_1131-ambient-occlusion-theory)
   - [_11.3.2 Visibility and Obscurance](#_1132-visibility-and-obscurance)
+  - [_11.3.3 Accounting for Interreflections](#_1133-accounting-for-interreflections)
 
 <!-- /TOC -->
 
@@ -84,3 +85,15 @@ $$k_A = \frac{1}{\pi}\int_{l \in \Omega}\rho(l)(n \cdot l)^+dl$$
 
 $\rho(l)$是设定一个距离$d_{max}$, 在这个距离内如果光线有碰撞, 则$\rho(l)$就是0, 否则, 如果超过这个距离, 不管有没有碰撞, $\rho(l)$都是1.  
 这种算法不符合物理的, 但是效果不错, 在图形学里有很多这样的compromise.
+
+#### _11.3.3 Accounting for Interreflections
+
+根据上面ambient occlusion的算法得到的图, 会比完整的全局光照算法得到的图要暗.  
+这是因为这个算法忽略了occlusion的反射光线, 将其的光照贡献算作0, 但是实际上其能够讲其他光线反射给着色点.  
+一种方法是提高$k_A$的值, 来避免recursive计算这种反射的高开销.  
+基于假设occlusion反射的radiance等于着色点发出的radiance, $k_A$做这样的调整:
+$$k_A^{\prime} = \frac{k_A}{1-\rho_{ss}(1-k_A)}$$
+$\rho_{ss}$是subsurface albedo.  
+这样, 着色点发出的irridiance就变成:
+$$E = \frac{\pi k_A}{1-\rho_{ss}(1-k_A)}L_i$$
+这种方法能得到很好的效果, 但是很依赖于$\rho_{ss}$
