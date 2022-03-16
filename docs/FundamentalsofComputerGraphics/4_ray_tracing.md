@@ -276,7 +276,7 @@ $$
 
 ### _4.6 A Ray-Tracing Program
 
-<img src="/_images/FundamentalsOfComputerGraphics/ray_tracing_program.png" width=50%>
+<img src="/_images/fundamentals_of_computer_graphics/ray_tracing_program.png" width=50%>
 
 是否hit the project可以用4.4.4章节的知识来解决  
 hit之后可以获取对象的引用, 或者其属性, 然后来进行着色

@@ -1,0 +1,142 @@
+<!-- TOC -->
+
+- [_3.1 Raster Devices](#_31-raster-devices)
+  - [_3.1.1 Displays](#_311-displays)
+  - [_3.1.2 Hardcopy Devices](#_312-hardcopy-devices)
+  - [_3.1.3 Input Devices](#_313-input-devices)
+- [_3.2 Images, Pixels, and Geometry](#_32-images-pixels-and-geometry)
+  - [_3.2.1 Pixel Values](#_321-pixel-values)
+  - [_3.2.2 Monitor Intensities and Gamma](#_322-monitor-intensities-and-gamma)
+
+<!-- /TOC -->
+
+**Raster Images光栅图像**
+
+大多数计算机图形都显示在某种raster display光栅显示器上, raster display是由矩形pixel阵列构成, 每个pixel有不同的颜色, 颜色由红绿蓝三种颜色组成.
+
+大多数输入设备也是光栅设备, 比如打印机, 也是对矩形阵列的点加上不同的墨水而实现.  
+数字摄像机也是光栅设备, 感应器记录其每个pixel的颜色和光线强度. 扫描仪也类似, 将扫描对象的信息记录在光栅阵列中.
+
+因为大多数设备都是光栅设备, 所以raster image是记录和处理图像的最普遍的格式. 通过raster image存储的像素颜色来控制显示器的像素颜色从而来显示图像.  
+但是我们应该将raster image和raster display分开理解, 他们是独立的. raster image是对图像的描述, 和raster display没有关系, raster display要通过taster image尽可能完美地显示图像.
+
+除了raster image之外, 还有一种image的格式是vector image矢量图, 它记录图像的形状, 和pixel没有关系, 所以它可以显示成任何分辨率. 换句话说, 它记录了显示图像的方法. 这也是其缺点, 显示前需要将其光栅化. 它适用于机械制图等精度要求比较高但真实感和复杂着色要求比较低的领域.
+
+<a id="markdown-_31-raster-devices" name="_31-raster-devices"></a>
+### _3.1 Raster Devices
+
+- Output
+  - Display:
+    - Transmissive透射: liquid crystal display LCD液晶显示器
+    - Emmissive: light-emitting diode LED显示器
+  - Hardcopy:
+    - Binary: ink-jet printer喷墨打印机
+    - Continuous tone: dye sublimation printer热升华打印机
+- Input
+  - 2D array sensor: digital camera
+  - 1D array sensor: flatbed scanner平板扫描仪
+
+#### _3.1.1 Displays
+
+当前世界上的显示器都是基于像素阵列, 包括电脑显示器、电影放映机、电视等等.  
+他们又可以分为两类: transmissive和emissive.
+
+emissive是指自己发光, 比如LED(发光二极管)显示器.  
+transmissive是指改变通过其自身的背后光源发出的光, 比如LCD液晶显示器.
+
+LED显示器的一个pixel由一个或多个LED构成, 在不同的电流下发出不同的光, 这是因为一个pixel有多个subpixel, 这些subpixel可以发出不同的红绿蓝色, 人眼只能看到它们混合之后的颜色, 分辨不出单个subpixel的颜色.
+
+LCD有液晶和其前后两个polarizer偏光片构成:  
+<img src="/_images/fundamentals_of_computer_graphics/LCD_display.png">  
+两个偏光片是垂直的, 中间的液晶由可以旋转光的polarization偏光的分子构成, 如果不给液晶加上电压, 那么液晶就不会旋转光的偏振, 那么光就会被全部挡住. 电压的变化可以控制多少光被透过. 和LED显示器一样, LCD的一个pixel也有多个subpixel构成, 改变每个subpixel的透光率, 就可以显示不同的颜色.
+
+pixel的数量就是显示器的reresolution分辨率, 比如我们说$1920\times 1200$分辨率, 指的是230400个pixel, 1920列, 1200行.
+
+#### _3.1.2 Hardcopy Devices
+
+很多打印机只能打印binary image: 要么墨水落在纸上, 要么不落, 不会存在中间量. (注: 这里应该指的是针式打印机)    
+例如喷墨打印机. 打印头上有墨水, 一行一行打印. 这种打印机的分辨率取决于墨滴的大小, 和纸张移动的距离.
+
+dye sublimation printer是continuous tone打印, 它通过加热来调整染料打印到印纸上的量. 不像喷墨打印机只有有和无. 加热元件的数量决定了打印机的横向的分辨率, 纵向的分辨率取决于纸张的加热和冷却速度.
+
+不同于显示器, 打印机的分辨率用pixel density描述.  
+dye sublimation printer的打印头上有300个加热元件每英寸, 那么我们说分辨率是300ppi(pixels per inch).  
+对于喷墨打印机, 一般说dpi(dots per inch), 表示一英寸有多少个网格点.
+
+#### _3.1.3 Input Devices
+
+一般是摄像机和扫描仪, 它们都基于传感器阵列, 对每个pixel做光学测量.
+
+camera的传感器最普遍的有两种: CCD(charge-coupled device电荷耦合器件)和CMOS(complimentary mental-oxide-semiconductor互补金属氧化物半导体).  
+一般的摄像机通过color filter或mosaic只获取RGB的一种颜色, 然后软件在成像时通过demosaicking补齐其他颜色.  
+还有camera会用三个阵列来单独获取RGB三种颜色, 获取的信息比mosaiccamera要多, 这样成像就不需要额外的处理.  
+camera的resolution就是阵列的列和行, 例如$3000 \times 2000$, 就是600万像素, 简称为6megapixel(MP) camera.
+
+flatbed scanner测量RGB三种颜色, 分别用三个独立的阵列.  
+分辨率和打印机一样, 以扫描阵列的密度为基准, 以ppi(pixels per inch)为单位.  
+扫描阵列有$n_x$个pixels, 那么彩色扫描仪就有$3 \times n_x$个像素.
+
+### _3.2 Images, Pixels, and Geometry
+
+image是像素阵列, 每个像素存储了现实世界的信息(例RGB颜色值). 我们需要找到通用的算法来获取或处理这些信息.
+
+在输出设备里, 每个pixel的值和显示器的位置关联, 在输出设备里, pixel的值和传感器的位置关联. 所以我们可以定义这样一个函数:
+$$I(x, y): R \to V$$
+$R \in \mathbb{R}^2$, 它是一个矩形区域. $V$是像素的值.  
+对于一个只有亮度没有颜色的图像, $V = \mathbb{R}^+$  
+对于RGB图像, $V = (\mathbb{R}^+)^3$
+
+$x, y, R$怎么定义? 上面的式子的现实意义是指一个像素对应的值, 像素我们可以用第几列第几行来表示(我们说分辨率都说的是列的数量和行的数量). 如下图:  
+<img src="/_images/fundamentals_of_computer_graphics/pixel_coordinate.png">  
+对于分辨率是$n_x \times n_y$的图像, 左下角是(0, 0)像素, 右上角是(n_x - 1, n_y - 1)像素.  
+对于矩形区域的任意点, 它的坐标, 也就是$R$的范围是:
+$$R = [-0.5, n_x - 0.5] \times [-0.5, n_y - 0.5]$$
+
+#### _3.2.1 Pixel Values
+
+对于灰度图, pixel的值只需要一个32bit的浮点数表示, RGB图则需要3个32bit的浮点数表示.  
+那么对于一个10MP(megapixel)的图, 就需要占用$3 \times 32 \times 10000000 \div 8 \div 1024 \div 1024 \approx 115MB$的内存空间
+
+如何需要做优化.  
+首先, 我们把值压缩到[0, 1]的范围, 尽管实际上光照强度无限大.  
+第二, 在不同场景用不同精度的数字.  
+比如8bit的图像, pixel的取值就是0, 1/255, 2/255, ..., 254/255, 255.  
+精度高的图像称为high dynamic range(HDR)图像.  
+精度低的图像称为low dynamic range(LDR)图像.  
+
+1-bit grayscale用于文本和灰度图  
+8-bit RGB用于web和电子邮件等场景  
+8-10bit RGB用于电脑显示器  
+12-14bit RGB用于摄像机的原图  
+16-bit grayscale用于医学影像  
+16-bit RGB用于实时渲染  
+32-bit RGB用于处理HDR图像
+
+这样的处理会导致一些artifacts.  
+第一, 亮度很高的光会被剪切掉, 例如太阳的反射光
+第二, 精度原因的四舍五入会导致quantization artifacts量化伪影和banding条带, 因为强度和颜色的明显跳跃. 动画和视频可能不太明显, 图像就会让人觉得很讨厌, 尤其是来回移动时.
+
+#### _3.2.2 Monitor Intensities and Gamma
+
+显示器会把pixel的值转换为intensity level.
+显示器关闭时intensity level为0, 我们称为black, 全开时为1, 称为white, 中间的灰色为0.5.  
+
+在上面讲到pixel的值也是[0, 1], 但是pixel的值和显示器的intensity lelve不是线性的, 例如pixel的值是0.5, 显示器的intensity level可能是0.25. 可以用下面的公式表示:
+$$display\ intensity = (maximum\ intensity)a^{\gamma}$$
+$a$是0-1的pixel value. 如果$\gamma$是2, 那么pixel value如果是0.5, 那么intensity level就是显示器最大intensity的0.25. 这是一种近似, 但是满足精度要求了.  
+
+但是问题来了, pixel value如果是0.5, 代表的颜色就是0.5灰色, 但是显示器显示的不是灰色, 这就需要进行gamma correct嘎玛校正.  
+我们首先要求得gamma的值, 可以通过下面的方法测量:  
+<img src="/_images/fundamentals_of_computer_graphics/gamma_measurement.png">  
+左边是黑白交替的检查板, 代表0.5灰色, 右侧显示器调整输入值a, 使两边看起来一样, 这样:
+$$0.5 = a^{\gamma}$$
+$a$的值我们知道, 这样就可以求得$\gamma$的值.
+
+那么对于pixel value是0.5, 也就是灰色的情况, 我们将其校正为:
+$a^{\prime} = a^{\frac{1}{\gamma}}$
+这样的话, 显示器的intensity level就等于0.5倍maximum intensity了, 就能正确显示灰色了. 因为:
+$$display\ intensity = (maximum\ intensity)\left({a^{\frac{1}{\gamma}}}\right)^{\gamma} = a(maximum intensity)$$
+
+另外, 显示器只能接受整数输入, 显示器如果是8-bit, 那么a的取值不是[0-1]的连续范围, 而是:
+$$a = \left\{\frac{0}{255}, \frac{1}{255}, \frac{2}{255}, ..., \frac{254}{255}, \frac{255}{255}\right\}$$
+这就意味着pixel value经过校正后要取整.  

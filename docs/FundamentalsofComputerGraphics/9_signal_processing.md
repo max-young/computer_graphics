@@ -94,7 +94,7 @@ moving average是convolution的核心.
 <a id="markdown-_922-discrete-convolution离散卷积" name="_922-discrete-convolution离散卷积"></a>
 #### _9.2.2 Discrete Convolution离散卷积
 
-<img src="./_images/FundamentalsOfComputerGraphics/discrete_convolution.png" width=50%>  
+<img src="./_images/fundamentals_of_computer_graphics/discrete_convolution.png" width=50%>  
 
 sequence a用sequence b做convolution  
 把b定义为一个半径为r的sequence, $b[0] = 6/16, b[\pm 1] = 4/16, b[\pm 2] = 1/16$  
@@ -443,7 +443,7 @@ b的长度是n, 从$x_0$开始采样. reconstruct是9.2.5章节的函数
 傅立叶变换可以把一个函数拆解成无穷多个不同权重不同频率的sinusoids正弦波    
 比如说square wave可以由无限多个正弦波得到, 如下图所示:
 
-<img src="_images/FundamentalsOfComputerGraphics/square_wave.png" width=70%>
+<img src="_images/fundamentals_of_computer_graphics/square_wave.png" width=70%>
 
 数学表达式是:  
 $$\sum_{n=1,3,5,...}^{\infty}\frac{4}{\pi n}\sin2\pi nx$$
@@ -452,7 +452,7 @@ $$\sum_{n=1,3,5,...}^{\infty}\frac{4}{\pi n}\sin2\pi nx$$
 $$\int_{-\infty}^{\infty}\frac{sin\pi u}{\pi u}cos2\pi ux du$$
 余弦的频率是u(因为一个完整的余弦的长度是$1/u$, x从0到$1/u$经过一个完整的余弦), 权重是$sin\pi u/\pi u$  
 如下图所示:  
-<img src="_images/FundamentalsOfComputerGraphics/box_function_fourier.png" width=70%>  
+<img src="_images/fundamentals_of_computer_graphics/box_function_fourier.png" width=70%>  
 
 参数为u的权重函数$\sin \pi u/\pi u$称为原始函数f的fourier transform(傅立叶变换), 表示为$\hat{f}$, 它的函数曲线分布称之为fourier spectrum傅立叶频谱
 这样原始函数可以表示为:
@@ -472,7 +472,7 @@ $f$的傅立叶变换$\hat{f}$也可表示为$\mathfrak{F}\{f\}$
 2. 如果我们把函数$f(x)$的x轴缩放, 那么其fourier也要对应的缩放:
    $$\mathfrak{F}\{f(x/b)\} = b\hat{f}(bx)$$
    如下图所示, 原函数在x轴方向放大, fourier transform缩小, 但是为了保证总积分不变(第一个特性), y轴相应的放大:  
-   <img src="_images/FundamentalsOfComputerGraphics/stretch_function.png" width=70%>  
+   <img src="_images/fundamentals_of_computer_graphics/stretch_function.png" width=70%>  
    所以如果我们对box function调整宽度和高度, 宽度放大b倍, 高度放大a倍, 那么对应的fourier transform就变成:
    $$ab\frac{\sin\pi bu}{\pi bu}$$
 3. $f$的平均值等于$\hat{f}(0)$
@@ -487,7 +487,7 @@ $$\hat{f} \ast \hat{g} = \mathfrak{F}\{fg\}$$
 
 傅立叶变换参与到卷积中, 引出一个全新的概念: the frequency domain频域  
 **复杂的convolution操作在频域里知识做简单的乘积**  
-<img src="_images/FundamentalsOfComputerGraphics/frequency_domain.png" width=70%>
+<img src="_images/fundamentals_of_computer_graphics/frequency_domain.png" width=70%>
 
 上面说到的filter有的不能用函数来表示, 比如box filterm, 就可以用傅立叶变换函数来表示了:  
 <img src="./_images/fourier_filter.png" width=50%>
@@ -513,7 +513,7 @@ $$s_T(x) = \sum_{i=-\infty}^{\infty}\delta(x-Ti)$$
 如果我们对整数倍数频率的正弦波用脉冲串取样后求和, 就会得到$\infty$, 如果非整数倍数, 求和会趋近0
 
 周期为$T$的impulse train的fourier transform是一个周期为$1/T$的impulse train, 如下图:  
-<img src="_images/FundamentalsOfComputerGraphics/impulse_train.png" width=70%>   
+<img src="_images/fundamentals_of_computer_graphics/impulse_train.png" width=70%>   
 因为周期为1的impulse train的fourier transform就是其自身.  
 那么根据fourier transform的特性, 如果周期变成T, fourier transform就变成了
 
@@ -531,7 +531,7 @@ $$(\hat{f} \ast s_{1/T})(u) = \sum_{i=-\infty}^{\infty}\hat{f}(u - i/T)$$
 
 这样就导致了高频部分的重叠overlap, 从而产生aliasing    
 reconstruction也是会造成重叠overlap  
-<img src="_images/FundamentalsOfComputerGraphics/aliasing.png" width=70%>  
+<img src="_images/fundamentals_of_computer_graphics/aliasing.png" width=70%>  
 
 - **Preventing Aliasing in Sampling**
 

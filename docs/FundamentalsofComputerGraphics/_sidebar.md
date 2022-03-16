@@ -1,6 +1,7 @@
 * [home](docs/FundamentalsofComputerGraphics/)
 * [1 introduction](docs/FundamentalsofComputerGraphics/1_introduction.md)
 * [2 miscellaneous math](docs/FundamentalsofComputerGraphics/2_miscellaneous_math.md)
+* [3 Raster Images](docs/FundamentalsofComputerGraphics/3_raster_images.md)
 * [4 ray tracing](docs/FundamentalsofComputerGraphics/4_ray_tracing.md)
 * [5 linear algebra](docs/FundamentalsofComputerGraphics/5_linear_algebra.md)
 * [6 transformation matrices](docs/FundamentalsofComputerGraphics/6_transformation_matrices.md)
