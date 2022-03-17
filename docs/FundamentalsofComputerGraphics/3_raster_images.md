@@ -7,6 +7,9 @@
 - [_3.2 Images, Pixels, and Geometry](#_32-images-pixels-and-geometry)
   - [_3.2.1 Pixel Values](#_321-pixel-values)
   - [_3.2.2 Monitor Intensities and Gamma](#_322-monitor-intensities-and-gamma)
+- [_3.3 RGB Color](#_33-rgb-color)
+- [_3.4 Alpha Compositing阿尔法合成](#_34-alpha-compositing阿尔法合成)
+  - [_3.4.1 Image Storage](#_341-image-storage)
 
 <!-- /TOC -->
 
@@ -121,22 +124,62 @@ $$R = [-0.5, n_x - 0.5] \times [-0.5, n_y - 0.5]$$
 显示器会把pixel的值转换为intensity level.
 显示器关闭时intensity level为0, 我们称为black, 全开时为1, 称为white, 中间的灰色为0.5.  
 
-在上面讲到pixel的值也是[0, 1], 但是pixel的值和显示器的intensity lelve不是线性的, 例如pixel的值是0.5, 显示器的intensity level可能是0.25. 可以用下面的公式表示:
+在上面讲到pixel的值也是[0, 1], 但是pixel的值和人感受的intensity level不是线性的, 例如pixel的值是0.5, intensity level可能是0.25. 可以用下面的公式表示:
 $$display\ intensity = (maximum\ intensity)a^{\gamma}$$
 $a$是0-1的pixel value. 如果$\gamma$是2, 那么pixel value如果是0.5, 那么intensity level就是显示器最大intensity的0.25. 这是一种近似, 但是满足精度要求了.  
 
-但是问题来了, pixel value如果是0.5, 代表的颜色就是0.5灰色, 但是显示器显示的不是灰色, 这就需要进行gamma correct嘎玛校正.  
-我们首先要求得gamma的值, 可以通过下面的方法测量:  
+如何求得gamma的值, 可以通过下面的方法测量:  
 <img src="/_images/fundamentals_of_computer_graphics/gamma_measurement.png">  
 左边是黑白交替的检查板, 代表0.5灰色, 右侧显示器调整输入值a, 使两边看起来一样, 这样:
 $$0.5 = a^{\gamma}$$
 $a$的值我们知道, 这样就可以求得$\gamma$的值.
 
-那么对于pixel value是0.5, 也就是灰色的情况, 我们将其校正为:
+那么对于pixel value是0.5, 我们将其校正为:
 $a^{\prime} = a^{\frac{1}{\gamma}}$
-这样的话, 显示器的intensity level就等于0.5倍maximum intensity了, 就能正确显示灰色了. 因为:
+这样的话, 显示器的intensity level就等于0.5倍maximum intensity了. 因为:
 $$display\ intensity = (maximum\ intensity)\left({a^{\frac{1}{\gamma}}}\right)^{\gamma} = a(maximum intensity)$$
+这样intensity的分布就是均匀的, 避免一些范围的颜色被压缩在比较窄的区域.
 
 另外, 显示器只能接受整数输入, 显示器如果是8-bit, 那么a的取值不是[0-1]的连续范围, 而是:
 $$a = \left\{\frac{0}{255}, \frac{1}{255}, \frac{2}{255}, ..., \frac{254}{255}, \frac{255}{255}\right\}$$
 这就意味着pixel value经过校正后要取整.  
+
+### _3.3 RGB Color
+
+RGB三种颜色可以累加成任何其他颜色, 基本的累加效果是:
+
+<img src="/_images/fundamentals_of_computer_graphics/RGB.png">
+
+red + green = yellow  
+green + blue = cyan青色  
+blue + red = magenta紫色  
+red + green + blue = white
+
+这样组合的颜色都可以在RGB显示器上显示出来.  
+
+这三种颜色的组合可以组成一个cube:  
+<img src="/_images/fundamentals_of_computer_graphics/RGB_cube.png">
+
+RGB level和上一章节讲的显示器接受的值一样, 都是整数格式.  
+整数占1byte, 也就是8bit. 这样取值范围是0-255.  
+RGB就占用24bit, 每种颜色有256个可能的值.
+
+### _3.4 Alpha Compositing阿尔法合成
+
+设想一种场景, 一张image被另一张image叠加  
+这样, 一个pixel如果被foreground完全覆盖, 那么这个像素的value就替换成了foreground的value.  
+如果被部分覆盖, 那么这个像素的value就是两个image的value的组合. 这种情况称为pixel coverage. (如果foreground是透明或者半透明, 需要格外小心)  
+如果foreground的fraction是$\alpha$, 那么这个像素的value就是:
+$$c = \alpha c_f + (1 - \alpha)c_b$$
+$\alpha$可以存储在一张单独的grayscale image上, 称为alpha mask或者transparency mask.  
+或者在RGB之上在增加一个通道, 称为alpha channel. 这种图像称为RGBA image. 如果是8-bit image, 那么一个像素占32bit.
+
+#### _3.4.1 Image Storage
+
+一般RGB image的一种颜色占8-bit, 一张一百万像素的image占差不多3MB.  
+为了减小占用, 有很多压缩方法, 有的是有损的, 有的是无损的.  
+jpeg是有损的, 但是压缩的是人类视觉系统之外的信息, 适用于自然图片.  
+tiff是无损的.  
+ppm和png是有损的.  
+
+因为压缩, image的输入和输出的过程会有改变, 为了简单和效率, 一个选择是ppm格式.
