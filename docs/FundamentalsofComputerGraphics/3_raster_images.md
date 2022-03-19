@@ -50,7 +50,7 @@ transmissive是指改变通过其自身的背后光源发出的光, 比如LCD液
 LED显示器的一个pixel由一个或多个LED构成, 在不同的电流下发出不同的光, 这是因为一个pixel有多个subpixel, 这些subpixel可以发出不同的红绿蓝色, 人眼只能看到它们混合之后的颜色, 分辨不出单个subpixel的颜色.
 
 LCD有液晶和其前后两个polarizer偏光片构成:  
-<img src="/_images/fundamentals_of_computer_graphics/LCD_display.png">  
+<img src="_images/fundamentals_of_computer_graphics/LCD_display.png">  
 两个偏光片是垂直的, 中间的液晶由可以旋转光的polarization偏光的分子构成, 如果不给液晶加上电压, 那么液晶就不会旋转光的偏振, 那么光就会被全部挡住. 电压的变化可以控制多少光被透过. 和LED显示器一样, LCD的一个pixel也有多个subpixel构成, 改变每个subpixel的透光率, 就可以显示不同的颜色.
 
 pixel的数量就是显示器的reresolution分辨率, 比如我们说$1920\times 1200$分辨率, 指的是230400个pixel, 1920列, 1200行.
@@ -148,21 +148,21 @@ $$display\ intensity = (maximum\ intensity)\left({a^{\frac{1}{\gamma}}}\right)^{
 我们为什么要进行gamma encode? 也就是对光照强度做指数变换? 有两个原因:  
 
 人眼对光线的感知和光线强度不是线性关系:  
-<img src="/_images/fundamentals_of_computer_graphics/eye_luminance.png">  
+<img src="_images/fundamentals_of_computer_graphics/eye_luminance.png">  
 横轴是物理光线强度, 纵轴是探测到的强度.  
 对于camera来说, 实际的光线强度是多少, 测出来就是多少, 对应紫色的直线.  
 对于人眼来说, 我们看红色的箭头, 物理光线强度不到0.25, 我们感受到的亮度就达到了0.5.  
 换句话说, 坐标轴0点是黑, 1点是白, camera测到的光线强度是0.25, 我们感受到的亮度是中灰.
 而且, 这个特性还让我们知道, 人眼对黑暗的感知能力更强, 光线强度从0.1变到0.2, 人眼能感受到亮度增加了一倍, 但是在更亮的范围, 从0.4到0.8, 人眼才能感受到亮度增加了一倍, 我们更能分辨暗色.  
 gamma encode可以将光线强度转换为人眼的颜色感知. 两者显示的效果如下:  
-<img src="/_images/fundamentals_of_computer_graphics/image_gamma.png">  
+<img src="_images/fundamentals_of_computer_graphics/image_gamma.png">  
 我们可以说: 这是因为显示器做了gamma decode, 如果显示器没做, 那么第一张图应该是正常的, 第二张图会过亮.  
 是这样的, 接下来说gamma encode的第二个作用.
 
 在上面3.2.1节中, 我们说为了空间压缩, 会用bit位整数来存储pixel value, 如果采用5-bit来存储pixel value, 也就是0-32之间.  
 因为光线强度大约0.25, 对于数字$32 \times 0.25 = 8$, 人眼就能感受到中灰色, 所以如果我们把光线强度存储为pixel value, 那么0-8对应的是黑色到中灰的区域, 8-32对应中灰到白色的区域, 相当于我们在光线强度的测量数据里, 暗的区域采集了8个点, 亮的区域采集了24个点, 上面我们讲到人眼更能分辨暗色, 这样做的话, 就丢失了很多对人眼很重要的暗色信息.  
 如果我们做gamma encode, 相当于在光线强度0-8之间采样16个点, 8-32之间采样16个点, 然后将其转换成0-32的整数. 这样就保留了更多暗色细节:  
-<img src="/_images/fundamentals_of_computer_graphics/gamma_encode.png">  
+<img src="_images/fundamentals_of_computer_graphics/gamma_encode.png">  
 上图是指人眼的颜色感知. 图的中间对应中灰, 光线强度是0.25, 我们可以直观的感受到左侧更能分辨, 右侧好像都是白光一样, 变化很小.   
 中图是把线性的光线强度直接作为pixel value对应的人眼的感知颜色, 可以看见暗灰色区域很稀疏, 亮灰色区域很密.  
 下图是gamma encode的采样效果, 对应的人眼感知的颜色就是均匀的.
@@ -181,7 +181,7 @@ $$a = \left\{\frac{0}{255}, \frac{1}{255}, \frac{2}{255}, ..., \frac{254}{255}, 
 现在我们知道了如果如果我们gamma encode之后的pixel value直接显示, 就会过亮.  
 所以我们要进行gamma decode, 将其还原成本来的光线强度之后再显示, 这就是显示器的gamma correct.
 
-<img src="/_images/fundamentals_of_computer_graphics/gamma_correct.png">  
+<img src="_images/fundamentals_of_computer_graphics/gamma_correct.png">  
 经过gamma encode和decode之后, 原始的光线强度和输出的光线强度就是线性的了, 暗色的光线数据更多, 人眼感知的颜色是均匀的, 暗色细节没有丢失. 
 
 **其他**
@@ -189,7 +189,7 @@ $$a = \left\{\frac{0}{255}, \frac{1}{255}, \frac{2}{255}, ..., \frac{254}{255}, 
 这里有个巧合, 以前的CRT显示器做不到电压和亮度的线性关系, 是指数关系, 最后确定的gamma标准值是2.2, 与光照和人眼感知颜色的关系和数值正好相反, 所以encode是gamma用1/2.2, decode用2.2. 现代显示器虽然能做到电压和亮度的线性关系, 但是还是会加上gamma校正.
 
 如何求得gamma的值, 可以通过下面的方法测量:  
-<img src="/_images/fundamentals_of_computer_graphics/gamma_measurement.png">  
+<img src="_images/fundamentals_of_computer_graphics/gamma_measurement.png">  
 左边是黑白交替的检查板, 代表0.5亮度, 右侧显示器(色板)调整输入值a(更换色板), 使两边看起来一样, 这样:
 $$0.5 = a^{\gamma}$$
 $a$的值我们知道, 这样就可以求得$\gamma$的值.  
@@ -211,7 +211,7 @@ $a$的值我们知道, 这样就可以求得$\gamma$的值.
 
 RGB三种颜色可以累加成任何其他颜色, 基本的累加效果是:
 
-<img src="/_images/fundamentals_of_computer_graphics/RGB.png">
+<img src="_images/fundamentals_of_computer_graphics/RGB.png">
 
 red + green = yellow  
 green + blue = cyan青色  
@@ -221,7 +221,7 @@ red + green + blue = white
 这样组合的颜色都可以在RGB显示器上显示出来.  
 
 这三种颜色的组合可以组成一个cube:  
-<img src="/_images/fundamentals_of_computer_graphics/RGB_cube.png">
+<img src="_images/fundamentals_of_computer_graphics/RGB_cube.png">
 
 RGB level和上一章节讲的显示器接受的值一样, 都是整数格式.  
 整数占1byte, 也就是8bit. 这样取值范围是0-255.  
