@@ -90,7 +90,7 @@ $R \in \mathbb{R}^2$, 它是一个矩形区域. $V$是像素的值.
 对于RGB图像, $V = (\mathbb{R}^+)^3$
 
 $x, y, R$怎么定义? 上面的式子的现实意义是指一个像素对应的值, 像素我们可以用第几列第几行来表示(我们说分辨率都说的是列的数量和行的数量). 如下图:  
-<img src="/_images/fundamentals_of_computer_graphics/pixel_coordinate.png">  
+<img src="_images/fundamentals_of_computer_graphics/pixel_coordinate.png">  
 对于分辨率是$n_x \times n_y$的图像, 左下角是(0, 0)像素, 右上角是(n_x - 1, n_y - 1)像素.  
 对于矩形区域的任意点, 它的坐标, 也就是$R$的范围是:
 $$R = [-0.5, n_x - 0.5] \times [-0.5, n_y - 0.5]$$
