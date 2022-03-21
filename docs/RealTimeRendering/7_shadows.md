@@ -1,28 +1,20 @@
 <!-- TOC -->
 
-- [前置知识](#前置知识)
-  - [the rendering equation](#the-rendering-equation)
-- [Shadows](#shadows)
-  - [_7.1 Planar Shadows投射到平面上的阴影](#_71-planar-shadows投射到平面上的阴影)
-    - [_7.1.1 Projection Shadows](#_711-projection-shadows)
-    - [_7.1.2 Soft Shadows](#_712-soft-shadows)
-  - [_7.2 Shadows on Curved Surfaces](#_72-shadows-on-curved-surfaces)
-  - [_7.3 Shadow Volumes](#_73-shadow-volumes)
-  - [_7.4 Shadow Maps](#_74-shadow-maps)
-    - [_7.4.1 Resolution Enhancement](#_741-resolution-enhancement)
-  - [_7.5 Percentage-Closer Filtering](#_75-percentage-closer-filtering)
-  - [_7.6 Percentage-Closer Soft Shadows](#_76-percentage-closer-soft-shadows)
-  - [_7.7 Filtered Shadow Maps](#_77-filtered-shadow-maps)
-  - [_7.8 distance field soft shadow](#_78-distance-field-soft-shadow)
+- [_7.1 Planar Shadows投射到平面上的阴影](#_71-planar-shadows投射到平面上的阴影)
+  - [_7.1.1 Projection Shadows](#_711-projection-shadows)
+  - [_7.1.2 Soft Shadows](#_712-soft-shadows)
+- [_7.2 Shadows on Curved Surfaces](#_72-shadows-on-curved-surfaces)
+- [_7.3 Shadow Volumes](#_73-shadow-volumes)
+- [_7.4 Shadow Maps](#_74-shadow-maps)
+  - [_7.4.1 Resolution Enhancement](#_741-resolution-enhancement)
+- [_7.5 Percentage-Closer Filtering](#_75-percentage-closer-filtering)
+- [_7.6 Percentage-Closer Soft Shadows](#_76-percentage-closer-soft-shadows)
+- [_7.7 Filtered Shadow Maps](#_77-filtered-shadow-maps)
+- [_7.8 distance field soft shadow](#_78-distance-field-soft-shadow)
 
 <!-- /TOC -->
 
 **shadows**
-
-## 前置知识
-
-<a id="markdown-the-rendering-equation" name="the-rendering-equation"></a>
-### the rendering equation
 
 在GAMES101里面, the rendering equation是这么写的:
 $$L_o(p, \omega_o) = L_e(p, \omega_o) + \int_{all\ \omega_i}L_i(p, \omega_i)\rho(p, \omega_i, \omega_o)\cos\theta_id\omega_i$$
@@ -30,9 +22,6 @@ $$L_o(p, \omega_o) = L_e(p, \omega_o) + \int_{all\ \omega_i}L_i(p, \omega_i)\rho
 
 在实时渲染里, 会加入一个visibility项, 代表p点是否能够看到$\omega_i$方向入射的光:
 $$L_o(p, \omega_o) = L_e(p, \omega_o) + \int_{all\ \omega_i}L_i(p, \omega_i)\rho(p, \omega_i, \omega_o)\cos\theta_iV(p, \omega_i)d\omega_i$$
-
-<a id="markdown-shadow" name="shadow"></a>
-## Shadows
 
 关于术语:
 
