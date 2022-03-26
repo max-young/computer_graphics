@@ -5,6 +5,8 @@
   - [_8.1.2 Photometry](#_812-photometry)
   - [_8.1.3 colorimetry](#_813-colorimetry)
   - [_8.1.4 Rendering with RGB Colors](#_814-rendering-with-rgb-colors)
+- [_8.2 Scene to Screen](#_82-scene-to-screen)
+  - [_8.2.1 High Dynamic Range Display Encoding](#_821-high-dynamic-range-display-encoding)
 
 <!-- /TOC -->
 
@@ -24,7 +26,7 @@ radiometry通过电磁辐射的方式来度量light
 电磁辐射有wavelength, 可见光只是一小部分波长范围的电磁辐射  
 radiometry通过下面几种单位来度量light的强度、功率等等:
 - radiant flux: 功率  
-  radimetry的基本单位, 电磁辐射能量除以时间, 用$\Phi$表示, 单位是watt($W$)
+  radiometry的基本单位, 电磁辐射能量除以时间, 用$\Phi$表示, 单位是watt($W$)
 - irridiance:  
   功率再除以面积, 一般用在物体表面, 用$\textit{E}$表示, 单位是$W/m^2$
 - radiant intensity:  
@@ -43,7 +45,7 @@ radiometry通过下面几种单位来度量light的强度、功率等等:
 
 #### _8.1.2 Photometry
 
-radimetry是从物理角度来度量light, 跟人的感知没有关系.  
+radiometry是从物理角度来度量light, 跟人的感知没有关系.  
 photometry则是从人的感知角度来度量light.  
 photometry的度量方式是和radiometry对应的, 上面讲到了radiometry用4种单位来度量light, photometry也有对应的4种单位, 且含义是一样的  
 两者之间有换算关系, 对radiometry的单位乘以一个常数即可, 这个常数根据不同的wavelength而不同, 表现为一条曲线, 书中有图.  
@@ -65,15 +67,15 @@ luminance用来表示物体表面的亮度, 例如HDR电视的亮度是50-100nit
 人类之所以能感受到颜色, 是因为人的retina视网膜里面有三个视锥体, 能感受到不同wavelength, 所以我们用三个变量来表示颜色.
 
 CIE(国际照明委员会)制定了RGB三原色, 通过调整三原色的强度来测量不同波长的单波长颜色, 得到r的wavelength是645nm, g是526nm, b是444nm.  
-CIE定义了三个参数$\textit{X, Y, Z}$来表示不同波长的颜色, 这个公式称之为color-matching functions. 这三个系数并不对应rgb, 其中$\textit{Y}$对应亮度(luminance), 测量出来可以得到这样的曲线:
+CIE定义了三个参数$\textit{X, Y, Z}$来表示不同波长的light, 这个公式称之为color-matching functions. 这三个系数并不对应rgb, 其中$\textit{Y}$对应亮度(luminance), 测量出来可以得到这样的曲线:
 
-![](RGB.png)
+<img src="_images/real_time_rendering/RGB.png">
 
 对于SPD的光呢(也就是不是单一wavelength, wavelength分布在一定范围), 我们采用积分的方式, 计算曲线覆盖的面积, 计算得到三个面积$\textit{X, Y, Z}$.
 
 我们还可以把三个系数减少为两个系数, 将三个系数转换为0-1的空间, $x = \frac{\textit{X}}{\textit{X+Y+Z}}, y=\frac{\textit{y}}{\textit{X+Y+Z}}, z=1-x-y$, 这样我们只需要xy值, 从而得到下面的图:
 
-![](RGBXY.png)
+<img src="_images/real_time_rendering/RGBXY.png">
 
 黑色的曲线是wavelength, 两个端点是wavelength的上下界.  
 xy值经过了缩放, 只能表示颜色的构成, 但是颜色还有一个特性是亮度(luminance), 相同的颜色可能有不同的亮度.
@@ -97,3 +99,10 @@ xy值经过了缩放, 只能表示颜色的构成, 但是颜色还有一个特�
 ![](wavelength_reflectance.png)
 
 这里要说的就是同色异谱的情况可能就会造成RGB渲染出错. 但是大多数情况RGB渲染都表现很好.
+
+### _8.2 Scene to Screen
+
+接下来的几章着眼于physical based rendering(PBR). PBR的目的是计算一个虚拟场景的radiance, 使其和真实的一样. 要实现这个目标还有很多工作要做. 最后的结果, 显示器framebuffer的pixel value, 仍然需要确定. 这一章我们着眼于此.
+
+#### _8.2.1 High Dynamic Range Display Encoding
+

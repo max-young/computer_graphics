@@ -8,6 +8,7 @@
     - [Spotlights](#spotlights)
     - [Other Punctual Lights](#other-punctual-lights)
   - [_5.2.3 Other Light Types](#_523-other-light-types)
+- [_5.6 Display Encoding](#_56-display-encoding)
 
 <!-- /TOC -->
 
@@ -130,3 +131,15 @@ $$c_{light} = c_{light_0}f_{dist}(r)f_{dir}(l)$$
 上面介绍的光源的光照方向, 一个是固定的, 一个是着色点和光源位置的连线.  
 我们还可以做一些变化, 比如古墓丽影里有线光源, 光照方向是着色点和光源线段最近的点的连线.  
 还有面光源, 可以生成penumbra、soft shadow.
+
+### _5.6 Display Encoding
+
+计算光照、纹理、和其他操作时, 用到的值都是线性的, 所以可加法和乘法.  
+但是为了消除visual artifacts, 显示器buffer和texture使用非线性的encoding.  
+简单的说: shader的输出范围是[0, 1], 将其提高到其1/2.2次方, 这个操作称为gamma correction.  
+显示器对传入的texture和color再进行相反的操作.  
+在大多数情况下, 我们告诉GPU做这些操作即可.  
+这一章节将会介绍为什么要这么做.
+
+可以参照[fundamentals of computer graphics: 3.2.2 Monitor Intensities and Gamma](docs/FundamentalsofComputerGraphics/3_raster_images?id=_322-monitor-intensities-and-gamma)  
+本章内容暂且搁置.
