@@ -7,6 +7,10 @@
   - [_8.1.4 Rendering with RGB Colors](#_814-rendering-with-rgb-colors)
 - [_8.2 Scene to Screen](#_82-scene-to-screen)
   - [_8.2.1 High Dynamic Range Display Encoding](#_821-high-dynamic-range-display-encoding)
+  - [_8.2.2 Tone Mapping色调映射](#_822-tone-mapping色调映射)
+    - [Tone Reproduction Transform](#tone-reproduction-transform)
+    - [Exposure](#exposure)
+  - [_8.2.3 Color Grading](#_823-color-grading)
 
 <!-- /TOC -->
 
@@ -106,3 +110,72 @@ xy值经过了缩放, 只能表示颜色的构成, 但是颜色还有一个特�
 
 #### _8.2.1 High Dynamic Range Display Encoding
 
+HDR使用Rec. 2020和Rec. 2100标准, sRGB(个人电脑的色彩范围)的色彩范围更广, 但是白点是一样的. 如下图所示:  
+<img src="_images/real_time_rendering/HDR.png">
+Rec. 2100定义了两种nonlinear display encoding: perceptual quantizer(PQ)和hybrid log-gamma(HLG). HLG在渲染里不使用, 我们主要关注PQ.
+
+HDR display现实中的色彩范围接近于DCI-P3. 所以HDR显示器按实际显示的能力执行内色调色域映射.  
+有三种途径将image transfer到display:
+1. HDR10
+2. scRGB
+3. Dolby Vision
+
+#### _8.2.2 Tone Mapping色调映射
+
+之前我们讲到了scene radiance encoding(gamma encode), 以及display的electrical optical transfer function(EOTF)(gamma decode). 两者是互逆的. 
+
+tone mapping或者tone reproduction是gamma encode之前的一个过程, 它将scene的radiance valu转换为display的radiance value. 这个过程中应用的变换称为end-to-end transfer function或者scene-to-screen transform. 经过tone mapping, image由scene-refered image变成了display-refered image. 请注意, 变换之后的image还是线性的, 这不同于gamma encode. 下面这张imaging pipeline的图片可以说明这一点:  
+<img src="_images/real_time_rendering/imaging_pipeline.png">  
+
+tone mapping是一种image repoduction. 目的是让显示器显示的image尽可能和真实的场景一样.  
+还有一种image reproduction是为了让image看起来更好为第一目的, 而不是更加还原真实的场景.  
+
+为什么显示器很难还原现实场景? 因为现实场景的亮度范围比显示器可显示的亮度能力大得多, 颜色的saturation饱和度也超出显示器的能力范围. 尽管如此, 我们还是利用人类的视觉特效, 很好的实现了还原真实场景.
+
+视觉系统有适应性, 昏暗的室内看室外场景, 就算亮度不到真实场景的1%, 人的感受也是差不多的, 只是感知的对比度和色彩会降低.
+
+显示器周围的环境光也会影响视觉系统的感受, 还有显示器的瑕疵和眩光也会降低image的对比度. 所以我们需要增大image的对比度和色彩饱和度.
+
+但是提高对比度又会造成另外的问题. 显示器的亮度范围是有限的, 它将现实场景的亮度范围裁剪到了一个有限的范围, 如果提高对比度, 这个范围就进一步缩小了(因为提高对比度把原来的0.9亮度提高到了1, 原来的1就现实不了了, 可不就是缩小了). 为了解决这个问题, soft roll-off可以用来恢复被裁减的阴影和高光.
+
+koda和其他公司实现了很好的image production. 所以形容词filmic会经常出现在tone mapping里.
+
+exposure曝光在tone mapping里至关重要. exposure是在tone reproduction transform之前对scene-refered image进行线性变换. 
+
+exposure的缩放和之后的tone reproduction transform称之为global tone mapping, 它对所以pixel执行. 还有local tone mapping, 它对不同的pixel执行不一样的mapping. real time rendering几乎只使用global tone mapping.
+
+需要注意的是, 物理操作只能对scene-refered image进行.
+
+##### Tone Reproduction Transform
+
+tone reproduction transform通常表现为一条一维曲线, 映射scene-refered image和display-refered image的RGB值和亮度. 这种变换会带来其他问题, 例如眩光、变形、超出显示器的色彩范围等等.
+
+很多人提出的变换曲线得到了不同程度的应用. 例如hable提出的hable filmic curve被应用到了很多游戏中, 等等...
+
+Academy Color Encoding System(ACES)将tone mapping分成了两个部分:  
+1. reference r endearing transform(RRT). 它将scene-refered值转换为标准的设备中立的空间(output color encoding specification OCES)的display-refered值.
+2. output device transform(ODT). 它将OCES的颜色值转换为显示器的值. 不同的显示器和不同的环境有不同的ODT.
+两者组成完整的tone mapping.  
+Hart建议ACES对SDR和HDR都要支持.
+
+ACES是为了电影和电视设计的, 但是在real time应用里也得到了越开越多的应用. 例如unreal engine和unity engine都支持ACES. Narkowicz和Patry都给ACES RRT提出了曲线, Hart为ODT提出了参数化版本, 适用于很多设备.
+
+对于HDR的tone mapping需要各位注意, 因为HDR显示器有自己的tone mapping.  
+frostbite引擎的策略是使用一系列tone mapping. 对于SDR采样比较激进的tone reproduction curve, 对于HDR采样比较柔和的tone reproduction curve, 对于使用dolby vision path的显示器则不执行tone mapping(其使用自己的tone mapping就可以了). 
+
+##### Exposure
+
+计算exposure值依赖于分析scene-refered的亮度值, 这个分析通过上一帧的采样完成.
+
+一种方法是计算采样的亮度的对数平均值. 这个方法的缺陷是个别亮度值比较高的采样会影响计算结果. 替代的方法是用亮度值的histogram直方图计算median中位数.
+
+这样的复杂操作的原因是根据pixel的亮度值来决定exposure不靠谱. 更好的方法是用光照.
+
+#### _8.2.3 Color Grading
+
+上一节里讲到有些tone mapping的目的是为了实现更好看的色调, 而不是还原更真实的场景. 这就需要操作场景的颜色, 涉及到color grading.
+
+color grading最开始是在电影界应用, 对样例进行交互式的操作测试, 找到需要的效果, 然后应用到所有的场景中. color grading现在在游戏界也得到了广泛的应用.
+
+可以对scene-refered image进行color grading, 也可以对display-refered image进行color grading.  
+对display-refered image进行color grading更容易操作, 但是对scene-refered image进行color grading能获得高保真的效果.
