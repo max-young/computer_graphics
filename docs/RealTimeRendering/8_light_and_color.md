@@ -170,6 +170,8 @@ frostbite引擎的策略是使用一系列tone mapping. 对于SDR采样比较激
 
 这样的复杂操作的原因是根据pixel的亮度值来决定exposure不靠谱. 更好的方法是用光照.
 
+HDR的实现参照: <https://learnopengl.com/Advanced-Lighting/HDR>
+
 #### _8.2.3 Color Grading
 
 上一节里讲到有些tone mapping的目的是为了实现更好看的色调, 而不是还原更真实的场景. 这就需要操作场景的颜色, 涉及到color grading.

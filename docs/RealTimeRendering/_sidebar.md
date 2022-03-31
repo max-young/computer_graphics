@@ -6,3 +6,5 @@
 * [9 Physical Based Shading](docs/RealTimeRendering/9_physical_based_shading.md)
 * [10 Local Illumination](docs/RealTimeRendering/10_local_illumination.md)
 * [11 Global Illumination](docs/RealTimeRendering/11_global_illumination.md)
+* [18 Pipeline Optimization](docs/RealTimeRendering/18_pipeline_optimization.md)
+* [20 Efficient Shading](docs/RealTimeRendering/20_efficient_shading.md)

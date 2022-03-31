@@ -27,3 +27,5 @@ blur通常采用Gaussian. 制作这种图像通常采样的方法是bright-pass 
 
 bloom image的分辨率可以低一点, 这样节省时间, 也可以增强filtering的效果.
 因为bloom image过度曝光, 加到原始图像中时需要对颜色进行混合和缩放.
+
+具体实现参照: <https://learnopengl.com/Advanced-Lighting/Bloom>
