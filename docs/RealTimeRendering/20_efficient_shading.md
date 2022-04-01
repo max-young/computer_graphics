@@ -58,7 +58,7 @@ deferred shading的两个重要技术局限涉及transparency和antialiasing. ba
 
 forward shading的优点是其可以很容易的支持MSAA(multi sampling antialiasing)等antialiasing技术. deferred shading要支持的话需要额外付出更多的内存、计算等开销(因为G-buffers的每个target都需要记录multi sampling的结果). 一种解决方法是edge检测, 这样只对edge上的pixel做MSAA.
 
-虽然deferred shading有一些局限, 但它依然是商业领域中很实用的渲染方法. 它自然地将geometry与shading, 以及light与material分开，这意味着每一项都可以自行优化。
+虽然deferred shading有一些局限, 但它依然是商业领域中很实用的渲染方法. <font color=red>它自然地将geometry与shading, 以及light与material分开</font>，这意味着每一项都可以各自优化。
 
 ### _20.2 Decal Rendering
 
