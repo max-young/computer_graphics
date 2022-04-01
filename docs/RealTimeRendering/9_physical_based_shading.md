@@ -314,8 +314,8 @@ $D(h)$表示的是$h$在NDF中占的比例, $G_2$是这些microfacet能被l和v�
 
 subsurface albedo是指subsurface scattering的能量和进入介质的总能量之比, 进入介质的能量除了被subsurface scatterred, 剩下就被吸收了. surface albedo用$\rho_{ss}$表示.
 
-subsurface albedo和wavelength相关, 所以他能转化为颜色来表示物体的diffuse color.
-dielectric的fresnel reflection的比例较低, 更多的是进入介质被scatter或者absorb, 所以相比于specular color $F_0$, subsurface albedo更能反映dielectric的颜色. 比如雪的subsurface albedo达到0.8, 显得很亮.  
+subsurface albedo和wavelength相关, 所以他能转化为颜色来表示物体的diffuse color. diffuse color map也被称为albedo color map.  
+dielectric的reflection的比例较低, 更多的是进入介质被scatter或者absorb, 所以相比于specular color $F_0$, subsurface albedo更能反映dielectric的颜色. 比如雪的subsurface albedo达到0.8, 显得很亮.  
 
 测量获取subsurface albedo时必须分离specular reflectance.
 
