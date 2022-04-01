@@ -22,7 +22,7 @@
 - [_9.8 BRDF Models for Surface Reflection](#_98-brdf-models-for-surface-reflection)
 - [_9.9 BRDF Models for Subsurface Scattering](#_99-brdf-models-for-subsurface-scattering)
   - [_9.9.1 Subsurface Albedo](#_991-subsurface-albedo)
-  - [_9.12 Layered Materials](#_912-layered-materials)
+- [_9.12 Layered Materials](#_912-layered-materials)
 
 <!-- /TOC -->
 
@@ -312,14 +312,14 @@ $D(h)$表示的是$h$在NDF中占的比例, $G_2$是这些microfacet能被l和v�
 
 #### _9.9.1 Subsurface Albedo
 
-subsurface albedo是指scattering的能量和进入介质的总能量之比, 剩下的能量就被吸收了. surface albedo用$\rho_{ss}$表示.
+subsurface albedo是指subsurface scattering的能量和进入介质的总能量之比, 进入介质的能量除了被subsurface scatterred, 剩下就被吸收了. surface albedo用$\rho_{ss}$表示.
 
 subsurface albedo和wavelength相关, 所以他能转化为颜色来表示物体的diffuse color.
-dielectric的fresnel reflection的比例较低, 更多的是进入介质被scatter或者absorb, 所以想相比于specular color $F_0$, subsurface albedo更能反映dielectric的颜色. 比如雪的subsurface albedo达到0.8, 显得很亮.  
+dielectric的fresnel reflection的比例较低, 更多的是进入介质被scatter或者absorb, 所以相比于specular color $F_0$, subsurface albedo更能反映dielectric的颜色. 比如雪的subsurface albedo达到0.8, 显得很亮.  
 
 测量获取subsurface albedo时必须分离specular reflectance.
 
-#### _9.12 Layered Materials
+### _9.12 Layered Materials
 
 在现实世界中, 材质总是叠加在一起. 比如表面被水、冰、灰尘覆盖, 等等
 
