@@ -97,7 +97,7 @@ $$c_{light}(r) = c_{light_0}\frac{r_0^2}{r^2+\epsilon}$$
 unreal engine里$\epsilon = 1cm$  
 有的engine采用这样的方式:
 $$c_{light}(r) = c_{light_0}\left(\frac{r_0}{max(r, r_{min})}\right)^2$$
-这个$r_min$可以解释为光源的半径
+这个$r_{min}$可以解释为光源的半径
 
 另外一个问题是, 光源强度可以衰减到无限远, 但是在实际场景里到一定的距离光源就衰减到消失了.  
 不同的engine不同的场景有不同的处理方式, 其中一种方式是将这个等式乘以一个window function:
@@ -106,6 +106,15 @@ $$f_{win}(r) = \left(1-\left(\frac{r}{r_{max}}\right)^4\right)^{+2}$$
 有的engine是将光源强度在$0.8r_{max}$到$r_{max}$范围内做线性衰减到0.  
 有的engine一样时用window function, 但是为了计算效率, 将4次方改成2次方.  
 有的场景下为了风格会混用.
+
+there is a another attenuation function. we find light intensity attentuate quickly in a distance, over this distance the low intensity light attentuate very slowly. like this graph:  
+<img src="_images/real_time_rendering/attentuation_graph.png">  
+this attentuation function can express this feature:
+$$F_{att} = \frac{1}{K_c + K_l d + K_q d^2}$$
+$K_c$ is a constant factor.  
+$K_l$ is a linear factor.  
+$K_q$ is a quadratic factor.  
+environment, light radius etc cause different factors.
 
 ##### Spotlights
 
@@ -117,7 +126,7 @@ s和灰色的线构成penumbra angle $\theta_p$, s和黑色的先构成umbra ang
 $\theta_p$范围内的光照强度最强, $\theta_p$到$\theta_u$范围内的光照强度会衰减, 超出$\theta_u$范围的光照强度会变成0.  
 这样, 我们计算光照强度还要加上角度:
 $$c_{light} = c_{light_0}f_{dist}(r)f_{dir}(l)$$
-角度的衰减函数在不同的engine里不一样, 列举两种:
+角度的衰减函数在不同的engine里不一样, 列举两种:  
 ![](direction_falloff.png)  
 第一种是一个游戏引擎的算法, 第二种是three.js的算法  
 这些都是shading language的内置函数
