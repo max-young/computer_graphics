@@ -1,0 +1,20 @@
+{
+  "grammarly.overrides": [
+    {
+      "files": [
+        "**/docs/RealTimeRendering/11_global_illumination.md"
+      ],
+      "config": {
+        "audience": "general",
+        "dialect": "american",
+        "domain": "general",
+        "emotions": [
+          "optimistic"
+        ],
+        "goals": [
+          "describe"
+        ]
+      }
+    }
+  ]
+}

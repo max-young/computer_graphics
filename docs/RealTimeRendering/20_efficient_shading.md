@@ -21,7 +21,8 @@
 
 例如, z-prepass的问题是一个几何体要render两次(一次写入z-buffer, 一次正常render), 额外的开销可能比节省的时间还要多. 如果网格是通过tesselation、skinning等过程生成的, 额外的开销会更多. 再者, 对于有alpha值的对象, 每次render都要获取此值, 或者忽略这个对象, 只在第二次render时纳入, 但是有遗漏的风险. 基于这些原因, 第一次render时只写入大的occluder. 不够完整的第一次prepass在一些screen-space effects(例如ambient occlusion和ambient reflection)的实现中还是必要的. 还有一些加速技术也需要精确的z-prepass.
 
-不考虑overdraw, 一个scene有大量的光源的话也会有非常大的开销. 例如一个scene里有50个光源, 对于multi-pass的方案, 则对每个object都有进行一次shader pass, 那就是50次. 一种技术是将一个object的local light限时在一定范围内, 比如一个有限半径的球体, 一个一定高度的锥体, 等等. 这里的假设是光源在超过一定范围时候其贡献可以忽略不计. 在本章我们定义光源的范围是一个球体, 实际上光源的范围也可以是其他形状. 通常光源的强度可以由半径来决定. 对于glossy specular materials, 光源对其影响的距离更远, 其对光照更加敏感. 对于极其光滑的surface, 这个影响的距离会无穷大, 这个时候就需要使用environment map等技术了.
+不考虑overdraw, 一个scene有大量的光源的话也会有非常大的开销. 例如一个scene里有50个光源, 对于multi-pass的方案, 则对每个object都有进行一次shader pass, 那就是50次. 一种技术是将一个object的local light限时在一定范围内, 比如一个有限半径的球体, 一个一定高度的锥体, 等等. 这里的假设是光源在超过一定范围时候其贡献可以忽略不计. 在本章我们定义光源的范围是一个球体, 实际上光源的范围也可以是其他形状. 通常光源的强度可以由半径来决定. 对于glossy specular materials, 光源对其影响的距离更远, 其对光照更加敏感. 对于极其光滑的surface, 这个影响的距离会无穷大, 这个时候就需要使用environment map等技术了.  
+[OpenGL course](https://learnopengl.com/Advanced-Lighting/Deferred-Shading) illustate how we use light volume to reduce lighting calculations.
 
 既然光源的影响范围有限, 那么一个简单的预处理是为每个mesh创建一个影响它的光源列表. 我们可以理解为这是在mesh和光源之间做碰撞实验, 找到overlap. 对mesh做shading时, 就可以只考虑这些光源, 而不用对全部光源都执行一遍. 这个方案的问题是, object或者光源移动了, 那么光源列表也就失效了. 另外, 出于性能考虑, 同样的材质的mesh会组成一个更大的mesh, 但是其中的单个mesh的光源列表可能是不一样的, 那么我们可以根据材质来组合, 根据空间做拆分.
 
@@ -52,9 +53,9 @@ single pass forward shading因为是一次计算所以光照和材质, 所以sha
 
 basic deferred shading的单个material shader支持固定字段的材质, 这就意味着一个shader只对应一个材质, 有没有方法可以让一个shader支持多个材质? 我们可以让一个字段存储一个材质的blender factor, 存储另一个材质的tangent vector, 这样就实现了这个目的. 但是shader相应的也会变复杂, 可能会影响性能.
 
-basic deferred shading还有其他缺点. 例如G-buffer对内存和带宽有一定要求, 可以有低精度和压缩来解决. Pesce讨论了world-space和scene-space的normal数据的压缩和转换.
+basic deferred shading还有其他缺点. 例如G-buffer对<font color=red>内存和带宽</font>有一定要求, 可以有低精度和压缩来解决. Pesce讨论了world-space和scene-space的normal数据的压缩和转换.
 
-deferred shading的两个重要技术局限涉及transparency和antialiasing. basic deferred shading不支持transparency, 因为一个pixel只存储一个surface的数据. 一个解决方案是用deferred shading渲染opaque objects之后再用forward shading渲染transparency objects. 现在可以为pixel存储transparency属性, 但第一方案是标准.
+deferred shading的两个重要技术局限涉及transparency和<font color=red>antialiasing</font>. basic deferred shading不支持transparency, 因为一个pixel只存储一个surface的数据. 一个解决方案是用deferred shading渲染opaque objects之后再用forward shading渲染transparency objects. 现在可以为pixel存储transparency属性, 但第一方案是标准.
 
 forward shading的优点是其可以很容易的支持MSAA(multi sampling antialiasing)等antialiasing技术. deferred shading要支持的话需要额外付出更多的内存、计算等开销(因为G-buffers的每个target都需要记录multi sampling的结果). 一种解决方法是edge检测, 这样只对edge上的pixel做MSAA.
 
