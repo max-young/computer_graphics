@@ -1,4 +1,4 @@
-<!-- ![logo](_media/icon.svg) -->
+![logo](favicon.ico)
 
 # Computer Graphics Notes &nbsp;&nbsp;<small>Max Young</small>
 
@@ -11,3 +11,5 @@
 [Fundamentals](docs/FundamentalsofComputerGraphics/)
 [RealTimeRendering](docs/RealTimeRendering/)
 [MyBlog](https://max-young.github.io/)
+
+![color](#f0f0f0)

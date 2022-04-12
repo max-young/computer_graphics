@@ -3,6 +3,7 @@
 - [_10.1 Area Light Sources](#_101-area-light-sources)
 - [_10.2 Environment Lighting](#_102-environment-lighting)
 - [_10.3 Spherical and Hemispherical Functions](#_103-spherical-and-hemispherical-functions)
+  - [Spherical Harmonics](#spherical-harmonics)
 - [_10.4 Environment Mapping](#_104-environment-mapping)
 - [_10.5 Specular Image-Based Lighting](#_105-specular-image-based-lighting)
   - [_10.5.1 Prefiltered Environment Mapping](#_1051-prefiltered-environment-mapping)
@@ -62,6 +63,10 @@ $$
 上面我们说ambient light的radiance是一个定值$L_A$, 我门扩展一下, randiance能不能变化? 不同的方向的radiance是不同的.   
 这就需要用到spherical function, 它定义在一个单位球面上.  
 定义这个函数, 根据角度和法线能就能算出radiance.
+
+#### Spherical Harmonics
+
+TODO
 
 ### _10.4 Environment Mapping
 

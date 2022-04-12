@@ -9,7 +9,8 @@
   - [_11.3.2 Visibility and Obscurance](#_1132-visibility-and-obscurance)
   - [_11.3.3 Accounting for Interreflections](#_1133-accounting-for-interreflections)
   - [_11.3.4 Precomputed Ambient Occlusion](#_1134-precomputed-ambient-occlusion)
-  - [_11.3.5 Dynamic Computatio of Ambient Occlusion](#_1135-dynamic-computatio-of-ambient-occlusion)
+  - [_11.3.5 Dynamic Computation of Ambient Occlusion](#_1135-dynamic-computation-of-ambient-occlusion)
+  - [_11.3.6 Screen-Space Methods](#_1136-screen-space-methods)
 
 <!-- /TOC -->
 
@@ -111,6 +112,29 @@ if calculate obscurance, then replace $\mathit{v}(l_i)$ with $\rho(l_i)$
 
 This equation includes a cosine factor, which means directions close to the normal have a higher weight, so we can sample more directions which close to the normal. This sampling schema is called *Malley's method*.
 
-ambient occlusion precomputation can performed on the CPU or GPU by library such as Embree or OptiX.
+ambient occlusion precomputation can perform on the CPU or GPU by libraries such as Embree or OptiX.
 
-#### _11.3.5 Dynamic Computatio of Ambient Occlusion
+#### _11.3.5 Dynamic Computation of Ambient Occlusion
+
+if the objects in the scene are constant, we can precompute ambient occlusion. but if objects are moving or changing shape, we need to compute the factors dynamically in object space or screen space.
+
+bunnell's algorithm computes ambient occlusion by modeling the surface as a collection of disk-shaped elements at vertices. Hoberock optimized this algorithm.
+
+Evans described another method based on *signed distance fields*(SDF), SDF is a 3D grid, the location in the grids stores the distance from the closest surface. if it in an object, the distance is negative. SDF can store in a texture. we can sample some points around the vertex in the SDF to estimate the ambient occlusion. it is a approximation and non-physical. 
+
+Wright proposed *cone tracing* based on SDF:  
+<img src="_images/real_time_rendering/cone_tracing.png">  
+sphere in the cone move forward and become larger, when it hits the objects, then sphere change smaller, and angles of cone also reduce, the final occlusion factor is estimated as a ratio of the clipped cone angle to the origin cone angle. we can trace a set of cones.
+
+some methods based on [spherical harmonics](docs/RealTimeRendering/10_local_illumination?id=spherical-harmonics)
+
+#### _11.3.6 Screen-Space Methods
+
+above methods are in object-space, the expense is proportional to scene complexity. we can use screen-space methods to compute ambient occlusion, the expense is only related to the resolution, we can compute by depth and normal included in the screen-space data.
+
+a simple screen-space ambient occlusion(SSAO) method is using z-buffer. sample a set of points around the pixel, and computer z-test. the result is estimated by the ratio of the z-test pass count:  
+<img src="_images/real_time_rendering/ssao.png">  
+the disadvantage is not cosine weighted, and it sample the whole sphere, not hemisphere, so it is not accurate, the result is flat surface are darken. we can use mormal-oriented hemisphere.
+
+*volumetric ambient occlusion* method is using z-buffer and normal, basic idea is a sphere, esitimate with ratio of the unoccupied volume to the whole sphere, there are two schema, one is sphere with shader point as center, one is tangent sphere:  
+<img src="_images/real_time_rendering/volumetric_ambient_occlusion.png">  
