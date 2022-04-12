@@ -1,9 +1,8 @@
 ![](cover.jpeg)
 
-《fundamentals of computer graphics》的读书笔记  
-边学GAMES101边看这本书更好
+《fundamentals of computer graphics》
 
-第2-8章是核心的核心, 讲述了通过基本的ray tracing(光线跟踪)和rasterization(光栅化)将图像显示在显示器上.
+第2-8章是核心的核心, 讲述了通过基本的ray tracing和rasterization将图像显示在显示器上.
 
 首先介绍ray tracing, 它是生成3D图像的最简单的方法
 
