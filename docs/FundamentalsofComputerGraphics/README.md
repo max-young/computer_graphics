@@ -1,6 +1,9 @@
-![](cover.jpeg)
+# Fundamentals of Computer Graphics
 
-《fundamentals of computer graphics》
+Hello, I'm <a href="https://maxyoung.fun/">Max Young</a>, this website is about fundamentas of computer graphics.  
+hope it makes some sense for you.
+
+<img src="_images/fundamentals_of_computer_graphics/cover.jpeg" width="30%">
 
 第2-8章是核心的核心, 讲述了通过基本的ray tracing和rasterization将图像显示在显示器上.
 
