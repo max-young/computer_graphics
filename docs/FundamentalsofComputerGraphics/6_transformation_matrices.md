@@ -85,7 +85,9 @@ $s_x$就是$x$的缩放比例, $x_y$就是y的缩放比例, 如果等比例缩�
 <a id="markdown-_612-shearing" name="_612-shearing"></a>
 #### _6.1.2 Shearing
 
-对照书上的图更容易理解, 讲一个正方形的上边往右挪, 挪45度  
+<img src="_images/fundamentals_of_computer_graphics/shearing.png">  
+
+将一个正方形的上边往右挪, 挪45度  
 这样y是不变的, x变成了x+y:
 $$
 \left[

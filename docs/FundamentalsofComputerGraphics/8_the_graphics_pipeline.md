@@ -33,12 +33,12 @@ rasterization是德语图像化的意思
 
 rendering有很多方法, 本章介绍基本的一种, 原理都是相通的  
 rendering的过程包括:  
-<img src="./_images/graphics_pipeline.png" width=50%>  
+<img src="./_images/fundamentals_of_computer_graphics/graphics_pipeline.png" width=50%>  
 application指的是存储vertices顶点集的文件  
 经过vertex processing得到primitive(暂且译作多边形)  
 经过rasterization stage得到fragment(pixel covered by the primitive)(多边形以及其圈占的像素)  
 然后经过fragment processing和blending stage就可以显示了(着色等操作)  
-<img src="./_images/pipeline.png" width=50%>  
+<img src="./_images/fundamentals_of_computer_graphics/pipeline.png">  
 在第四章讲到了shading着色, 我们可以对三角形进行着色, 也可以对单个像素进行着色  
 对三角形着色就发生在vertex processing阶段, 对像素着色就发生在fragment processing阶段  
 GPU(图形处理器)就是图形管线pipeline的硬件实现  

@@ -297,10 +297,10 @@ $G_2$是对$G_1$的扩展, $G_1$的算法只跟m, v有关, $G_2$的算法还跟l
 ### _9.8 BRDF Models for Surface Reflection
 
 对于只有specular reflection的场景, 视线v只有和反射方向平行, 才会看到光线. 根据v和l可以计算出中线的向量h, 称之为half vector.  
-也就是说只有m和h相等的时候, 才会看到光线. h可以这样计算:
+也就是说只有normal m和h相等的时候, 才会看到光线. h可以这样计算:
 $$h = \frac{l+v}{\|l+v\|}$$
 另外微表面的BRDF也只有在这种情况下才有值, 其他方向都是0, 而且这个值就是反射率fresnel equation.  
-这样, 根据上一章节计算宏观BRDF的equation, 我们不用积分, 只用考虑这种情况, 得到:
+这样, 根据上一章节计算宏观BRDF的equation, 我们不用积分, 只用考虑这种情况, 得到 specular BRDF:
 $$f_{spec}(l, v) = \frac{F(h, l)G_2(l, v, h)D(h)}{4|n \cdot l||n \cdot h|}$$
 $D(h)$表示的是$h$在NDF中占的比例, $G_2$是这些microfacet能被l和v看到的比例.  
 这个equation反应的是specular reflection. 完整的BRDF应该还要包括diffuse reflection, 也就是subsurface scattering.

@@ -3,7 +3,7 @@
 - [_1.1 Graphics Areas图形学领域](#_11-graphics-areas图形学领域)
 - [_1.2 Major Applications主要用途](#_12-major-applications主要用途)
 - [_1.3 Graphics APIs图形学接口](#_13-graphics-apis图形学接口)
-- [_1.4 Graphics Pipeline图形管道](#_14-graphics-pipeline图形管道)
+- [_1.4 Graphics Pipeline图形管线](#_14-graphics-pipeline图形管线)
 - [_1.5 Numerical Issues数值问题](#_15-numerical-issues数值问题)
 - [_1.6 Efficiency效率](#_16-efficiency效率)
 - [_1.7 Designing and Coding Graphics Programs](#_17-designing-and-coding-graphics-programs)
@@ -21,9 +21,9 @@ The term computer graphics describes any use of computers to create and manipula
 
 这本书介绍了算法和数学工具, 它们可以用来创建所有的图像: 逼真的视觉效果、内容丰富的插图、精美的电脑动画
 
-Graphics图形可以是二维或者三维的; image图像可以完成生成、也可以在通过照片处理得到
+Graphics图形可以是二维或者三维的; image图像可以完全生成、也可以在通过照片处理得到
 
-这本书是关于基本的算法和数学, 它们用来合成三维对象和场景.
+这本书包括基本的算法和数学, 它们用来合成三维对象和场景.
 
 <a id="markdown-_11-graphics-areas图形学领域" name="_11-graphics-areas图形学领域"></a>
 ### _1.1 Graphics Areas图形学领域
@@ -74,12 +74,13 @@ API的经典定义:
 1. 方法的集成, 由语言包实现, 例如java等
 2. Direct3D、OpenGL, 由C++等实现的软件
   
+
 <a id="markdown-_14-graphics-pipeline图形管道" name="_14-graphics-pipeline图形管道"></a>
-### _1.4 Graphics Pipeline图形管道
+### _1.4 Graphics Pipeline图形管线
 
-什么是图形管道? 每台计算机都有强大的3D图形管道. 这是一个特殊的子系统, 可以高校的绘制3D图像. 
+什么是图形管线? 每台计算机都有强大的3D图形管线. 这是一个特殊的子系统, 可以高效的绘制3D图像. 
 
-基本的操作是绘制共享定点的三角形并加上阴影, 使之呈现3D效果.
+基本的操作是绘制共享vertex的三角形并加上阴影, 使之呈现3D效果.
 
 <a id="markdown-_15-numerical-issues数值问题" name="_15-numerical-issues数值问题"></a>
 ### _1.5 Numerical Issues数值问题
@@ -125,7 +126,7 @@ $$
 
 这个特性给我们带来了很多方便, 例如:
 $$a = \frac{1}{\frac{1}{b} + \frac{1}{c}}$$
-如果不遵循IEEE不标准, 就需要检查b和c是否为0, 否则就会出现异常.  
+如果不遵循IEEE标准, 就需要检查b和c是否为0, 否则就会出现异常.  
 
 另外一种情况:
 ```pseudocode
@@ -216,5 +217,5 @@ locations位置和displacements位移是否需要用不同的类来表达, 看�
 <a id="markdown-notes" name="notes"></a>
 ### Notes
 
-本章对于软件工程的讨论, 收到了Effective C++ se- ries (Meyers, 1995, 1997)、Extreme Programming movement (Beck & Andres, 2004)、The Practice of Programming (Kernighan & Pike, 1999)的影响.    
+本章对于软件工程的讨论, 收到了Effective C++ series (Meyers, 1995, 1997)、Extreme Programming movement (Beck & Andres, 2004)、The Practice of Programming (Kernighan & Pike, 1999)的影响.    
 有许多计算机图形学大会, 包括 ACM SIGGRAPH 和 SIGGRAPH Asia, Graphics Interface, the Game Developers Conference (GDC), Eurographics, Pacific Graphics, High Performance Graphics, the Eurographics Symposium on Rendering, and IEEE VisWeek. 去网上搜索吧.
