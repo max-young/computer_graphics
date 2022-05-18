@@ -8,6 +8,7 @@
   - [_5.2.4 Special Types of Matrics矩阵的特殊类型](#_524-special-types-of-matrics矩阵的特殊类型)
 - [_5.3 Computing with Matrices and Determinants](#_53-computing-with-matrices-and-determinants)
   - [_5.3.1 Computing Inverse](#_531-computing-inverse)
+- [_5.4 Eigenvalues and Matrix Diagonalization特征值和矩阵对角化](#_54-eigenvalues-and-matrix-diagonalization特征值和矩阵对角化)
 
 <!-- /TOC -->
 
@@ -382,6 +383,13 @@ $$
 <a id="markdown-_531-computing-inverse" name="_531-computing-inverse"></a>
 #### _5.3.1 Computing Inverse
 
-计算你矩阵, 和上面计算determinant相关, 也是直接拿过来用, 这里不重复说了
+计算逆矩阵, 和上面计算determinant相关, 也是直接拿过来用, 这里不重复说了
 
 需要说明的是, 这种计算方法比较耗时, 比较适合小的矩阵. 但是在图形学里, 小矩阵居多, 所以很有用.
+
+### _5.4 Eigenvalues and Matrix Diagonalization特征值和矩阵对角化
+
+一个$n \times n$的square matrix $A$, 他有*eigenvalues特征值*$\lambda$和*eigenvectors特征向量*$a$.  
+eigenvector是非零的. 他们满足这样的等式:
+$$Aa = \lambda a$$
+这意味着对eigenvector $a$变换, 其方向不变, 不过其可能缩放了.

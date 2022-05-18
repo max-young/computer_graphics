@@ -313,9 +313,10 @@ Spatial data structures大体可分为三类: 根据对象划分, 根据空间�
 - bounding volume hierarchies(BVH)
 - uniform spatial subdivision规则空间划分
 - binary space partition
+
 下图说明了前两种技术:
 
-<img src="./_images/spatial_data_structure1.png" width=30%>
+<img src="_images/fundamentals_of_computer_graphics/spatial_data_structure1.png">
 
 左边是用uniform spatial subdivision, 对空间进行均匀划分  
 右边是bounding box hierarchies, 根据几何对象的边界进行划分
@@ -329,12 +330,11 @@ Spatial data structures大体可分为三类: 根据对象划分, 根据空间�
 
 接下来的问题是如何进行计算和判断? 我们先简化为二维的场景, 一条射线和一个矩形是否相交. 如下图所示:
 
-<img src="./_images/bounding_box.png" width=30%>
+<img src="_images/fundamentals_of_computer_graphics/bounding_box.png">
 
 这个矩形有四个边界: $x_{min}, x_{max}, y_{min}, y_{max}$  
 $$(x, y) \in [x_{min}, x_{max}] \times [y_{min}, y_{max}]$$
-假设射线的起点是: $(x_e, y_e)$, xy方向的导数是$d_x, d_y$  
-这里可以理解为, 起点分别在x和y方向上的运行速度, 或者我们可以理解为起点是光源, 这两个参数是光束.  
+假设射线的起点是: $(x_e, y_e)$, xy方向的导数是$d_x, d_y$(也就是x, y方向的速度)  
 这样我们就能计算出射线分别和这个矩形的四条边界相交的时间:
 $$
 t_{xmin} = (x_{min} - x_e)/d_x \\
@@ -344,9 +344,10 @@ t_{ymin} = (y_{max} - y_e)/d_y \\
 $$
 和x轴的两个边界相交的时间段, 和y轴的两个边界相交的时间段, 这两个时间段如果有交集的话, 这个射线就和这个box相交. 如果没有交集, 那就是不相交.  
 物理上可以这么理解, 如果射线通过x轴的两个边界时, 也通过y轴的两个边界, 那这个时间段就是在矩形内.  
-还不好理解的话, 我们反过来理解, 如果涉嫌通过x轴的两个边界时, 这个时间段没有通过y轴的两个边界, 那么这条射线肯定完全从矩形的左侧或者右侧通过, 避开了矩形的左上角和右下角  
+还不好理解的话, 我们反过来理解, 如果光线通过x轴的两个边界时, 这个时间段没有通过y轴的两个边界, 那么这条射线肯定完全从矩形的左侧或者右侧通过, 避开了矩形的左上角和右下角.  
 3D情况下, C++判断如下:
-```C++
+
+```cpp
 float t_enter = std::max(tXMin, std::max(tYMin, tZMin));
 float t_exit =  std::min(tXMax, std::min(tYMax, tZMax));
 if (t_enter < t_exit && t_exit >= 0)

@@ -82,6 +82,8 @@ TODO
 
 根据$r$获取radiance有多种方法, 这里暂时不详述.
 
+IBL的实际操作可参照: <https://learnopengl.com/PBR/IBL/Specular-IBL>
+
 ### _10.5 Specular Image-Based Lighting
 
 在10.4章节里, 我门讲到用environment mapping来计算镜面反射的radiance.  
