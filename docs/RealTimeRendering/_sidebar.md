@@ -8,3 +8,4 @@
 * [11 Global Illumination](docs/RealTimeRendering/11_global_illumination.md)
 * [18 Pipeline Optimization](docs/RealTimeRendering/18_pipeline_optimization.md)
 * [20 Efficient Shading](docs/RealTimeRendering/20_efficient_shading.md)
+* [25 Collision Detection](docs/RealTimeRendering/25_collision_detection.md)
