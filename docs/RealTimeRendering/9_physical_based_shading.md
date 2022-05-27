@@ -277,17 +277,16 @@ external reflection的折射角$\theta_t$小于入射角$\theta_i$, internal ref
 
 facet theory是BRDF模型基于微表面的数值分析.
 
-单元微表面的normal记为m, 对应的BRDF记作$f_{\mu}(l, v, m)$  
+单元微表面的normal记为m, 对应的BRDF记作$f_{\mu}(l, v, m)$, l是入射光, v是视线.  
 normal的分布称之为normal distribution function(NDF), 记作$D(m)$  
-$D(m)$的积分就是微表面的面积, 如果投影到宏观表面的normal上, 就得到1:
+$D(m)$的积分就是surface的面积, 可以把单位microfacet理解为一个个小方块.  
+如果和宏观表面的normal n做dot product上, 就相当于表面积投影到了和法线n垂直的表面上, 得到1:
 $$\int_{m \in \Theta}D(m)(n \cdot m)dm = 1$$
-如果投影到视线的向量上, 就得到了实现向量和宏观表面的normal的余弦:
+如果投影到视线的向量上, 就得到了实现向量和宏观表面的normal n的余弦:
 $$\int_{m \in \Theta}D(m)(v \cdot m)dm = v \cdot n$$
 
 视线看向微表面的时候是有遮挡的, 也就是微表面的一部分的normal和视线的dot product是小于0的, 就是上面的$v \cdot m$, 我们只需要大于0的部分(看得见的部分), 这部分才需要被渲染, 所以, 我们引入了一个*masking function*: $G_1(m, v)$, 表示normal为m被视线v看到的比例, 然后我门还要把$v \cdot m$做一个clampping operation, 得到:
 $$\int_{m \in \Theta}G_1(m, v)D(m)(v \cdot m)^+dm = v \cdot n$$
-
-后面介绍了$G_1$的算法, 它跟m的方向没有关系.
 
 宏观表面的BRDF可以这样计算:
 $$f(l, v) = \int_{m \in \Omega}f_{\mu}(l, v, m)G_2(l, v, m)D(m)\frac{(m\cdot l)^+}{|n \cdot l|}\frac{(m\cdot v)^+}{|n\cdot v|}dm$$
@@ -299,7 +298,7 @@ $G_2$是对$G_1$的扩展, $G_1$的算法只跟m, v有关, $G_2$的算法还跟l
 对于只有specular reflection的场景, 视线v只有和反射方向平行, 才会看到光线. 根据v和l可以计算出中线的向量h, 称之为half vector.  
 也就是说只有normal m和h相等的时候, 才会看到光线. h可以这样计算:
 $$h = \frac{l+v}{\|l+v\|}$$
-另外微表面的BRDF也只有在这种情况下才有值, 其他方向都是0, 而且这个值就是反射率fresnel equation.  
+另外微表面的BRDF也只有在这种情况下才有值, 其他方向都是0, 而且这个值就是反射率fresnel equation $F(h, l)$.  
 这样, 根据上一章节计算宏观BRDF的equation, 我们不用积分, 只用考虑这种情况, 得到 specular BRDF:
 $$f_{spec}(l, v) = \frac{F(h, l)G_2(l, v, h)D(h)}{4|n \cdot l||n \cdot h|}$$
 $D(h)$表示的是$h$在NDF中占的比例, $G_2$是这些microfacet能被l和v看到的比例.  
