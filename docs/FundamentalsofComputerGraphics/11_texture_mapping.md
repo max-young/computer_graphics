@@ -282,7 +282,16 @@ normal maps和bump maps不改变表面, 只改变法线, 相当于实现了一�
 
 #### _11.4.4 Shadow Maps阴影贴图
 
-和z-buffer有点像, 只不过z-buffer是从视点出发, shadow是从光源出发
+和depth map类似, 只不过depth map是从视点出发, shadow是从光源出发.  
+depth map存储的是从camera出发的射线, 最先照射到的表面.  
+而shadow map则是从一个点光源出发的射线, 最先照射到的表面.  
+
+所以渲染需要做两个pass, 第一个pass还是用z-buffer来判断一个点是否能被camera看到, 需不需要渲染.  
+如果camera能看到, 则进行第二个pass, 看这个点和光源的距离和shadow map中的深度做比较, 如果相等, 则判定其被照亮, 如果大于, 则被遮挡, 处在阴影中.  
+
+但是因为精度的关系, 我们做不到判断两个值相等, 所以引入了*shadow bias*, 如果小雨这个值, 则判断其是同一个表面, 被光源照亮.  
+
+另外, 在阴影的边缘会有锯齿, 为了消除这种现象, 需要对周围进行采样, 得到一个0-1的值, 而不是非0(遮挡)即1(照亮)的结果, 这就是*percentage closer filtering*, 在[real-time rendering](docs/RealTimeRendering/7_shadows?id=_75-percentage-closer-filtering)里有更详细的介绍.
 
 #### _11.4.5 Environment Maps环境贴图
 
