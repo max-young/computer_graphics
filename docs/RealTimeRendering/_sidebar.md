@@ -1,4 +1,5 @@
 * [home](docs/RealTimeRendering/)
+* [2 The Graphics Rendering Pipeline](docs/RealTimeRendering/2_the_graphics_rendering_pipeline.md)
 * [5 Shading Basics](docs/RealTimeRendering/5_shading_basics.md)
 * [6 Texturing](docs/RealTimeRendering/6_texturing.md)
 * [7 Shadows](docs/RealTimeRendering/7_shadows.md)

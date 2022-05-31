@@ -170,7 +170,7 @@ $$
 这个矩阵等式可以用cramer's rule克莱姆法则来解  
 解出$t, \beta, \gamma$后, 我们就可以做判断了:
 
-<img src="./_images/ray-triangle.png" width=30%>
+<img src="./_images/ray-triangle.png" width=40%>
 
 #### _4.4.3 Ray-Polygon Intersection
 

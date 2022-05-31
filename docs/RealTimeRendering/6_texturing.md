@@ -83,6 +83,11 @@ texture value可以是RGB颜色, 也可以是灰度值, 还有$RGB\alpha$, $\alp
 
 有的texture value需要做转换才能用, 比如法线以RGB格式存在texture image里面, 值的范围是[0, 1], 需要转换为法线的正常范围[-1, 1]才能用.
 
+### _6.6 Alpha Mapping
+
+我们设定一个值, 当纹理的alpha值小于这个数值时, 则不渲染这个像素(discard), 例如前景和背景叠加, 前景的一部分是透明的, 那么就可以这么实现.  
+这样可以节省成本, 这一部分可以不要再做blend.
+
 <a id="markdown-_67-bump-mapping" name="_67-bump-mapping"></a>
 ### _6.7 Bump Mapping
 
