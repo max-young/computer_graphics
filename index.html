@@ -7,17 +7,13 @@
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  <!-- latex -->
   <script src="https://cdn.jsdelivr.net/npm/katex-copytex@1.0.2/dist/katex-copytex.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/katex-copytex@1.0.2/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
 
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+  <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css"> -->
 </head>
 <body>
   <div id="app"></div>
-  <!-- latex -->
-  <!-- <script>window.texme = { style: 'none' }</script>
-  <script src="https://cdn.jsdelivr.net/npm/texme@0.9.0"></script> -->
   <script>
     window.$docsify = {
       name: 'Computer Graphics Notes',
@@ -34,23 +30,25 @@
             noData: '😞 No Results! ',
             depth: 6
         },
-      // load from _footer.md
-      loadFooter: true,
-      themeColor: '#F9564F'
+      loadFooter: false,
+      themeColor: '#37A'
     }
   </script>
   <!-- latex -->
   <script src="./index.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
   <!-- Docsify v4 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
-  <!-- using the footer plugin from CDN -->
-  <script src="//cdn.jsdelivr.net/npm/@alertbox/docsify-footer/dist/docsify-footer.min.js"></script>
+  <!-- <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.js"></script> -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
-  <script>
+  <!-- using the footer plugin from CDN -->
+  <!-- <script src="//cdn.jsdelivr.net/npm/@alertbox/docsify-footer/dist/docsify-footer.min.js"></script> -->
+
+  <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script> -->
+  <!-- <script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script> -->
+  <!-- <script>
     const gitalk = new Gitalk({
       clientID: '50c778ee7ea8fe21c780',
       clientSecret: 'f6a9cae9fdbf10b2721e75bf5bb656d12dd0f862',
@@ -61,6 +59,6 @@
       distractionFreeMode: false,
       id: decodeURI(window.location.pathname)
     })
-  </script>
+  </script> -->
 </body>
 </html>

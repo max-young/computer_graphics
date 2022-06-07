@@ -77,6 +77,7 @@ texture mapping有两个主要的问题需要解决:
    书中举了地板的例子, 我们可以这么理解  
    一个房间的地板的纹理图是均匀的, 远近的地板的纹理是一样的, 但是我们拍摄图像时有远近, 近处的一个像素覆盖了一个地板, 远处的一个像素可能覆盖了几块地板, 采样频率不一样, 这样就导致了aliasing
 
+<a id="markdown-_112-texture-coordinate-functions" name="_112-texture-coordinate-functions"></a>
 #### _11.2 Texture Coordinate Functions
 
 这个问题并不只是图形学的问题, 对于地图绘图来说, 这个问题存在了几百年. 对三维的地球绘图, 在有限的图纸上保证尽可能的不失真.
@@ -94,6 +95,7 @@ texture coordinate map是平衡各种问题的解决办法. 这些问题包括:
 在2.5.8章节我们用两个参数来定义曲面, 我们可以用这两个参数来定义texture coordinate, 这样就实现了对象表面和纹理的对应关系.  
 如果不依靠曲面的参数化表达, 怎么定义纹理坐标系呢? 有两种方法, 一种是根据曲面上点的空间坐标, 另外一种是根据曲面三角网的顶点坐标来内插其他点的坐标. 看下面的章节解释.
 
+<a id="markdown-_1121-geometrically-determined-coordinates几何上确定的坐标系" name="_1121-geometrically-determined-coordinates几何上确定的坐标系"></a>
 #### _11.2.1 Geometrically Determined Coordinates几何上确定的坐标系
 
 geometrically determined coordinates适用于比较简单的场景.  
@@ -150,6 +152,7 @@ $$\phi(x, y, z) = (\frac{1}{2\pi}[\pi+atan2(y, x)]/2\pi, \frac{1}{2}[1+\pi])$$
 例如: 如果|x|>|y|, |x|>|z|, 那么根据x的正负, 分别投影到+x面或者-x面.  
 OpenGL里有对应的六个面的转换方法, 这里不列公式了, 用到的时候看书吧.
 
+<a id="markdown-_1122-interpolated-texture-coordinates内插纹理坐标系" name="_1122-interpolated-texture-coordinates内插纹理坐标系"></a>
 #### _11.2.2 Interpolated Texture Coordinates内插纹理坐标系
 
 只存储三角形顶点的坐标和属性, 三角形内部用内插的方式来获取坐标和属性  
@@ -159,6 +162,7 @@ rexture mapping的质量和顶点相关, 例如顶点的密度等等
 
 这种方式在某些区域依然有变形, 比如书中举的例子: 鼻翼, 地球两极. 皆因为小的三角形对应面积较大的texture space
 
+<a id="markdown-_1123-tiling-wrapping-modes-and-texture-transformations平铺环绕模式-和纹理变换" name="_1123-tiling-wrapping-modes-and-texture-transformations平铺环绕模式-和纹理变换"></a>
 #### _11.2.3 Tiling, Wrapping Modes, and Texture Transformations平铺、环绕模式, 和纹理变换
 
 有时图像上的点对应的texture coordinate由于某种原因落到了terxture space的外面  
@@ -167,16 +171,20 @@ rexture mapping的质量和顶点相关, 例如顶点的密度等等
 
 对于重复图形的图像, 比如地板、砖块墙, 应该只需要一块重复区域的纹理, 这样更节省空间. 详情待实际应用再看.
 
+<a id="markdown-_1124-perspective-correct-interpolation透视校正内插" name="_1124-perspective-correct-interpolation透视校正内插"></a>
 #### _11.2.4 Perspective Correct Interpolation透视校正内插
 
+<a id="markdown-_1125-continuity-ans-seams连续性和接缝" name="_1125-continuity-ans-seams连续性和接缝"></a>
 #### _11.2.5 Continuity ans Seams连续性和接缝
 
+<a id="markdown-_113-antialiasing-texture-lookups反走样纹理查找" name="_113-antialiasing-texture-lookups反走样纹理查找"></a>
 ### _11.3 Antialiasing Texture Lookups反走样纹理查找
 
 texture mapping的第二个基本问题是antialiasing  
 由于纹理是表现细节的关键, 所以纹理是引起aliasing的关键来源  
 纹理aliasing和光栅化aliasing一样, 都涉及到sample、blur、reconstruction等等
 
+<a id="markdown-_1131-the-footprint-of-a-pixel" name="_1131-the-footprint-of-a-pixel"></a>
 #### _11.3.1 The Footprint of a Pixel
 
 我们图像上一个pixel对应的纹理区域称为texture space footprint of the pixel  
@@ -195,6 +203,7 @@ $\psi$经过了两次转换, 所以pixel对应的footprint的大小形状和这�
 一个pixel的中心是x, 这个pixel对应texture space上一个平行四边形  
 书中有详细解释, 但是没看懂, 用到时再详细研究
 
+<a id="markdown-_1132-reconstruction重建" name="_1132-reconstruction重建"></a>
 #### _11.3.2 Reconstruction重建
 
 一个像素对应的footprint可能很大, 需要做平均  
@@ -202,6 +211,7 @@ $\psi$经过了两次转换, 所以pixel对应的footprint的大小形状和这�
 这和第9章节的reconstruction不太一样, 第9章需要重建的离散数据是规律采样的  
 但是纹理是不规则的, 详情待用到时再研究
 
+<a id="markdown-_1133-mipmapping" name="_1133-mipmapping"></a>
 #### _11.3.3 MipMapping
 
 上一节我们说到一个pixel对应的footprint可能大于一个texel, 为了antialiasing我们需要做平均.   
@@ -214,6 +224,7 @@ level k的一个texel相当于base level的$2^k \times 2^k$个texels
 
 这些不同分辨率的texture层层堆叠, 我们形象的称之为image pyramid图像金字塔.
 
+<a id="markdown-_1134-basic-texture-filtering-with-mipmap用mipmaps进行基本纹理过滤" name="_1134-basic-texture-filtering-with-mipmap用mipmaps进行基本纹理过滤"></a>
 #### _11.3.4 Basic Texture Filtering with Mipmap用mipmaps进行基本纹理过滤
 
 我们又了mipmaps, 如果我们计算出图像上的某个pixel对应原始texture上的$D \times D$个texels, 我们就能对应上mipmaps的level $k = log_2D$的一个texel.  
@@ -245,20 +256,24 @@ Color mipmap_sample_trilinear(Texture mip[], float u, float v, matrix J)
 <img src="./_images/mipmap_antialiasing.png" width=50%>
 其中最后一个图Anisotropic filtering各项异性过滤是另外一种计算方法, 如下:
 
+<a id="markdown-_1135-anisotropic-filtering各向异性过滤" name="_1135-anisotropic-filtering各向异性过滤"></a>
 #### _11.3.5 Anisotropic Filtering各向异性过滤
 
 这个计算方法是根据短边来匹配mipmap, 然后再沿着长边做平均. 这里没有详述.
 
+<a id="markdown-_114-applications-of-texture-mapping纹理映射的应用" name="_114-applications-of-texture-mapping纹理映射的应用"></a>
 ### _11.4 Applications of Texture Mapping纹理映射的应用
 
 "textures are a very general tool with applications limited only by what theprogrammer can think up"  
 纹理是只有程序员才能理解的通用工具??
 
+<a id="markdown-_1141-controlling-shading-parameters控制着色参数" name="_1141-controlling-shading-parameters控制着色参数"></a>
 #### _11.4.1 Controlling Shading Parameters控制着色参数
 
 在第2章节光线追踪和第10章节着色里说到漫反射计算  
 在计算时有一个参数, 这个参数就可以通过纹理来获得, 来实现不同的光照纹理效果, 而不只是均质的黑白色
 
+<a id="markdown-_1142-normal-maps-and-bump-maps法线图和凹凸贴图" name="_1142-normal-maps-and-bump-maps法线图和凹凸贴图"></a>
 #### _11.4.2 Normal Maps and Bump Maps法线图和凹凸贴图
 
 上面说的纹理存储的都是颜色值, 颜色值只是一个属性, 我们把这个属性换成别的呢?  
@@ -271,6 +286,7 @@ Color mipmap_sample_trilinear(Texture mip[], float u, float v, matrix J)
 bump maps存储了一个texels的相对理想模型的高度, 比如理想模型是一个圆, 某个texels纹素可能凹进去低于圆的高度, 也可能凸出高于圆的高度.
 我们存储这个相对高度, 这样, 我们就能计算出法线, 实现光影效果.
 
+<a id="markdown-_1143-displacement-maps位移贴图" name="_1143-displacement-maps位移贴图"></a>
 #### _11.4.3 Displacement Maps位移贴图
 
 在GAMES101那门课里有一张这样的图, 形象的说明了normal maps、bump maps和displacement maps的区别:  
@@ -280,6 +296,7 @@ normal maps和bump maps不改变表面, 只改变法线, 相当于实现了一�
 但是它真的改变了表面, 让表面上的点沿法线移动相对高度  
 从图中可以看到, displacement maps更加真实
 
+<a id="markdown-_1144-shadow-maps阴影贴图" name="_1144-shadow-maps阴影贴图"></a>
 #### _11.4.4 Shadow Maps阴影贴图
 
 和depth map类似, 只不过depth map是从视点出发, shadow是从光源出发.  
@@ -289,28 +306,33 @@ depth map存储的是从camera出发的射线, 最先照射到的表面.
 所以渲染需要做两个pass, 第一个pass还是用z-buffer来判断一个点是否能被camera看到, 需不需要渲染.  
 如果camera能看到, 则进行第二个pass, 看这个点和光源的距离和shadow map中的深度做比较, 如果相等, 则判定其被照亮, 如果大于, 则被遮挡, 处在阴影中.  
 
-但是因为精度的关系, 我们做不到判断两个值相等, 所以引入了*shadow bias*, 如果小雨这个值, 则判断其是同一个表面, 被光源照亮.  
+但是因为精度的关系, 我们做不到判断两个值相等, 所以引入了*shadow bias*, 如果小于这个值, 则判断其是同一个表面, 被光源照亮.  
 
 另外, 在阴影的边缘会有锯齿, 为了消除这种现象, 需要对周围进行采样, 得到一个0-1的值, 而不是非0(遮挡)即1(照亮)的结果, 这就是*percentage closer filtering*, 在[real-time rendering](docs/RealTimeRendering/7_shadows?id=_75-percentage-closer-filtering)里有更详细的介绍.
 
+<a id="markdown-_1145-environment-maps环境贴图" name="_1145-environment-maps环境贴图"></a>
 #### _11.4.5 Environment Maps环境贴图
 
 环境光照用纹理图来实现
 
+<a id="markdown-_115-procedural-3d-textures程序化三维纹理" name="_115-procedural-3d-textures程序化三维纹理"></a>
 ### _11.5 Procedural 3D Textures程序化三维纹理
 
 <img src="./_images/3D_textures.png" width=50%>  
 
 三维纹理会消耗大量内存, 有些情况下我们可以不用存储这么大的纹理, 而通过程序化计算得到
 
+<a id="markdown-_1151-3d-stripe-textures三维条纹纹理" name="_1151-3d-stripe-textures三维条纹纹理"></a>
 #### _11.5.1 3D Stripe Textures三维条纹纹理
 
 用两个颜色实现不同宽度的条纹, 已经渐变条纹, 书中写了三个函数
 
+<a id="markdown-_1152-solid-noise实体噪声" name="_1152-solid-noise实体噪声"></a>
 #### _11.5.2 Solid Noise实体噪声
 
 条纹是比较规则的形状, 我们要实现类似蛋纹(瓷器裂纹等各种随机但是连续的花纹)的斑驳纹理, 可以通过solid noise, 也被称为Perlin noise(已发明者命名)  
 
+<a id="markdown-_1153-turbulance扰动" name="_1153-turbulance扰动"></a>
 #### _11.5.3 Turbulance扰动
 
 一些自然的纹理在相同的纹理中包含一些特征随机的变化. 例如规整的条纹加上扰动, 变成奇怪的线条, 但是整体而言还是条纹.

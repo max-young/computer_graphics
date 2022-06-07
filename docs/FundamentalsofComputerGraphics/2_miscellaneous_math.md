@@ -126,15 +126,26 @@ $$ln\ x \equiv log_ex$$
 
 Quadratic Equation可以表示为:
 $$Ax^2 + Bx + C = 0$$
-这一节的图Figure2.5很有意思, 我们根据$y = Ax^2 + Bx + C$可以画出一个倒抛物线  
+我们根据$y = Ax^2 + Bx + C$可以画出一个倒抛物线:  
+<img src="_images/fundamentals_of_computer_graphics/figure2.5.png">  
 $Ax^2 + Bx + C = 0$的root(解/根)就是y=0的线(也就是x轴)和抛物线相交的点  
 抛物线可以misses(错过), grazes(掠过), hits(撞击)x轴, 分别得到0、1、2个解
 
 我们可以推导出:
-$$x = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A}$$
+$$
+\begin{aligned}
+x^2 + \frac{B}{A}x + \frac{C}{A} = 0 \\
+ \\
+\left(x + \frac{B}{2A}\right)^2 - \frac{B^2}{4A^2} + \frac{C}{A} = 0 \\
+ \\
+x + \frac{B}{2A} = \pm\sqrt{\frac{B^2}{4A^2} - \frac{C}{A}} \\
+ \\
+x = \frac{-B \pm \sqrt{B^2 - 4AC}}{2A}
+\end{aligned}
+$$
 有几个root取决于$B^2 - 4AC$, 我们表示为:
 $$D \equiv B^2 - 4AC$$
-D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个实数解, 如果$D = 0$, 则有1个实数解, 如果$D < 0$, 则没有实数解答
+D成为这个二次方程的discriminant(判别式), 如果$D > 0$, 则有两个实数解, 如果$D = 0$, 则有1个实数解, 如果$D < 0$, 则没有实数解
 
 <a id="markdown-_23-trigonometry三角几何" name="_23-trigonometry三角几何"></a>
 ### _2.3 Trigonometry三角几何
