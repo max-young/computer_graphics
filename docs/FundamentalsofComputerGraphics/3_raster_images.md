@@ -97,7 +97,7 @@ $$R = [-0.5, n_x - 0.5] \times [-0.5, n_y - 0.5]$$
 
 #### _3.2.1 Pixel Values
 
-对于灰度图, pixel的值只需要一个32bit的浮点数表示, RGB图则需要3个32bit的浮点数表示.  
+对于灰度图, pixel的值只需要一个32bit的浮点数表示, RGB图则需要3个32bit的浮点数表示.(浮点数的内存大小是4byte=32bit)  
 那么对于一个10MP(megapixel)的图, 就需要占用$3 \times 32 \times 10000000 \div 8 \div 1024 \div 1024 \approx 115MB$的内存空间
 
 需要做优化.  
