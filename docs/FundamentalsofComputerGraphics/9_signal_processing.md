@@ -489,7 +489,7 @@ $$\hat{f} \ast \hat{g} = \mathfrak{F}\{fg\}$$
 **复杂的convolution操作在频域里知识做简单的乘积**  
 <img src="_images/fundamentals_of_computer_graphics/frequency_domain.png" width=70%>
 
-上面说到的filter有的不能用函数来表示, 比如box filterm, 就可以用傅立叶变换函数来表示了:  
+上面说到的filter有的不能用函数来表示, 比如box filter, 就可以用傅立叶变换函数来表示了:  
 <img src="./_images/fourier_filter.png" width=50%>
 
 #### _9.5.3 A Gallery of Fourier Transform
@@ -538,25 +538,29 @@ reconstruction也是会造成重叠overlap
   有两种方法: 1提高采样频率, 2filtering
 
   提高采样频率比较好理解, T足够小, 那么1/T足够大, 大到能够覆盖整个频域, 就不会出现重叠的现象了, 如下图:  
-  <img src="./_images/sample_rates_and_aliasing.png" width=50%>  
+  <img src="./_images/sample_rates_and_aliasing.png" width=70%>  
 
   filtering滤波, 我们把高频部分过滤掉(或者说模糊掉), 这样就能减少overlap引起的aliasing了, 如下图:  
-  <img src="./_images/low_pass_filtering_and_aliasing.png" width=50%>
+  <img src="./_images/low_pass_filtering_and_aliasing.png" width=70%>
   我们看到strong blur相比middle blue过滤掉了更多的高频信号, 从而减少overlap
 
 - **Preventing Aliasing in Reconstruction**
 
   reconstruction也是一样, 需要用低通滤波器low-pass filter过滤掉高频信号, 减少aliasing:  
-  <img src="./_images/low_pass_prevent_aliasing.png" width=50%>  
+
+  <img src="_images/low_pass_prevent_aliasing.png" width=70%>  
+
   我们再对比一下不同的filter的效果:  
-  <img src="./_images/different_reconstruction_filter_prevent_aliasing.png" width=50%>  
+
+  <img src="_images/different_reconstruction_filter_prevent_aliasing.png" width=70%>  
+
   一个好的reconstruction filter必须是一个好的lowpass filter
 
 - **Preventing Aliasing in Resampling**
 
   我们重采样时, 比如一个高采样率的结果, 再用低采样率采一遍, 并不是直接从1000个采样点里取其中的800个点  
   而是根据这1000个采样点reconstruction, 根据合适的lowpass filter去除重复的频谱和高频信号, 再进行采样:  
-  <img src="../_images/lowpass_filter_and_resampling.png" width=50%>
+  <img src="_images/fundamentals_of_computer_graphics/lowpass_filter_and_resampling.png" width=70%>
 
 #### _9.5.6 Ideal Filters vs. Useful Filters
 
