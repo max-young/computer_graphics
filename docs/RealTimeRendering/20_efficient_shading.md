@@ -66,7 +66,5 @@ OpenGL里有具体的实施方法: [OpenGL course](https://learnopengl.com/Advan
 
 defered shading将
 
-
-
 ### _20.2 Decal Rendering
 

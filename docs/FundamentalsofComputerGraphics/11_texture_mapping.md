@@ -42,10 +42,11 @@
 我们需要找到地板上的点对应的纹理, 然后用纹理作为参数去做shader着色.  
 根据图像上的点去纹理匹配的过程叫texture lookup, 找到的结果就是texture sampling.  
 这个过程的代码大概是这样:  
-```C++
-Color texture_lookup(Texture y, float u, float v) {
+```cpp
+// u, v是[0, 1]之间的坐标
+Color texture_lookup(Texture t, float u, float v) {
   int i = round(u * t.width() - 0.5)
-  int j = round(v * t.height() = 0.5)
+  int j = round(v * t.height() - 0.5)
   return t.get_pixel(i, j)
 }
 
@@ -58,8 +59,8 @@ Color shade_surface_point(Surface s, Point p, Texture t) {
 }
 ```
 我们需要找到图像上的点和texture上的点的对应关系: texture coordinate function  
-<img src="./_images/texture_coordinate_function.png" width=60%>  
-第七章的各种变换, 找到了实际空间中的坐标和图像坐标的对应关系, 这里需要找到世纪空间坐标和纹理坐标的对应关系. 从而这三者就能互相转换了:
+<img src="./_images/texture_coordinate_function.png" width=90%>  
+第七章的各种变换, 找到了实际空间中的坐标和图像坐标的对应关系, 这里需要找到实际空间坐标和纹理坐标的对应关系. 从而这三者就能互相转换了:
 $$
 \begin{aligned}
 \phi &: S \to T \\
@@ -92,19 +93,19 @@ texture coordinate map是平衡各种问题的解决办法. 这些问题包括:
 - Continuity连续性
   对象是连续的, 纹理上也应该是连续的. 纹理应避免不连续的情况.
 
-在2.5.8章节我们用两个参数来定义曲面, 我们可以用这两个参数来定义texture coordinate, 这样就实现了对象表面和纹理的对应关系.  
-如果不依靠曲面的参数化表达, 怎么定义纹理坐标系呢? 有两种方法, 一种是根据曲面上点的空间坐标, 另外一种是根据曲面三角网的顶点坐标来内插其他点的坐标. 看下面的章节解释.
+在[2.5.8章节](docs/FundamentalsofComputerGraphics/2_miscellaneous_math?id=_258-3d-parametric-surface%e4%b8%89%e7%bb%b4%e5%8f%82%e6%95%b0%e8%a1%a8%e9%9d%a2)我们用两个参数来定义曲面, 我们可以用这两个参数来定义texture coordinate, 这样就实现了三维对象的surface和2D纹理的对应关系.  
+这个方法需要曲面是参数化定义, 如果曲面是[隐式表达](docs/FundamentalsofComputerGraphics/2_miscellaneous_math?id=_253-3d-implicit-surfaces)呢? 或者这个曲面就是一个三角网, 该怎么映射纹理坐标系呢? 有两种方法, 一种是根据曲面上点的空间坐标通过几何计算得到纹理坐标, 另外一种是根据曲面三角网顶点的纹理坐标来内插其他点的坐标.
 
 <a id="markdown-_1121-geometrically-determined-coordinates几何上确定的坐标系" name="_1121-geometrically-determined-coordinates几何上确定的坐标系"></a>
 #### _11.2.1 Geometrically Determined Coordinates几何上确定的坐标系
 
 geometrically determined coordinates适用于比较简单的场景.  
-我们用这个这个图像来说明, 上面的数字可以代表u,v坐标, 网格线可以看到变形的情况  
+这是一张纹理图:  
 <img src="./_images/texture_test_image.png">
 
 **Planar Projection平面投影**
 
-和第7章的投影变换(正交投影、透视投影)类似, 用矩阵变换就可以转换得到u, v
+和第7章的[正交投影](docs/FundamentalsofComputerGraphics/7_viewing?id=_712-the-orthographic-projection-transformation正交投影变换)类似, 对三维空间坐标进行仿射变换(平移缩放)就可以对应到纹理坐标u, v
 $$
 \phi(x, y, z) = (u, v)
 $$
@@ -125,9 +126,10 @@ $$
   1
 \end{matrix}
 \right]
-$$
-注: z坐标用星号是因为我们不关心z坐标  
-Planar projection不具有injective, 因为如果是一个封闭的对象, 那么这个对象的前面和后面的两个点, 对应的texture coordinate的坐标是一样的  
+$$ 
+Planar projection不具有injective, 因为如果是一个封闭的对象, 那么这个对象的前面和后面的两个点, 对应的texture coordinate的坐标是一样的:  
+<img src="_images/fundamentals_of_computer_graphics/planar_projection.png">
+<img src="_images/fundamentals_of_computer_graphics/planar_projection1.png">  
 但是它在shadow mapping会用到, 在第11.4.4章节会讲到
 
 **Spherical Coordinates球面坐标**
@@ -147,7 +149,7 @@ $$\phi(x, y, z) = (\frac{1}{2\pi}[\pi+atan2(y, x)]/2\pi, \frac{1}{2}[1+\pi])$$
 
 **cubemaps立方体地图**
 
-球星坐标系在两极会造成较大的变形, 提到方案是cubemaps, 可以改善这种情况, 但是会失去一定的连续性.  
+球形坐标系在两极会造成较大的变形, 替代方案是cubemaps, 可以改善这种情况, 但是会失去一定的连续性.  
 立方体有六个面, 对应六个texture map. 意味着对象的不同区域投影到不同的texture map, 投影就是正交投影.  
 例如: 如果|x|>|y|, |x|>|z|, 那么根据x的正负, 分别投影到+x面或者-x面.  
 OpenGL里有对应的六个面的转换方法, 这里不列公式了, 用到的时候看书吧.
@@ -155,10 +157,10 @@ OpenGL里有对应的六个面的转换方法, 这里不列公式了, 用到的�
 <a id="markdown-_1122-interpolated-texture-coordinates内插纹理坐标系" name="_1122-interpolated-texture-coordinates内插纹理坐标系"></a>
 #### _11.2.2 Interpolated Texture Coordinates内插纹理坐标系
 
-只存储三角形顶点的坐标和属性, 三角形内部用内插的方式来获取坐标和属性  
+三角网只有三角形顶点的坐标和属性, 三角形内部用内插的方式来获取坐标和属性.  
 内插方法采用barycentric coordinate重心坐标, 中心坐标参照第二章节
 
-rexture mapping的质量和顶点相关, 例如顶点的密度等等
+texture mapping的质量和顶点相关, 例如顶点的密度等等
 
 这种方式在某些区域依然有变形, 比如书中举的例子: 鼻翼, 地球两极. 皆因为小的三角形对应面积较大的texture space
 
@@ -253,7 +255,7 @@ Color mipmap_sample_trilinear(Texture mip[], float u, float v, matrix J)
 ```
 如果footprint是完美的正方形区域, 且宽度是2的指数, 那么mipmap的antialiasing很完美  
 但是如果不规整, 那就会有缺陷, 下图能看到效果:  
-<img src="./_images/mipmap_antialiasing.png" width=50%>
+<img src="./_images/mipmap_antialiasing.png">  
 其中最后一个图Anisotropic filtering各项异性过滤是另外一种计算方法, 如下:
 
 <a id="markdown-_1135-anisotropic-filtering各向异性过滤" name="_1135-anisotropic-filtering各向异性过滤"></a>

@@ -27,8 +27,8 @@
   - [_2.5.4 Surface Normal to an Implicit Surface](#_254-surface-normal-to-an-implicit-surface)
   - [_2.5.5 Implicit Planes](#_255-implicit-planes)
   - [_2.5.6 2D Parametrics Curves二维参数化曲线](#_256-2d-parametrics-curves二维参数化曲线)
-  - [_2.5.7 3D Parametric Curves三位参数曲线](#_257-3d-parametric-curves三位参数曲线)
-  - [_2.5.8 3D Parametric Surfaces](#_258-3d-parametric-surfaces)
+  - [_2.5.7 3D Parametric Curves三维参数曲线](#_257-3d-parametric-curves三维参数曲线)
+  - [_2.5.8 3D Parametric Surface三维参数表面](#_258-3d-parametric-surface三维参数表面)
   - [_2.5.9 Summary of Curves and Surfaces](#_259-summary-of-curves-and-surfaces)
 - [_2.6 Linear Interpolation线性插值](#_26-linear-interpolation线性插值)
 - [_2.7 Triangles三角形](#_27-triangles三角形)
@@ -438,6 +438,7 @@ $$(x-x_c)^2 + (y-y_c)^2 - r^2 = 0$$
 这个等式就是一个长半径是a, 短半径是b的椭圆:
 $$\frac{(x-x_c)^2}{a^2} + \frac{(y-y_c)^2}{b^2} - 1 = 0$$
 
+<a id="markdown-_253-3d-implicit-surfaces" name="_253-3d-implicit-surfaces"></a>
 #### _2.5.3 3D Implicit Surfaces
 
 和2D曲线一样, 3D曲面可以这样表示:
@@ -445,12 +446,14 @@ $$f(x, y, z) = 0$$
 如果我们定义向量$p = (x, y, z)$, 那么:
 $$f(p) = 0$$
 
+<a id="markdown-_254-surface-normal-to-an-implicit-surface" name="_254-surface-normal-to-an-implicit-surface"></a>
 #### _2.5.4 Surface Normal to an Implicit Surface
 
 和2D一样, 3D曲面的发现可以这样表示:
 $$ n = \nabla f(p) = \left(\frac{\partial f(p)}{\partial x}, \frac{\partial f(p)}{\partial y}, \frac{\partial f(p)}{\partial z}\right)$$
 发现指向$f(p) > 0$的方向
 
+<a id="markdown-_255-implicit-planes" name="_255-implicit-planes"></a>
 #### _2.5.5 Implicit Planes
 
 假设一个无线的平面经过一个点a, 法线是n, 那么对于平面上的点p:
@@ -490,6 +493,7 @@ g(p) = 0
 $$
 有没有更简单的方法, 下面我们来讲
 
+<a id="markdown-_256-2d-parametrics-curves二维参数化曲线" name="_256-2d-parametrics-curves二维参数化曲线"></a>
 #### _2.5.6 2D Parametrics Curves二维参数化曲线
 
 我们想用一个参数来定义2D曲线:
@@ -565,7 +569,8 @@ $$
 \right]
 $$
 
-#### _2.5.7 3D Parametric Curves三位参数曲线
+<a id="markdown-_257-3d-parametric-curves三维参数曲线" name="_257-3d-parametric-curves三维参数曲线"></a>
+#### _2.5.7 3D Parametric Curves三维参数曲线
 
 和2D类似, 我们可以这样表示:
 $$
@@ -598,7 +603,8 @@ $$
 如果是一个线段segment, 那么我们定义t在某个区间  
 如果是一个射线, 那么可以定义$t \in [0, \infty]$
 
-#### _2.5.8 3D Parametric Surfaces
+<a id="markdown-_258-3d-parametric-surface三维参数表面" name="_258-3d-parametric-surface三维参数表面"></a>
+#### _2.5.8 3D Parametric Surface三维参数表面
 
 surface和curve类似, 但是多了一个参数:
 $$
@@ -618,11 +624,12 @@ $$
 $$
 举一个例子, 对于地球上的一个点, 可以用经纬度来表示, 相当于uv这两个参数
 
-如果我们保持v保持某个数值$v_0$不变, 那么我们就会得到一条曲线$q(t) = p(t, v_0)$, 这条曲线在某个点的导数(切线)表示为$p_u$  
-同样的, 我们保持u在某个数值$u_0$不变, 那么就会得到一条曲线$q(t) = p(u_0, t)$, 这条曲线在某个点的导数(切线)为$p_v$  
+如果我们让v保持某个数值$v_0$不变, 那么我们就会得到一条曲线$q(t) = p(t, v_0)$, 这条曲线在某个点的导数(切线)表示为$p_u$.  
+同样的, 我们保持u在某个数值$u_0$不变, 那么就会得到一条曲线$q(t) = p(u_0, t)$, 这条曲线在某个点的导数(切线)为$p_v$.  
 这样, 在曲面上的一个点, 都能找到这样的两条切线向量, 这个曲面在这个点上的的法线normal就是这两个切线向量的cross product:
 $$n = p_u \times p_v$$
 
+<a id="markdown-_259-summary-of-curves-and-surfaces" name="_259-summary-of-curves-and-surfaces"></a>
 #### _2.5.9 Summary of Curves and Surfaces
 
 对于曲线和曲面, 根据function来定义:
