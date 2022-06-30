@@ -1,5 +1,9 @@
 <!-- TOC -->
 
+- [_2.1 Architecture](#_21-architecture)
+- [_2.2 The Application Stage](#_22-the-application-stage)
+- [_2.3 Geometry Processing](#_23-geometry-processing)
+  - [2.3.1 Vertex Shading](#231-vertex-shading)
 - [_2.4 Rasterization](#_24-rasterization)
 - [_2.5 Pixel Processing](#_25-pixel-processing)
   - [_2.5.1 Pixel Shading](#_251-pixel-shading)
@@ -12,6 +16,7 @@
 二维图像中对象的位置和形状由它们的几何形状、环境(例如相互遮挡关系等)以及相机位置决定.  
 对象的外观受其材质、光源、纹理和着色方程的影响.
 
+<a id="markdown-_21-architecture" name="_21-architecture"></a>
 ### _2.1 Architecture
 
 pipeline可以理解为有规则的过程, 例如工厂的装配线、快餐厨房的食品制作流程.  
@@ -32,6 +37,7 @@ rasterization光栅化阶段通常将三个顶点作为输入，形成一个三�
 最后，pixel processing像素处理阶段对每个像素执行一个程序以确定其颜色，并可能执行深度测试以查看它是否可见。它还可以执行逐像素操作，例如将新计算的颜色与先前的颜色混合, 光栅化和像素处理阶段也完全在GPU上处理.  
 所有这些阶段及其内部管道将在接下来的四节中讨论。有关GPU如何处理这些阶段的更多详细信息，请参见第3章
 
+<a id="markdown-_22-the-application-stage" name="_22-the-application-stage"></a>
 ### _2.2 The Application Stage
 
 开发人员可以完全控制application阶段发生的事情，因为它通常在CPU上执行.  
@@ -46,10 +52,64 @@ application最后会将几何元素送到下一个阶段geometry processing, 这
 
 这个阶段通常的一个任务碰撞检测, 还会处理来自其键盘、鼠标或头戴式显示器的输入, 加速算法，例如特定的剔除算法(第19章)也在这里实现，以及其他阶段无法处理的工作.
 
+<a id="markdown-_23-geometry-processing" name="_23-geometry-processing"></a>
+### _2.3 Geometry Processing
+
+这个过程分成4个阶段:  
+<img src="_images/real_time_rendering/geometry_processing.png">
+
+<a id="markdown-231-vertex-shading" name="231-vertex-shading"></a>
+#### _2.3.1 Vertex Shading
+
+顶点着色有两个主要任务，计算顶点的位置和计算其他顶点数据，例如法线和纹理坐标等.  
+这些属性可以用来计算着色, 所以这个可编程的顶点处理单元被命名为vertex shader顶点着色器, 尽管我们在这个阶段可能并不会有着色方程来计算颜色.
+
+顶点的位置计算大概是这样的, 顶点的坐标最开始是在自己的model space, 坐标称为model coordinate.  
+经过model transform编程world space下的world coordinate. 这样多个模型就统一在一个空间里了.
+
+world space下的对象不会都被渲染, 哪些被渲染取决于摄像机, 更准确的说, 取决于摄像机在world space下的位置和方向.  
+为了实现对对象的投影和剪裁, 需要做view transform, 将world space下的对象转换到view space下, view space是以camera为原点, 其朝向为-z轴, y轴朝上, x轴朝右. 
+
+要生成逼真的场景，对象的形状和位置是不够的，还需要对象的材质，以及光源的效果.  
+这种确定光对材料的影响的操作称为shading着色. 它涉及计算对象上各个点的着色方程. 通常，其中一些计算在模型顶点的geometry processing期间执行，而其他计算可能在pixel processing期间执行.   
+vertex shading阶段可以在每个顶点计算和存储各种材料数据，例如点的位置、法线、颜色或着色方程所需的任何其他信息, 然后将结果(颜色, 向量, 纹理坐标以及任何其他类型的着色数据）发送到光栅化和像素处理阶段进行插值并用于计算表面的着色.
+
+vertex shading阶段还会进行projection, 将view volume转换到单位立方体, 这个单位立方体的两个点是[-1, -1, -1], [1, 1, 1], 最常见的两种投影方式是orthographic(parallel)和perspective. 一些特殊场景会用到oblique倾斜投影和axonometric轴投影.  
+
+经过投影变换, 3D的场景就变成2D的了, 这个单位立方体的正面(z=0的那一面)就是要显示在屏幕上的场景, z值会存储在z-buffer里, 之后用来计算遮挡关系以及透明混合.
+
+#### _2.3.2 Optional Vertex Processing
+
+vertex shading之后, GPU上可以按以下顺序执行几个可选阶段: tesselation曲面细分, geometry shading几何着色和stream output流输出.  
+
+第一个可选阶段是tesselation曲面细分. 举一个例子, 一个球形物体, 如果用一组三角形来表示它，可能会遇到质量或性能问题, 球在5米外可能看起来不错，但近距离观察就能看到三角形，尤其是边缘. 所以如果距离近需要更多的三角形来保证显示质量, 如果距离远就需要减少三角形来保证性能. 使用tesselation曲面细分，可以生成具有适当数量三角形的曲面.  
+具体说一下, 我们目前为止讨论的都是vertex, vertex可以用来表示曲面, 曲面由patch面片构成, patch由vertex构成, 当patch距离近时, 生成的三角形更多, 反之更少.
+
+geometry shader更多见, 它常见的应用是粒子生成, 例如烟雾的生成, 还有[learnopengl](https://learnopengl-cn.github.io/04%20Advanced%20OpenGL/09%20Geometry%20Shader/)里的行星环绕石头的生成.
+
+stream output可以将顶点输出到数组以进行进一步处理, 通常用于粒子模拟，例如烟花.
+
+#### _2.3.3 Clipping
+
+只有完全或部分位于view volume内的primitive图元需要传递到光栅化阶段，然后将它们绘制在屏幕上.  
+投影变换和clipping息息相关:  
+<img src="_images/real_time_rendering/clipping.png">
+
+#### _2.3.4 Screen Mapping
+
+unit cube下的x, y坐标会被映射到屏幕坐标screen coordinates.
+这个变换可以参照[虎书](docs/FundamentalsofComputerGraphics/7_viewing?id=_711-the-viewport-transformation)
+screen coordinates再加上z坐标就是window coordinates. z坐标会从[-1, 1]转换到[0, 1](在OpenGL和DirectX里).  
+screen coordinate的0点在不同的API里不一样, OpenGL里是左下角, DirectX里是左上角. 
+
 <a id="markdown-_24-rasterization" name="_24-rasterization"></a>
 ### _2.4 Rasterization
 
-<img src="_images/real_time_rendering/rasterization.png">
+从geometry processing获取到顶点数据和其他着色数据后, rasterization的任务是要找到primitives里的像素.   
+这个过程可以分为两个阶段:  triangle setup(also called primitive assembly) and triangle traversal(三角形组装和三角形遍历). 如下图所示:  
+<img src="_images/real_time_rendering/rasterization.png">  
+这一过程将包含z值的二维顶点转换为像素, 共pixel processing处理.  
+像素是否在三角形内取决于你编写的程序, 例如可以采用中心点来决定, 但是可能会产生锯齿, 那么可以采用超采样或者多重采用, 来解决这个问题.
 
 <a id="markdown-_25-pixel-processing" name="_25-pixel-processing"></a>
 ### _2.5 Pixel Processing
