@@ -14,6 +14,18 @@
 
 **Pipeline Optimization**
 
+本章讨论与算法无关的性能优化, 重点放在瓶颈检测和优化, 从较小的本地化优化开始，以多进程处理能力的技术结束.
+
+在第二章节里讲到, 渲染的流程是: application, geometry processing, rasterization, pixel processing.  
+我们可以定位性能瓶颈在哪一个步骤中, 然后做针对性的优化.
+
+优化的过程分两步, 一是定位瓶颈, 二是优化, 第二步优化之后瓶颈可能就变了, 再继续优化, 重复这个过程. 不要过度优化.  
+所以我们说瓶颈不是指只要一个瓶颈, 优化之后就一劳永逸了.
+
+当pipeline的一个最慢的阶段无法被优化时, 其他阶段再怎么优化也提升不了性能, 因为渲染一帧的时间是右最慢的阶段决定的. 但是其他阶段的优化并不是完全没有意义, 比如最慢的阶段是application stage, 我们优化pixel processing阶段虽然提升不了性能, 但是可以提升渲染质量.
+
+阅读本章时，应始终牢记"KNOW YOUR ARCHITECTURE"这句话，因为不同GPU架构的优化技术差异很大. 还有一个相关的格言是: "MEASURE，MEASURE，MEASURE"
+
 <a id="markdown-_181-profiling-and-debugging-tools" name="_181-profiling-and-debugging-tools"></a>
 ### _18.1 Profiling and Debugging Tools
 
